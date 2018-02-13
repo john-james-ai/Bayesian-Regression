@@ -1,4 +1,4 @@
-Package: bayes
+Package: movie
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -9,3 +9,37 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.4.2),
+    data.table,
+    dplyr,
+    extrafont
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports:
+    BAS,
+    broom,
+    car,
+    corrplot,
+    e1071,
+    formatR,
+    GGally,
+    ggplot2,
+    ggpubr,
+    ggthemes,
+    gridExtra,
+    kableExtra,
+    kfigr,
+    lindia,
+    MASS,
+    moments,
+    openxlsx,
+    psych, 
+    qqplotr,
+    RColorBrewer,
+    rlist,
+    scales,
+    stargazer,
+    statsr
+RoxygenNote: 6.0.1

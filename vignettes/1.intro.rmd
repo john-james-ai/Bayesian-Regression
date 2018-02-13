@@ -1,0 +1,35 @@
+# Part 1: Introduction
+Bayesian model averaging (BMA), now widely accepted as a principled way of accounting for model uncertainty, involves the challenge of the elicitation of priors for all parameters of each model and the probability of each model. It is this elicitation of prior knowledge about the parameters of interest which often leads to more reliable estimates and smaller uncertainties. In some cases, the elicitation of prior knowledge is essential to obtaining meaningful results. If substantial prior information is available in the form of a probability distributions, it should be used. In many cases; however, prior information may be unavailable or miniscule with respect to the information provided by the data. In such cases, default priors can be used to characterize prior probability distributions of model parameters. Still, inappropriate priors may unduly influence posterior-based inferences and decision making. 
+
+This paper examines the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance. These issues are illustrated in the context of a linear regression model to predict audience scores for movies, given 645 observations and 16 regression parameters. ____ candidate default parameter priors were evaluated.  BMA reference models, which best described knowledge about future observations, served as proxies for the "true" deta generating models. Candidate models were evaluated vis-a-vis the BMA reference models on the basis of predictive performance and the cross-validated predictive mean using mean squared error.   
+
+## Background
+The effect of default priors on BMA, model selection, and predictive performance have been studied in range of disciplines including, econometrics, social sciences, biostatistics. Eicher, Papageorgiou, and Raftery [@Eicher2011] evaluated 12 priors which have been proposed in statistics and economics literature and found that the Unit Information Prior (UIP), which corresponds to the Bayesian Information Criteria (BIC) approximation of the marginal likelihood, combined with the uniform prior over the model space, outperformed, the 11 other priors.  Gelman, et. al, [@Gelman2008] proposed the Cauchy distribution with center 0 and scale 2.5, for logistic and other regression models. 
+
+
+
+
+## Research Questions
+
+## Theoretical Framework
+### Bayesian Model Averaging (BMA)
+Given a dependent variable $Y$, a number of observations $n$, and an $n$ by $p$ matrix of predictors $X$, the variable selection problem is to find the most effective subset of predictors, given the data. The models under consideration are denoted as the model space $M$ = {$M_1,...,M_k$} and represent $K = 2^p$ candidate predictors, each model having the form $Y = \alpha + X\beta + \epsilon$, where $\alpha$ is the intercept term,  $\beta_1,...\beta_p$ is a vector of coefficients to be estimated, and $\epsilon \sim N(0,\sigma^2)$ is the error term. The vector of parameters in $M_k$ is denoted by $\theta_k = (\alpha, \beta^{(k)}, \sigma^2)$. Variable inclusion in each model $M_k$ is represented by a vector of binary variables, $\gamma = (\gamma_1,...,\gamma_p)'$,where $\gamma_j$ is an indicator for the inclusion of variable $X_j$ under model $M_k$. Conventionally, let $\gamma$ represent the binary representation of $k$ for model $M_k$, such that there are $p\gamma$ = $\displaystyle\sum_{j=1}^{p}$ non-zero parameters, $\beta\gamma$ with $p\gamma x n$ design matrix $X_\gamma$ under $M_k$.
+
+Hierarchical Model for Variable Selection
+A hierarchical model [@George1993] is used to incorporate model uncertainty with respect to the variables in the linear regression model. The first stage is a normal probability under $M_k$, using $\beta\gamma$, and the design matrix $X_\gamma$.
+$$Y|\gamma, \sigma^2, M_k \sim N(X_\gamma \beta_\gamma, \sigma^2I_n)$$
+A hierarchical model 
+
+
+### Default Priors
+1. **Unit Information Prior (UIP) / Bayesian Information Criteria (BIC) Prior:**	The prior contains information approximately equal to that contained in a single typical observation. The resulting posterior model probabilities are closely approximated by the Schwarz criterion, Bayesian Information Criterion.  
+2. **Akaike information criterion (AIC)**	Prior information decreases with the number of parameters in the model.
+
+
+
+
+
+
+
+<br>
+* * *

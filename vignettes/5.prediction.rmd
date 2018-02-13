@@ -1,0 +1,42 @@
+# Part 6: Prediction
+```{r prediction}
+cases <- openxlsx::read.xlsx("../data/movies2016.xlsx")
+cases <- cases %>% filter(year == 2016)
+load(file = '../data/actorScores.RData')
+load(file = '../data/modelA.RData')
+load(file = '../data/modelTwo.RData')
+cases <- prepareData(cases,actorScores)
+votes <- prediction(mod = modelA$mod, cases = cases)
+cases$imdb_num_votes_log <- votes$predictions$`Predicted imdb_num_votes_log`
+revenue <- prediction(mod =modelTwo$mod, cases = cases)
+votes$predictions <- votes$predictions %>% arrange(.[[1]], desc(.[[2]]))
+revenue$predictions <- revenue$predictions %>% arrange(.[[1]], desc(.[[2]]))
+
+```
+Ten films from 2016 were selected from the BoxOfficeMojo.com website and two predictions were performed. The first used the multiple regression model to predict the log number of IMDb votes. The second was a test of the simple linear regression of log IMDb votes on log box office.
+
+## Log IMDb Votes Prediction
+The actual, predicted, prediction intervals, and percent error for the predictions are summarized in `r kfigr::figr(label = "votes_prediction", prefix = TRUE, link = TRUE, type="Table")`.
+
+`r kfigr::figr(label = "votes_prediction", prefix = TRUE, link = TRUE, type="Table")`: Prediction of log IMDb votes.
+```{r votes_prediction}
+knitr::kable(votes$predictions, digits = 2) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+`r kfigr::figr(label = "votes_prediction", prefix = TRUE, link = TRUE, type="Table")` shows the actual log number of IMDB votes and the predictions for the ten 2016 movies from the test set. The uncertainty is characterized by the computed 95% prediction intervals. The multiregression model predicted the log of IMDb number of votes with a mean absolute percentage error (MAPE) of `r round(votes$analysis$MAPE, 2)`, a mean square error (MSE) of `r round(votes$analysis$MSE, 2)`, a root mean square error (RMSE) of `r round(votes$analysis$RMSE, 2)`and a `r round(votes$analysis$pct, 2)`% accuracy.
+
+## Log Box Office Prediction
+The second was a prediction of the log box office revenue as follows.
+
+`r kfigr::figr(label = "revenue_prediction", prefix = TRUE, link = TRUE, type="Table")`: Prediction of log box office revenue
+```{r revenue_prediction}
+knitr::kable(revenue$predictions, digits = 2) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+Similarly, the actual and predicted log of box office revenue, the 95% prediction intervals, the absolute error, the percent error and the squared error. The multiregression model predicted the log of IMDb number of revenue with a mean absolute percentage error (MAPE) of `r round(revenue$analysis$MAPE, 2)`, a mean square error (MSE) of `r round(revenue$analysis$MSE, 2)`, a root mean square error (RMSE) of `r round(revenue$analysis$RMSE, 2)`and a `r round(revenue$analysis$pct, 2)`% accuracy. The performance reflects the compound affects of the error of this prediction as well as that of the predicted log number of IMDb votes.
+
+
+
+* * *

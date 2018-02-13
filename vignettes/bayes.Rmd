@@ -1,0 +1,108 @@
+---
+title: "Bayesian Modeling & Prediction for Movies"
+author: "John James jjames@datasciencesalon.org"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    css: rmdStyles.css
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+options(knitr.table.format = "html")
+options(max.print=100, scipen=999, width = 800)
+knitr::opts_chunk$set(echo=FALSE,
+	             cache=TRUE,
+               prompt=FALSE,
+	             eval = TRUE,
+               tidy=TRUE,
+               root.dir = "..",
+               fig.height = 8,
+               fig.width = 20,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+knitr::opts_knit$set(width=100, figr.prefix = T, figr.link = T)
+knitr::knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark=",")
+})
+```
+
+```{r load-libraries}
+library(BAS)
+library(broom)
+library(data.table)
+library(dplyr)
+library(extrafont)
+library(GGally)
+library(ggplot2)
+library(graphics)
+library(gridExtra)
+library(rlist)
+library(statsr)
+```
+
+```{r source-functions}
+source("../R/bma.R")
+source("../R/bmaAnalysis.R")
+source("../R/bmaCompare.R")
+source("../R/bmaPredict.R")
+source("../R/bmaSummary.R")
+source("../R/preprocess.R")
+source("../R/univariate.R")
+source("../R/univariateQual.R")
+source("../R/univariateQuant.R")
+source("../R/bivariate.R")
+source("../R/bivariateQual.R")
+source("../R/bivariateQuant.R")
+source("../R/visualization.R")
+source("../R/analysis.R")
+```
+
+```{r load-data}
+load("../inst/extdata/movies.RData")
+```
+
+```{r preprocess}
+
+processedData  <- preprocess(movies)
+```
+
+```{r univariate}
+#edaUni <- univariate(data = processedData)
+```
+
+```{r bivariate}
+#edaBi <- bivariate(data = processedData)
+```
+
+```{r removetitle}
+yX <- processedData %>% select(-title)
+```
+
+
+```{r bma}
+models <- bma(yX = yX)
+```
+
+```{r bmaSummary}
+analysis <- bmaSummary(models = models)
+```
+
+```{r bmaCompare}
+trials <- 2
+compare <- bmaCompare(yX, trials = trials)
+```
+
+```{r intro, child = '4.model.rmd'}
+```
+
+# References
