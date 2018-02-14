@@ -14,6 +14,15 @@ knitr::kable(analysis$pipTable, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
+
+### Posterior Parameter Inclusion Probabilities by Parameter
+```{r bma_pip_top, fig.height=20}
+n <- length(analysis$pipPlots)
+nCol <- floor(sqrt(n)-1)
+do.call("grid.arrange", c(analysis$pipPlots, ncol=nCol))
+```
+`r kfigr::figr(label = "bma_pip_top", prefix = TRUE, link = TRUE, type="Figure")`: Posterior inclusion probabilities for highest probability parameters
+
 ### Model Parameter Inclusion Correlation Across Priors
 ```{r pip_correlations}
 corrplot::corrplot(cor(analysis$pipDf), diag = FALSE,
@@ -26,28 +35,29 @@ corrplot::corrplot(cor(analysis$pipDf), diag = FALSE,
 ```
 `r kfigr::figr(label = "pip_correlations", prefix = TRUE, link = TRUE, type="Figure")`: Correlation of posterior parameter inclusion probabilities across parameter priors; model prior = uniform
 
-### Posterior Parameter Inclusion Probabilities by Parameter
-```{r bma_pip_top, fig.height=20}
-n <- length(analysis$pipPlots)
-nCol <- floor(sqrt(n)-1)
-do.call("grid.arrange", c(analysis$pipPlots, ncol=nCol))
-```
-`r kfigr::figr(label = "bma_pip_top", prefix = TRUE, link = TRUE, type="Figure")`: Posterior inclusion probabilities for highest probability parameters
-
-
-## Predictive Performance
-`r kfigr::figr(label = "bmaAnalysis", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE on test set for default priors over `r trials` trials.
-```{r bmaAnalysis}
+### Predictive Performance
+`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE on test set for default priors over `r trials` trials.
+```{r performance}
 knitr::kable(compare$summary, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
 ```
 
-## Prediction Correlation
+
+### Prediction Correlation
 ```{r prediction_correlations}
-GGally::ggpairs(data.frame(BMA = as.vector(compare$top$BMA$PREDICT$fit),  
-                           BPM = as.vector(compare$top$BPM$PREDICT$fit),  
-                           HPM = as.vector(compare$top$HPM$PREDICT$fit),  
-                           MPM = as.vector(compare$top$MPM$PREDICT$fit)))  
+predictions <- data.frame(compare$top[[1]]$rvp$Predicted, compare$top[[2]]$rvp$Predicted, compare$top[[3]]$rvp$Predicted)
+names(predictions) <- c(paste(compare$top[[1]]$prior, compare$top[[1]]$id),
+                        paste(compare$top[[2]]$prior, compare$top[[2]]$id),
+                        paste(compare$top[[3]]$prior, compare$top[[3]]$id))
+
+
+corrplot::corrplot(cor(predictions), diag = FALSE,
+                     order = "hclust", number.cex = 1,
+                     addCoef.col = "black", tl.col = "black",
+                     tl.srt = 90, tl.pos = "td", tl.cex = 1,
+                     method = "color", type = "upper",
+                     col = RColorBrewer::brewer.pal(n = 11,
+                                                    name = "PiYG"))
 ```
 `r kfigr::figr(label = "prediction_correlations", prefix = TRUE, link = TRUE, type="Figure")`: Prediction correlations of the top models.
 

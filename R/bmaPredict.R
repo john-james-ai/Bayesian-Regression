@@ -61,11 +61,20 @@ bmaPredict <- function(models, yX) {
     mse$HPM <- (cv.summary.bas(yhat$HPM$fit, y, score = "squared-error"))^2
     mse$MPM <- (cv.summary.bas(yhat$MPM$fit, y, score = "squared-error"))^2
 
+    # Compute model id and name
+    mnames <- list()
+    mnames$id <- c("BMA", "BPM", "HPM", "MPM")
+    mnames$names <- c("Bayesian Model Averaging", "Best Predictive Model",
+                      "Highest Probability Model", "Median Probability Model")
+
     # Format list objects
     ml <- lapply(seq_along(mse), function (x) {
       model <- list()
-      model$prior <- m$priorDesc
+      model$prior <- m$prior
+      model$priorDesc <- m$priorDesc
       model$model <- m
+      model$id <- mnames$id[x]
+      model$name <- mnames$names[x]
       model$rvp <- rvp[[x]]
       model$mse <- mse[[x]]
       model$size <- size[[x]]

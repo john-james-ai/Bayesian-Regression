@@ -392,7 +392,7 @@ plotLine <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
 #------------------------------------------------------------------------------#
 #' plotBar
 #'
-#' \code{plotBar} Renders a bar plot
+#' \code{plotBar} Renders a bar plot with bars sequenced by value left to right.
 #'
 #' @param data Data frame or vector containing a single categorical factor variable
 #' @param yLab Capital case character string describing the y variable
@@ -434,6 +434,60 @@ plotBar <- function(data, yLab, xLab, plotTitle = NULL) {
 }
 
 #------------------------------------------------------------------------------#
+#                             Grouped Bar Plot                                 #
+#------------------------------------------------------------------------------#
+#' groupBarPlot
+#'
+#' \code{groupBarPlot} Renders a grouped bar plot with confidence interval bars.
+#'
+#' @param data Data frame containing 4 columns: (1) The group parameter; (2)
+#' the subgoup variable; and (3), the mean value, and (4), the length
+#' of the confidence interval.
+#' @param plotTitle Capital case character string for the title of the plot
+#' @param
+#'
+#' @return Grouped bar plot with confidence / credible interval lines.
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family visualization functions
+#' @export
+groupBarPlot <- function(data, plotTitle = NULL, values = FALSE) {
+
+  # Format title
+  if (is.null(plotTitle)) {
+    plotTitle <- paste(yLab, "by", xLab)
+  }
+
+  # Render plot
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
+  barPlot <- ggplot2::ggplot(data = data,
+                             ggplot2::aes(x = Parameter,
+                                          y = Mean,
+                                          fill = Prior))  +
+    ggplot2::geom_bar(position = position_dodge(),  stat='identity') +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = mean-ci, ymax = mean+ci),
+                           width = .2, position = position_dodge(.9)) +
+    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                   axis.title.x = ggplot2::element_blank(),
+                   legend.position = "none") +
+    ggplot2::scale_fill_manual(values = myPal(length(data[[1]]))) +
+    ggplot2::ggtitle(plotTitle) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
+    ggplot2::scale_y_continuous(labels = scales::comma)
+
+  if (values == TRUE) {
+    barPlot <- barPlot + ggplot2::geom_text(aes(label=round(data[[2]], 3)),
+                                            family="Open Sans",
+                                            vjust=-.2, color="black",
+                                            size=5)
+  }
+
+
+  return(barPlot)
+}
+
+
+#------------------------------------------------------------------------------#
 #                                Bar Plot2                                     #
 #------------------------------------------------------------------------------#
 #' plotBar2
@@ -444,6 +498,7 @@ plotBar <- function(data, yLab, xLab, plotTitle = NULL) {
 #' @param yLab Capital case character string describing the y variable
 #' @param xLab Capital case character string containing the name of the variable x variable
 #' @param plotTitle Capital case character string for the title of the plot
+#' @param
 #'
 #' @return Bar plot
 #' @author John James, \email{jjames@@datasciencesalon.org}
@@ -472,7 +527,7 @@ plotBar2 <- function(data, yLab, xLab, plotTitle = NULL, values = FALSE) {
     ggplot2::ylab(yLab) +
     ggplot2::labs(fill = xLab) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
-    ggplot2::scale_y_continuous(labels = scales::comma)
+  ggplot2::scale_y_continuous(labels = scales::comma)
 
   if (values == TRUE) {
     barPlot <- barPlot + ggplot2::geom_text(aes(label=round(data[[2]], 3)),
@@ -484,6 +539,8 @@ plotBar2 <- function(data, yLab, xLab, plotTitle = NULL, values = FALSE) {
 
   return(barPlot)
 }
+
+
 
 #------------------------------------------------------------------------------#
 #                                Pie Plot                                      #

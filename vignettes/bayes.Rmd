@@ -90,11 +90,11 @@ yX <- processedData %>% select(-title)
 
 
 ```{r bma}
-models <- bma(yX = yX)
+#models <- bma(yX = yX)
 ```
 
 ```{r bmaSummary}
-analysis <- bmaSummary(models = models)
+#analysis <- bmaSummary(models = models)
 ```
 
 ```{r bmaCompare}
