@@ -46,6 +46,7 @@ library(GGally)
 library(ggplot2)
 library(graphics)
 library(gridExtra)
+library(reshape2)
 library(rlist)
 library(statsr)
 ```
@@ -68,38 +69,51 @@ source("../R/analysis.R")
 ```
 
 ```{r load-data}
-load("../inst/extdata/movies.RData")
+if (file.exists("./analysis/compare.Rdata")) {
+  run <- FALSE
+  load("./analysis/compare.Rdata")
+} else {
+  run <- TRUE
+}
+dir.create("./analysis", showWarnings = FALSE)
+```
+
+```{r load-data}
+if (run == TRUE) load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-
-processedData  <- preprocess(movies)
+if (run == TRUE) processedData  <- preprocess(movies)
 ```
 
 ```{r univariate}
-#edaUni <- univariate(data = processedData)
+#if (run == TRUE) #edaUni <- univariate(data = processedData)
 ```
 
 ```{r bivariate}
-#edaBi <- bivariate(data = processedData)
+#if (run == TRUE) #edaBi <- bivariate(data = processedData)
 ```
 
 ```{r removetitle}
-yX <- processedData %>% select(-title)
+if (run == TRUE) yX <- processedData %>% select(-title)
 ```
 
 
 ```{r bma}
-#models <- bma(yX = yX)
+#if (run == TRUE) #models <- bma(yX = yX)
 ```
 
 ```{r bmaSummary}
-#analysis <- bmaSummary(models = models)
+#if (run == TRUE) #analysis <- bmaSummary(models = models)
 ```
 
 ```{r bmaCompare}
-trials <- 2
-compare <- bmaCompare(yX, trials = trials)
+if (run == TRUE) {
+  trials <- 4 
+  compare <- bmaCompare(yX, trials = trials) 
+  save(compare, file = "./analysis/compare.Rdata")
+  run <- FALSE
+}
 ```
 
 ```{r intro, child = '4.model.rmd'}

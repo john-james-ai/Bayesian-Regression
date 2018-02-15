@@ -34,14 +34,39 @@ bmaCompare <- function(yX, trials = 2) {
     top3 <<- list.sort(top3, mse, (mse))
     top3 <<- lapply(seq(1:3), function(x) {top3[[x]]})
 
+    p$performance <- cbind(Trial = as.factor(i), p$performance)
     p$performance
   })
 
   # Sort models, by MSE
   top <- list.sort(top3, mse, (mse))
 
-  # Summarize Results
+  # Get results
   compare <- do.call("rbind", predictions)
+  
+  # Reshape results
+  mseDist <- list()
+  mseDist$all <- melt(compare, id = c("Prior", "Trial"))
+  names(mseDist$all) <- c("Prior", "Trial", "Model", "MSE")
+  mseDist$BMA <- mseDist$all %>% filter(Model == "BMA") %>% select(Trial, MSE, Prior )
+  mseDist$BPM <- mseDist$all %>% filter(Model == "BPM") %>% select(Trial, MSE, Prior )
+  mseDist$HPM <- mseDist$all %>% filter(Model == "HPM") %>% select(Trial, MSE, Prior )
+  mseDist$MPM <- mseDist$all %>% filter(Model == "MPM") %>% select(Trial, MSE, Prior )
+  
+  # Plot results
+  msePlots <- list()
+  msePlots$BMA <- plotLine(data = mseDist$BMA, xLab = "Trials", yLab = "Mean Squared Error", 
+                           plotTitle = "Prior Predictive Performance (BMA)")
+  msePlots$BPM <- plotLine(data = mseDist$BPM, xLab = "Trials", yLab = "Mean Squared Error", 
+                           plotTitle = "Prior Predictive Performance (BPM)")
+  msePlots$HPM <- plotLine(data = mseDist$HPM, xLab = "Trials", yLab = "Mean Squared Error", 
+                           plotTitle = "Prior Predictive Performance (HPM)")
+  msePlots$MPM <- plotLine(data = mseDist$MPM, xLab = "Trials", yLab = "Mean Squared Error", 
+                           plotTitle = "Prior Predictive Performance (MPM)")
+  
+  
+  
+  # Summarize Results
   compare <- as.data.frame(compare %>% group_by(Prior) %>%
                              summarize(BMA = mean(BMA),
                                        BPM = mean(BPM),
@@ -95,7 +120,8 @@ bmaCompare <- function(yX, trials = 2) {
 
   comparison <- list(
     top = top,
-    summary = compare
+    summary = compare,
+    plots = msePlots
   )
 
   return(comparison)

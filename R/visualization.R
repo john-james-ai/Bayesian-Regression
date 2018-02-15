@@ -302,17 +302,17 @@ plotResQQ <- function(res, mName) {
 #' \code{plotResFit} Plots regression diagnostics
 #'
 #' @param x Linear model object or a data frame containing the residuals for each observation
-#' @param yLab Capital case character string for response variable
+#' @param model Capital case name of the model
 #'
 #' @return resFit Residual vs. Fit Plot
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotResFit <- function(x, yLab) {
+plotResFit <- function(x, model) {
 
   if ("data.frame" %in% class(x)) {
     resFit <- plotScatter(x, xLab = "Predicted", yLab = "Residual",
-                          plotTitle = "Residual vs. Predicted")
+                          plotTitle = paste("Residual vs. Predicted:", model))
   } else {
     # Obtain diagnostics and render plot
     resFit <- lindia::gg_diagnose(mod, theme = ggplot2::theme_minimal(), plot.all = FALSE)
@@ -357,7 +357,8 @@ plotCorr <- function(data, yVar) {
 #'
 #' \code{plotLine} Renders a line plot
 #'
-#' @param data Data frame containing plokt data
+#' @param data Data frame containing three variables: (1) x data, (2), y data, and (3) 
+#' the grouping variable.
 #' @param xLab Capital case character string containing the name of the x variable (optional)
 #' @param yLab Capital case character string containing the name of the y variable
 #' @param plotTitle Character case character string containing the title for the plot
@@ -366,21 +367,22 @@ plotCorr <- function(data, yVar) {
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotLine <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
+plotLine <- function(data, xLab, yLab, plotTitle = NULL) {
 
   # Render plot
   myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
 
   lp <- ggplot2::ggplot(data = data,
-                        ggplot2::aes(x = data[1],
-                                     y = data[2]))  +
+                        ggplot2::aes(x = data[[1]],
+                                     y = data[[2]], 
+                                     group = data[[3]], color = data[[3]]))  +
     ggplot2::geom_line() +
     ggplot2::theme_minimal(base_size = 16) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    legend.position = "right") +
     ggplot2::ggtitle(plotTitle) +
-    ggplot2::labs(y = yLab, x = xLab) +
-    ggplot2::scale_x_continuous(labels = scales::comma) +
+    ggplot2::labs(y = yLab, x = xLab, color = names(data[3])) +
+    ggplot2::scale_x_discrete() +
     ggplot2::scale_y_continuous(labels = scales::comma)
 
   return(lp)

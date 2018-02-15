@@ -53,7 +53,7 @@ bmaPredict <- function(models, yX) {
     coefs$BPM <- pdc$BPM$df[yhat$BPM$bestmodel + 1,]
     coefs$HPM <- pdc$HPM$df[yhat$HPM$bestmodel + 1,]
     coefs$MPM <- pdc$MPM$df[yhat$MPM$bestmodel + 1,]
-
+    
     # Compute MSE
     mse <-list()
     mse$BMA <- (cv.summary.bas(yhat$BMA$fit, y, score = "squared-error"))^2
@@ -72,7 +72,6 @@ bmaPredict <- function(models, yX) {
       model <- list()
       model$prior <- m$prior
       model$priorDesc <- m$priorDesc
-      model$model <- m
       model$id <- mnames$id[x]
       model$name <- mnames$names[x]
       model$rvp <- rvp[[x]]
@@ -80,6 +79,8 @@ bmaPredict <- function(models, yX) {
       model$size <- size[[x]]
       model$pdc <- pdc[[x]]
       model$coefs <- coefs[[x]]
+      model$model <- m
+      model$yhat <- yhat
       model
     })
 
@@ -87,7 +88,7 @@ bmaPredict <- function(models, yX) {
     top3 <<- list.sort(top3, mse, (mse))
     top3 <<- lapply(seq(1:3), function(x) {top3[[x]]})
 
-    mse <- c(Prior = m$priorDesc, mse)
+    mse <- c(Prior = m$prior, mse)
     mse
   }))
 

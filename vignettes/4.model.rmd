@@ -42,27 +42,84 @@ knitr::kable(compare$summary, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
 ```
 
-
-### Prediction Correlation
-```{r prediction_correlations}
-predictions <- data.frame(compare$top[[1]]$rvp$Predicted, compare$top[[2]]$rvp$Predicted, compare$top[[3]]$rvp$Predicted)
-names(predictions) <- c(paste(compare$top[[1]]$prior, compare$top[[1]]$id),
-                        paste(compare$top[[2]]$prior, compare$top[[2]]$id),
-                        paste(compare$top[[3]]$prior, compare$top[[3]]$id))
-
-
-corrplot::corrplot(cor(predictions), diag = FALSE,
-                     order = "hclust", number.cex = 1,
-                     addCoef.col = "black", tl.col = "black",
-                     tl.srt = 90, tl.pos = "td", tl.cex = 1,
-                     method = "color", type = "upper",
-                     col = RColorBrewer::brewer.pal(n = 11,
-                                                    name = "PiYG"))
+### Parameter Density Top 3 Models
+**Prior:** `r compare$top[[1]]$priorDesc` **Model:** `r compare$top[[1]]$name` **MSE:** = `r compare$top[[1]]$mse`
+`r kfigr::figr(label = "model1_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r compare$top[[1]]$priorDesc` `r compare$top[[1]]$name` parameter distribution
+```{r model1_pdc}
+pdc <- compare$top[[1]]$pdc$df
+pdc <- cbind(Parameter = rownames(compare$top[[1]]$pdc$df), pdc)
+pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
+knitr::kable(pdc, digits = 2) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
 ```
-`r kfigr::figr(label = "prediction_correlations", prefix = TRUE, link = TRUE, type="Figure")`: Prediction correlations of the top models.
 
-## Parameter Inclusion Probabilities
-### Parameter Density
+**Prior:** `r compare$top[[2]]$priorDesc` **Model:** `r compare$top[[2]]$name` **MSE:** = `r compare$top[[2]]$mse`
+`r kfigr::figr(label = "model2_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r compare$top[[2]]$priorDesc` `r compare$top[[2]]$name` parameter distribution
+```{r model2_pdc}
+pdc <- compare$top[[2]]$pdc$df
+pdc <- cbind(Parameter = rownames(compare$top[[2]]$pdc$df), pdc)
+pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
+knitr::kable(pdc, digits = 2) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
+```
+
+**Prior:** `r compare$top[[3]]$priorDesc` **Model:** `r compare$top[[3]]$name` **MSE:** = `r compare$top[[3]]$mse`
+`r kfigr::figr(label = "model3_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r compare$top[[3]]$priorDesc` `r compare$top[[3]]$name` parameter distribution
+```{r model3_pdc}
+pdc <- compare$top[[3]]$pdc$df
+pdc <- cbind(Parameter = rownames(compare$top[[3]]$pdc$df), pdc)
+pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
+knitr::kable(pdc, digits = 2) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
+```
+
+
+### Credible Intervals Top 3 Models
+**Prior:** `r compare$top[[1]]$priorDesc` **Model:** `r compare$top[[1]]$name` **MSE:** = `r compare$top[[1]]$mse`
+```{r ci1}
+plot(compare$top[[1]]$ci)
+```
+`r kfigr::figr(label = "ci1", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[1]]$priorDesc` `r compare$top[[1]]$name` credible intervals
+
+**Prior:** `r compare$top[[2]]$priorDesc` **Model:** `r compare$top[[2]]$name` **MSE:** = `r compare$top[[2]]$mse`
+```{r ci2}
+plot(compare$top[[2]]$ci)
+```
+`r kfigr::figr(label = "ci2", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[2]]$priorDesc` `r compare$top[[2]]$name` credible intervals
+
+**Prior:** `r compare$top[[3]]$priorDesc` **Model:** `r compare$top[[3]]$name` **MSE:** = `r compare$top[[3]]$mse`
+```{r ci3}
+plot(compare$top[[3]]$ci)
+```
+`r kfigr::figr(label = "ci3", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[3]]$priorDesc` `r compare$top[[3]]$name` credible intervals
+
+### Residuals vs. Predicted 
+**Prior:** `r compare$top[[1]]$priorDesc` **Model:** `r compare$top[[1]]$name` **MSE:** = `r compare$top[[1]]$mse`
+```{r ci1}
+rvp <- compare$top[[1]]$rvp
+plotResFit(rvp, model = paste(compare$top[[1]]$prior, compare$top[[1]]$name))
+```
+`r kfigr::figr(label = "ci1", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[1]]$priorDesc` `r compare$top[[1]]$name` credible intervals
+
+**Prior:** `r compare$top[[2]]$priorDesc` **Model:** `r compare$top[[2]]$name` **MSE:** = `r compare$top[[2]]$mse`
+```{r ci2}
+rvp <- compare$top[[2]]$rvp
+plotResFit(rvp, model = paste(compare$top[[2]]$prior, compare$top[[2]]$name))
+```
+`r kfigr::figr(label = "ci2", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[2]]$priorDesc` `r compare$top[[2]]$name` credible intervals
+
+**Prior:** `r compare$top[[3]]$priorDesc` **Model:** `r compare$top[[3]]$name` **MSE:** = `r compare$top[[3]]$mse`
+```{r ci3}
+rvp <- compare$top[[3]]$rvp
+plotResFit(rvp, model = paste(compare$top[[3]]$prior, compare$top[[3]]$name))
+```
+`r kfigr::figr(label = "ci3", prefix = TRUE, link = TRUE, type="Figure")`: `r compare$top[[3]]$priorDesc` `r compare$top[[3]]$name` credible intervals
+
+
+
+#### `r compare$top[[2]]$priorDesc` `r compare$top[[1]]$name`
+
+#### `r compare$top[[3]]$priorDesc` `r compare$top[[1]]$name`
 ### Model Coefficient CI plots
 ### Residual vs Fitted
 ### Interpretation of Coefficients.
