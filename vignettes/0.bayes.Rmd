@@ -69,12 +69,14 @@ source("../R/analysis.R")
 ```
 
 ```{r load-data}
+override <- FALSE
 if (file.exists("./analysis/compare.Rdata")) {
   run <- FALSE
   load("./analysis/compare.Rdata")
 } else {
   run <- TRUE
 }
+if (override == TRUE) run <- TRUE
 dir.create("./analysis", showWarnings = FALSE)
 ```
 
