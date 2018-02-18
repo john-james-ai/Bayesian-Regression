@@ -359,6 +359,7 @@ plotCorr <- function(data, yVar) {
 #'
 #' @param data Data frame containing three variables: (1) x data, (2), y data, and (3) 
 #' the grouping variable.
+#' @param xticks Logical indicating whether xticks should be rendered.
 #' @param xLab Capital case character string containing the name of the x variable (optional)
 #' @param yLab Capital case character string containing the name of the y variable
 #' @param plotTitle Character case character string containing the title for the plot
@@ -367,7 +368,8 @@ plotCorr <- function(data, yVar) {
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotLine <- function(data, xLab, yLab, plotTitle = NULL) {
+plotLine <- function(data, xticks = TRUE, xLab, yLab, yLow = NULL, yHigh = NULL, 
+                     plotTitle = NULL) {
 
   # Render plot
   myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
@@ -383,7 +385,14 @@ plotLine <- function(data, xLab, yLab, plotTitle = NULL) {
     ggplot2::ggtitle(plotTitle) +
     ggplot2::labs(y = yLab, x = xLab, color = names(data[3])) +
     ggplot2::scale_x_discrete() +
-    ggplot2::scale_y_continuous(labels = scales::comma)
+    ggplot2::scale_y_continuous()
+  
+  if (!is.null(yLow) & !is.null(yHigh)) {
+    lp <- lp + ggplot2::scale_y_continuous(limits = c(yLow, yHigh))
+  }
+  if (xticks == FALSE) {
+    lp <- lp + ggplot2::theme(axis.text.x = ggplot2::element_blank())
+  }
 
   return(lp)
 }

@@ -80,7 +80,8 @@ bmaPredict <- function(models, yX) {
       model$pdc <- pdc[[x]]
       model$coefs <- coefs[[x]]
       model$model <- m
-      model$yhat <- yhat
+      model$yhat <- yhat[[x]]
+      model$yX <- yX
       model
     })
 

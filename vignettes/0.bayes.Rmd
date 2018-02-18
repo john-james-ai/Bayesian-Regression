@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Modeling & Prediction for Movies"
+title: "Bayesian Model Averaging, Default Priors & Prediction Accuracy"
 author: "John James jjames@datasciencesalon.org"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
@@ -55,6 +55,7 @@ library(statsr)
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
 source("../R/bmaCompare.R")
+source("../R/bmaCompareReport.R")
 source("../R/bmaPredict.R")
 source("../R/bmaSummary.R")
 source("../R/preprocess.R")
@@ -68,24 +69,27 @@ source("../R/visualization.R")
 source("../R/analysis.R")
 ```
 
-```{r load-data}
+```{r set_run}
 override <- FALSE
-if (file.exists("./analysis/compare.Rdata")) {
-  run <- FALSE
-  load("./analysis/compare.Rdata")
+if (override == FALSE) {
+  if (file.exists("./analysis/compare.Rdata")) {
+    run <- FALSE
+    load("./analysis/compare.Rdata")
+  } else {
+    run <- TRUE
+  }
 } else {
   run <- TRUE
 }
-if (override == TRUE) run <- TRUE
 dir.create("./analysis", showWarnings = FALSE)
 ```
 
 ```{r load-data}
-if (run == TRUE) load("../inst/extdata/movies.RData")
+load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-if (run == TRUE) processedData  <- preprocess(movies)
+processedData  <- preprocess(movies)
 ```
 
 ```{r univariate}
@@ -97,28 +101,33 @@ if (run == TRUE) processedData  <- preprocess(movies)
 ```
 
 ```{r removetitle}
-if (run == TRUE) yX <- processedData %>% select(-title)
+yX <- processedData %>% select(-title)
 ```
 
 
 ```{r bma}
-#if (run == TRUE) #models <- bma(yX = yX)
+models <- bma(yX = yX)
 ```
 
 ```{r bmaSummary}
-#if (run == TRUE) #analysis <- bmaSummary(models = models)
+analysis <- bmaSummary(models = models)
 ```
 
 ```{r bmaCompare}
 if (run == TRUE) {
-  trials <- 4 
-  compare <- bmaCompare(yX, trials = trials) 
+  trials <- 100
+  compare <<- bmaCompare(yX, trials = trials) 
   save(compare, file = "./analysis/compare.Rdata")
   run <- FALSE
 }
 ```
 
-```{r intro, child = '4.model.rmd'}
+```{r bmaCompareReport}
+report <- bmaCompareReport(compare = compare)
+```
+
+
+```{r intro, child = '1.intro.rmd'}
 ```
 
 # References
