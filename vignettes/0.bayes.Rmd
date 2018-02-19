@@ -69,17 +69,17 @@ source("../R/visualization.R")
 source("../R/analysis.R")
 ```
 
+```{r load_priors}
+priors <- openxlsx::read.xlsx(xlsxFile = "../notes/priors.xlsx")
+```
+
 ```{r set_run}
-override <- FALSE
-if (override == FALSE) {
-  if (file.exists("./analysis/compare.Rdata")) {
-    run <- FALSE
-    load("./analysis/compare.Rdata")
-  } else {
-    run <- TRUE
-  }
-} else {
-  run <- TRUE
+run <- TRUE
+if (run == FALSE) {
+  load("./analysis/yX.Rdata")
+  load("./analysis/models.Rdata")
+  load("./analysis/analysis.Rdata")
+  #load("./analysis/report.Rdata")
 }
 dir.create("./analysis", showWarnings = FALSE)
 ```
@@ -89,7 +89,10 @@ load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-processedData  <- preprocess(movies)
+if (run == TRUE)  {
+  processedData  <- preprocess(movies)
+  save(processedData, file = "./analysis/processedData.Rdata")
+}
 ```
 
 ```{r univariate}
@@ -101,33 +104,45 @@ processedData  <- preprocess(movies)
 ```
 
 ```{r removetitle}
-yX <- processedData %>% select(-title)
+if (run == TRUE)  {
+  yX <- processedData %>% select(-title)
+  save(yX, file = "./analysis/yX.Rdata")
+}
 ```
 
 
 ```{r bma}
-models <- bma(yX = yX)
+if (run == TRUE) {
+  models <- bma(yX = yX)
+  save(models, file = "./analysis/models.Rdata")
+}
 ```
 
 ```{r bmaSummary}
-analysis <- bmaSummary(models = models)
+if (run == TRUE)  {
+  analysis <- bmaSummary(models = models)
+  save(analysis, file = "./analysis/analysis.Rdata")
+}
 ```
 
 ```{r bmaCompare}
+trials <- 10
 if (run == TRUE) {
-  trials <- 100
-  compare <<- bmaCompare(yX, trials = trials) 
+  compare <- bmaCompare(yX, trials = trials) 
   save(compare, file = "./analysis/compare.Rdata")
-  run <- FALSE
 }
 ```
 
 ```{r bmaCompareReport}
-report <- bmaCompareReport(compare = compare)
+if (run == TRUE) {
+  report <- bmaCompareReport(compare = compare)
+  save(report, file = "./analysis/report.Rdata")
+}
+run <- FALSE  
 ```
 
 
-```{r intro, child = '1.intro.rmd'}
+```{r intro, child = '7.appendix.rmd'}
 ```
 
 # References

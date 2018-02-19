@@ -34,11 +34,7 @@ bmaPredict <- function(models, yX) {
     rvp$MPM <- data.frame(Residual = (y - yhat$MPM$fit), Predicted = yhat$MPM$fit)
 
     # Obtain Coefficients Distributions
-    pdc <- list()
-    pdc$BMA <- postDist(m, estimator = "BMA")
-    pdc$BPM <- postDist(m, estimator = "BPM")
-    pdc$HPM <- postDist(m, estimator = "HPM")
-    pdc$MPM <- postDist(m, estimator = "MPM")
+    pdc <- postDist(m)
 
     # Get model Size
     size <- list()
@@ -49,7 +45,7 @@ bmaPredict <- function(models, yX) {
 
     # Get Coefficients Variables
     coefs <- list()
-    coefs$BMA <- pdc$BMA$df[yhat$BMA$bestmodel[[yhat$BMA$best[1]]]+1, ]
+    coefs$BMA <- pdc$BMA$df[yhat$BMA$bestmodel[[yhat$BMA$best[1]]]+1,]
     coefs$BPM <- pdc$BPM$df[yhat$BPM$bestmodel + 1,]
     coefs$HPM <- pdc$HPM$df[yhat$HPM$bestmodel + 1,]
     coefs$MPM <- pdc$MPM$df[yhat$MPM$bestmodel + 1,]

@@ -626,15 +626,17 @@ plotCIBars <- function(data, plotTitle = NULL) {
     ggplot2::geom_bar(position = ggplot2::position_dodge(), stat = "identity") +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = data[[3]], ymax = data[[4]]),
                                         width = .2, position = ggplot2::position_dodge(.9)) +
-    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme_minimal(base_size = 28) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.title.y = ggplot2::element_blank(),
                    axis.title.x = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank(),
-                   axis.text.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
                    legend.position = "none") +
+    ggplot2::geom_text(ggplot2::aes(label = round(data[[2]], 2)), 
+                       family="Open Sans", size = 5,
+                       vjust=-0.35) +
     ggplot2::ggtitle(plotTitle) +
-    ggplot2::scale_fill_manual(values = myPal(length(data[[1]]))) +
-    ggplot2::coord_flip()
+    ggplot2::scale_fill_manual(values = myPal(length(data[[1]])))
   return(confIntPlot)
 }

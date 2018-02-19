@@ -1,66 +1,35 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Appendix
-## Appendix A: Posterior Distribution of Coefficients by Parameter Prior
-
-### `r analysis$pdc[[1]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_1", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[1]]$desc`.
-```{r bma_pdc_1}
-knitr::kable(analysis$pdc[[1]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+## Appendix A: Model Analyses
+### `r models[[1]]$priorDesc`
+#### Model Space: `r models[[1]]$priorDesc`
+```{r a_model_space_1}
+par(cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(5,15,4,2) + 0.1)
+image(models[[1]], rotate = F, cex = 2)
 ```
+`r kfigr::figr(label = "model_space_1", prefix = TRUE, link = TRUE, type="Figure")`: Model space `r models[[1]]$priorDesc`
 
-### `r analysis$pdc[[2]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_2", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[2]]$desc`.
-```{r bma_pdc_2}
-knitr::kable(analysis$pdc[[2]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+#### Model Analysis: `r models[[1]]$priorDesc`
+```{r a_BIC_analysis, fig.height=15}
+par(mfrow = c(2,2), cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(10,5,4,2) + 0.1)
+plot(models[[1]], ask = F)
 ```
+`r kfigr::figr(label = "a_rvf1", prefix = TRUE, link = TRUE, type="Figure")`: Residuals vs Fitted `r models[[1]]$priorDesc`
 
-### `r analysis$pdc[[3]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_3", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[3]]$desc`.
-```{r bma_pdc_3}
-knitr::kable(analysis$pdc[[3]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+#### Parameter Estimates: `r models[[1]]$priorDesc`
+
+```{r a_pdc, fig.height=24}
+p <- list()
+p$BMA <- analysis$pdc[[1]]$BMA$plot
+p$BPM <- analysis$pdc[[1]]$BPM$plot
+p$HPM <- analysis$pdc[[1]]$HPM$plot
+p$MPM <- analysis$pdc[[1]]$MPM$plot
+n <- length(p)
+nCol <- floor(sqrt(n))
+do.call("grid.arrange", c(p, ncol=nCol))
 ```
-
-### `r analysis$pdc[[4]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_4", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[4]]$desc`.
-```{r bma_pdc_4}
-knitr::kable(analysis$pdc[[4]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-### `r analysis$pdc[[5]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_5", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[5]]$desc`.
-```{r bma_pdc_5}
-knitr::kable(analysis$pdc[[5]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-### `r analysis$pdc[[6]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_6", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[6]]$desc`.
-```{r bma_pdc_6}
-knitr::kable(analysis$pdc[[6]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-### `r analysis$pdc[[7]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_7", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[7]]$desc`.
-```{r bma_pdc_7}
-knitr::kable(analysis$pdc[[7]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-### `r analysis$pdc[[8]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_8", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[8]]$desc`.
-```{r bma_pdc_8}
-knitr::kable(analysis$pdc[[8]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-### `r analysis$pdc[[9]]$desc` Prior
-`r kfigr::figr(label = "bma_pdc_9", prefix = TRUE, link = TRUE, type="Table")`: Posterior distribution of coefficients for `r analysis$pdc[[9]]$desc`.
-```{r bma_pdc_9}
-knitr::kable(analysis$pdc[[9]]$df, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
+`r kfigr::figr(label = "a_pdc", prefix = TRUE, link = TRUE, type="Figure")`: Posterior parameter estimates and credible intervals 

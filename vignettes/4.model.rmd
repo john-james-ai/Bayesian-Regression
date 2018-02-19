@@ -1,5 +1,36 @@
 # Part 4: Modeling
+The model spaces and posterior inclusion probabilities, means, standard deviations, and credible intervals for the parameter are presented For each of the nine priors.
 
+## Model Spaces
+```{r model_spaces, fig.height=10}
+graphics::par(mfrow = c(2,2), family = "Open Sans")
+image(models$BIC, rotate = F, main = "BIC Prior")
+image(models$AIC, rotate = F, main = "AIC Prior")
+#image(models$`EB-G`, rotate = F, title = "EB Global Prior")
+```
+
+<div class = "row">
+<div class = "col3-left">"
+```{r model_space_BIC, fig.height=10}
+image(models$BIC, rotate = F)
+```
+`r kfigr::figr(label = "model_space_BIC", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for BIC Prior
+</div>
+
+<div class = "col3-left">"
+```{r model_space_AIC, fig.height=10}
+image(models$AIC, rotate = F)
+```
+`r kfigr::figr(label = "model_space_AIC", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for AIC Prior
+</div>
+
+<div class = "col3-left">"
+```{r model_space_EB_G, fig.height=10}
+image(models$`EB-G`, rotate = F)
+```
+`r kfigr::figr(label = "model_space_EBG", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for Empirical Bayes Global Prior
+</div>
+</div>
 ## Overview 
 ### Best Model Posterior Probabilities by Prior
 ```{r postProbs}
@@ -122,21 +153,21 @@ plot(report$top[[3]]$ci)
 
 ### Residuals vs. Predicted 
 **Prior:** `r report$top[[1]]$priorDesc` **Model:** `r report$top[[1]]$name` **MSE:** = `r report$top[[1]]$mse`
-```{r ci1}
+```{r rvp1}
 rvp <- report$top[[1]]$rvp
 plotResFit(rvp, model = paste(report$top[[1]]$prior, report$top[[1]]$name))
 ```
 `r kfigr::figr(label = "ci1", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[1]]$priorDesc` `r report$top[[1]]$name` credible intervals
 
 **Prior:** `r report$top[[2]]$priorDesc` **Model:** `r report$top[[2]]$name` **MSE:** = `r report$top[[2]]$mse`
-```{r ci2}
+```{r rvp2}
 rvp <- report$top[[2]]$rvp
 plotResFit(rvp, model = paste(report$top[[2]]$prior, report$top[[2]]$name))
 ```
 `r kfigr::figr(label = "ci2", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[2]]$priorDesc` `r report$top[[2]]$name` credible intervals
 
 **Prior:** `r report$top[[3]]$priorDesc` **Model:** `r report$top[[3]]$name` **MSE:** = `r report$top[[3]]$mse`
-```{r ci3}
+```{r rvp3}
 rvp <- report$top[[3]]$rvp
 plotResFit(rvp, model = paste(report$top[[3]]$prior, report$top[[3]]$name))
 ```
