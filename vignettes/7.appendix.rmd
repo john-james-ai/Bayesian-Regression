@@ -8,8 +8,7 @@ editor_options:
 ### `r models[[1]]$priorDesc`
 #### Model Space: `r models[[1]]$priorDesc`
 ```{r a_model_space_1}
-par(cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(5,15,4,2) + 0.1)
-image(models[[1]], rotate = F, cex = 2)
+image(models[[1]], rotate = F, cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(10,4,4,2) + 0.1)
 ```
 `r kfigr::figr(label = "model_space_1", prefix = TRUE, link = TRUE, type="Figure")`: Model space `r models[[1]]$priorDesc`
 

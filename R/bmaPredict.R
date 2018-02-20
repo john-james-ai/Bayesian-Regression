@@ -34,7 +34,7 @@ bmaPredict <- function(models, yX) {
     rvp$MPM <- data.frame(Residual = (y - yhat$MPM$fit), Predicted = yhat$MPM$fit)
 
     # Obtain Coefficients Distributions
-    pdc <- postDist(m)
+    pdc <- postParamDist(m)
 
     # Get model Size
     size <- list()

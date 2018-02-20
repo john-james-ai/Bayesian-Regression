@@ -56,8 +56,13 @@ source("../R/bma.R")
 source("../R/bmaAnalysis.R")
 source("../R/bmaCompare.R")
 source("../R/bmaCompareReport.R")
+source("../R/bmaImage.R")
+source("../R/bmaModel1.R")
+source("../R/bmaModel1Plots.R")
 source("../R/bmaPredict.R")
-source("../R/bmaSummary.R")
+source("../R/bmaPDC.R")
+source("../R/bmaPIP.R")
+source("../R/bmaPIPPlots.R")
 source("../R/preprocess.R")
 source("../R/univariate.R")
 source("../R/univariateQual.R")
@@ -79,7 +84,7 @@ if (run == FALSE) {
   load("./analysis/yX.Rdata")
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
-  #load("./analysis/report.Rdata")
+  load("./analysis/report.Rdata")
 }
 dir.create("./analysis", showWarnings = FALSE)
 ```
@@ -90,7 +95,7 @@ load("../inst/extdata/movies.RData")
 
 ```{r preprocess}
 if (run == TRUE)  {
-  processedData  <- preprocess(movies)
+  processedData  <<- preprocess(movies)
   save(processedData, file = "./analysis/processedData.Rdata")
 }
 ```
@@ -105,7 +110,7 @@ if (run == TRUE)  {
 
 ```{r removetitle}
 if (run == TRUE)  {
-  yX <- processedData %>% select(-title)
+  yX <<- processedData %>% select(-title)
   save(yX, file = "./analysis/yX.Rdata")
 }
 ```
@@ -113,36 +118,37 @@ if (run == TRUE)  {
 
 ```{r bma}
 if (run == TRUE) {
-  models <- bma(yX = yX)
+  models <<- bma(yX = yX)
   save(models, file = "./analysis/models.Rdata")
 }
 ```
 
-```{r bmaSummary}
+```{r bmaAnalysis}
 if (run == TRUE)  {
-  analysis <- bmaSummary(models = models)
+  analysis <<- bmaAnalysis(models = models)
   save(analysis, file = "./analysis/analysis.Rdata")
 }
+run <- FALSE
 ```
 
 ```{r bmaCompare}
 trials <- 10
 if (run == TRUE) {
-  compare <- bmaCompare(yX, trials = trials) 
+  compare <<- bmaCompare(yX, trials = trials) 
   save(compare, file = "./analysis/compare.Rdata")
 }
 ```
 
 ```{r bmaCompareReport}
 if (run == TRUE) {
-  report <- bmaCompareReport(compare = compare)
+  report <<- bmaCompareReport(compare = compare)
   save(report, file = "./analysis/report.Rdata")
 }
 run <- FALSE  
 ```
 
 
-```{r intro, child = '7.appendix.rmd'}
+```{r intro, child = '4.model.rmd'}
 ```
 
 # References

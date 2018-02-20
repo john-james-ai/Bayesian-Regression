@@ -529,7 +529,7 @@ plotBar2 <- function(data, yLab, xLab, plotTitle = NULL, values = FALSE) {
                                           y = data[[2]],
                                           fill = data[[1]]))  +
     ggplot2::geom_bar(stat='identity') +
-    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme_minimal(base_size = 20) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.title.x = ggplot2::element_blank(),
                    legend.position = "none") +

@@ -1,185 +1,45 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Part 4: Modeling
-The model spaces and posterior inclusion probabilities, means, standard deviations, and credible intervals for the parameter are presented For each of the nine priors.
+This section has three purposes: first, explore BMA within the context of each of the nine default parameter priors under consideration; second, evaluate and compare the predictive accuracy of BMA, highest probability model (HPM), best predictive model (BPM), and the median probability model (MPM) for each of the default priors; and third, to reveal the parameter estimates, the predictive means and values of the best performing models under squared error.
 
-## Model Spaces
-```{r model_spaces, fig.height=10}
-graphics::par(mfrow = c(2,2), family = "Open Sans")
-image(models$BIC, rotate = F, main = "BIC Prior")
-image(models$AIC, rotate = F, main = "AIC Prior")
-#image(models$`EB-G`, rotate = F, title = "EB Global Prior")
+## Bayesian Model Averaging
+`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")` shows the model spaces for each of the nine parameter priors. The AIC prior stands out as having the largest model sizes (`r min(summary(models[[2]])[21,-1])` - `r max(summary(models[[2]])[21,-1])`) among its top five models. The remaining models look almost identical. Runtime, imdb_rating, and critics_score appear to be the variables most common among the remaining models.
+
+### Model Spaces
+```{r model_spaces, fig.height = 4}
+graphics::par(mfrow = c(1,3), family = "Open Sans")
+for (i in 1:length(models)) {
+  bmaImage(models[[i]], rotate = F, main = paste(models[[i]]$priorDesc, "Model Rank"))
+  title(sub = "")
+}
 ```
+`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")`: Model spaces for under BMA for the nine candidate parameter priors: model prior = uniform
 
-<div class = "row">
-<div class = "col3-left">"
-```{r model_space_BIC, fig.height=10}
-image(models$BIC, rotate = F)
+### Model Posterior Probabilities
+Of the posterior probabilities for the highest probability model under each prior shown in `r kfigr::figr(label = "model_post_probs", prefix = TRUE, link = TRUE, type="Figure")` the `r analysis$m1s$data[1,1]` prior yielded the model with the greatest probability, given the data. The `r analysis$m1s$data[1,1]` prior was followed by `r analysis$m1s$data[2,1]` and `r analysis$m1s$data[3,1]` priors. The `r mins <- analysis$m1s$data %>% filter(pctMean < 0)` `r mins[[1,1]]` and `r mins[[2,1]]` priors gave models with posterior probabilities `r abs(mins$pctMean[[1]])` and `r abs(mins$pctMean[[2]])` percent below the mean posterior model probability, respectively.
+
+```{r model_post_probs}
+analysis$m1s$plots$postProbs
 ```
-`r kfigr::figr(label = "model_space_BIC", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for BIC Prior
-</div>
+`r kfigr::figr(label = "model_post_probs", prefix = TRUE, link = TRUE, type="Figure")`: Posterior probabilities for the top model under each prior: model prior = uniform 
 
-<div class = "col3-left">"
-```{r model_space_AIC, fig.height=10}
-image(models$AIC, rotate = F)
+### Model Coefficients of Determination
+The coefficients of determination $R^2$ are displayed for each prior in `r kfigr::figr(label = "model_R2", prefix = TRUE, link = TRUE, type="Figure")` Naturally, the `analysis$m1s$data %>% filter(R2 == max(R2)) %>% select(Prior)` had the highest $R^2$ as this metric favors large models. However, the larger model didn't produce an $R^2$ significantly greater than the mean of `r round(mean(analysis$m1s$data$R2), 2)`.
+
+```{r model_R2}
+analysis$m1s$plots$r2
 ```
-`r kfigr::figr(label = "model_space_AIC", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for AIC Prior
-</div>
+`r kfigr::figr(label = "model_R2", prefix = TRUE, link = TRUE, type="Figure")`: Model coefficients of determination $R^2$ values for the top model under each prior: model prior = uniform 
 
-<div class = "col3-left">"
-```{r model_space_EB_G, fig.height=10}
-image(models$`EB-G`, rotate = F)
+### Model Size
+As shown in `r kfigr::figr(label = "model_size", prefix = TRUE, link = TRUE, type="Figure")`, the AIC model was significantly larger than the mean model size of `r size <- analysis$m1s$data %>% filter(Size != max(Size)) %>% select(Size)` `r round(mean(size$Size), 2)` parameters.
+```{r model_size}
+analysis$m1s$plots$size
 ```
-`r kfigr::figr(label = "model_space_EBG", prefix = TRUE, link = TRUE, type="Table")`: Model spaces for Empirical Bayes Global Prior
-</div>
-</div>
-## Overview 
-### Best Model Posterior Probabilities by Prior
-```{r postProbs}
-analysis$postProbsPlot
-```
-`r kfigr::figr(label = "postProbs", prefix = TRUE, link = TRUE, type="Table")`: Best model posterior probabilities by parameter prior; model prior = uniform
-
-### Posterior Parameter Inclusion Probabilities by Prior
-`r kfigr::figr(label = "bma_pip", prefix = TRUE, link = TRUE, type="Table")`: Posterior inclusion probabilities across parameter priors; model prior = uniform
-```{r bma_pip}
-knitr::kable(analysis$pipTable, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-
-### Posterior Parameter Inclusion Probabilities by Parameter
-```{r bma_pip_top, fig.height=20}
-n <- length(analysis$pipPlots)
-nCol <- floor(sqrt(n)-1)
-do.call("grid.arrange", c(analysis$pipPlots, ncol=nCol))
-```
-`r kfigr::figr(label = "bma_pip_top", prefix = TRUE, link = TRUE, type="Figure")`: Posterior inclusion probabilities for highest probability parameters
-
-### Model Parameter Inclusion Correlation Across Priors
-```{r pip_correlations}
-corrplot::corrplot(cor(analysis$pipDf), diag = FALSE,
-                     order = "hclust", number.cex = 1,
-                     addCoef.col = "black", tl.col = "black",
-                     tl.srt = 90, tl.pos = "td", tl.cex = 1,
-                     method = "color", type = "upper",
-                     col = RColorBrewer::brewer.pal(n = 11,
-                                                    name = "PiYG"))
-```
-`r kfigr::figr(label = "pip_correlations", prefix = TRUE, link = TRUE, type="Figure")`: Correlation of posterior parameter inclusion probabilities across parameter priors; model prior = uniform
-
-### Predictive Performance
-`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE on test set for default priors over `r trials` trials.
-```{r performance}
-knitr::kable(report$performance, escape = F, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
-```
-
-### Predictive Performance by Prior and Trial
-**Models:** Bayesian Model Averaging
-```{r bma_performance}
-plot(report$msePlots[[1]])
-```
-`r kfigr::figr(label = "bma_performance", prefix = TRUE, link = TRUE, type="Figure")`: Performance under baysian model averaging by trial
-
-**Models:** Best Predictive Models
-```{r bpm_performance}
-plot(report$msePlots[[2]])
-```
-`r kfigr::figr(label = "bpm_performance", prefix = TRUE, link = TRUE, type="Figure")`: Performance of best predictive models by trial
-
-**Models:** Highest Probability Models
-```{r hpm_performance}
-plot(report$msePlots[[3]])
-```
-`r kfigr::figr(label = "hpm_performance", prefix = TRUE, link = TRUE, type="Figure")`: Performance of highest probability models by trial
-
-**Models:** Median Predictive Models
-```{r mpm_performance}
-plot(report$msePlots[[4]])
-```
-`r kfigr::figr(label = "mpm_performance", prefix = TRUE, link = TRUE, type="Figure")`: Performance of median predictive models by trial
-
-
-
-### Parameter Density Top 3 Models
-**Prior:** `r report$top[[1]]$priorDesc` **Model:** `r report$top[[1]]$name` **MSE:** = `r report$top[[1]]$mse`
-`r kfigr::figr(label = "model1_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r report$top[[1]]$priorDesc` `r report$top[[1]]$name` parameter distribution
-```{r model1_pdc}
-pdc <- report$top[[1]]$pdc$df
-pdc <- cbind(Parameter = rownames(report$top[[1]]$pdc$df), pdc)
-pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
-knitr::kable(pdc, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
-```
-
-**Prior:** `r report$top[[2]]$priorDesc` **Model:** `r report$top[[2]]$name` **MSE:** = `r report$top[[2]]$mse`
-`r kfigr::figr(label = "model2_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r report$top[[2]]$priorDesc` `r report$top[[2]]$name` parameter distribution
-```{r model2_pdc}
-pdc <- report$top[[2]]$pdc$df
-pdc <- cbind(Parameter = rownames(report$top[[2]]$pdc$df), pdc)
-pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
-knitr::kable(pdc, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
-```
-
-**Prior:** `r report$top[[3]]$priorDesc` **Model:** `r report$top[[3]]$name` **MSE:** = `r report$top[[3]]$mse`
-`r kfigr::figr(label = "model3_pdc", prefix = TRUE, link = TRUE, type="Table")`: `r report$top[[3]]$priorDesc` `r report$top[[3]]$name` parameter distribution
-```{r model3_pdc}
-pdc <- report$top[[3]]$pdc$df
-pdc <- cbind(Parameter = rownames(report$top[[3]]$pdc$df), pdc)
-pdc <- pdc %>% filter(Probability > 0) %>% select(-Probability)
-knitr::kable(pdc, digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped"), full_width = T, position = "center")
-```
-
-
-### Credible Intervals Top 3 Models
-**Prior:** `r report$top[[1]]$priorDesc` **Model:** `r report$top[[1]]$name` **MSE:** = `r report$top[[1]]$mse`
-```{r ci1}
-plot(report$top[[1]]$ci)
-```
-`r kfigr::figr(label = "ci1", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[1]]$priorDesc` `r report$top[[1]]$name` credible intervals
-
-**Prior:** `r report$top[[2]]$priorDesc` **Model:** `r report$top[[2]]$name` **MSE:** = `r report$top[[2]]$mse`
-```{r ci2}
-plot(report$top[[2]]$ci)
-```
-`r kfigr::figr(label = "ci2", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[2]]$priorDesc` `r report$top[[2]]$name` credible intervals
-
-**Prior:** `r report$top[[3]]$priorDesc` **Model:** `r report$top[[3]]$name` **MSE:** = `r report$top[[3]]$mse`
-```{r ci3}
-plot(report$top[[3]]$ci)
-```
-`r kfigr::figr(label = "ci3", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[3]]$priorDesc` `r report$top[[3]]$name` credible intervals
-
-### Residuals vs. Predicted 
-**Prior:** `r report$top[[1]]$priorDesc` **Model:** `r report$top[[1]]$name` **MSE:** = `r report$top[[1]]$mse`
-```{r rvp1}
-rvp <- report$top[[1]]$rvp
-plotResFit(rvp, model = paste(report$top[[1]]$prior, report$top[[1]]$name))
-```
-`r kfigr::figr(label = "ci1", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[1]]$priorDesc` `r report$top[[1]]$name` credible intervals
-
-**Prior:** `r report$top[[2]]$priorDesc` **Model:** `r report$top[[2]]$name` **MSE:** = `r report$top[[2]]$mse`
-```{r rvp2}
-rvp <- report$top[[2]]$rvp
-plotResFit(rvp, model = paste(report$top[[2]]$prior, report$top[[2]]$name))
-```
-`r kfigr::figr(label = "ci2", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[2]]$priorDesc` `r report$top[[2]]$name` credible intervals
-
-**Prior:** `r report$top[[3]]$priorDesc` **Model:** `r report$top[[3]]$name` **MSE:** = `r report$top[[3]]$mse`
-```{r rvp3}
-rvp <- report$top[[3]]$rvp
-plotResFit(rvp, model = paste(report$top[[3]]$prior, report$top[[3]]$name))
-```
-`r kfigr::figr(label = "ci3", prefix = TRUE, link = TRUE, type="Figure")`: `r report$top[[3]]$priorDesc` `r report$top[[3]]$name` credible intervals
-
-
-
-#### `r report$top[[2]]$priorDesc` `r report$top[[1]]$name`
-
-#### `r report$top[[3]]$priorDesc` `r report$top[[1]]$name`
-### Model Coefficient CI plots
-### Residual vs Fitted
-### Interpretation of Coefficients.
+`r kfigr::figr(label = "model_size", prefix = TRUE, link = TRUE, type="Figure")`: Model size for the top model under each prior: model prior = uniform 
 
 * * *

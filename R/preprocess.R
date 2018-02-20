@@ -40,6 +40,7 @@ preprocess <- function(data) {
   # Transform number of IMDB votes
   data$imdb_num_votes_log <- log2(data$imdb_num_votes)
   data <- data[complete.cases(data),]
+  data <- data %>% select(-imdb_num_votes)
 
   data <- na.omit(data)
   data <- data %>% mutate_if(is.factor, as.character)

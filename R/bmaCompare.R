@@ -13,8 +13,6 @@
 #' @export
 bmaCompare <- function(yX, trials = 2) {
 
-  top3 <- list()
-
   set.seed(529)
   predictions <- lapply(seq_len(trials), function(i) {
 
@@ -29,29 +27,9 @@ bmaCompare <- function(yX, trials = 2) {
     # Perform predictions on new data.
     p <- bmaPredict(models, test)
 
-    # Retain top 3
-    top3 <<- c(top3, p$top3)
-    top3 <<- list.sort(top3, mse, (mse))
-    top3 <<- lapply(seq(1:3), function(x) {top3[[x]]})
-
     p$performance <- cbind(Trial = as.factor(i), p$performance)
     p$performance
   })
-
-  # Sort models, by MSE
-  top <- list.sort(top3, mse, (mse))
   
-  # Compute confidence intervals for top models
-  for (i in 1:length(top)) {
-    p <- predict(top[[i]]$model, newdata = top[[i]]$yX, 
-                 estimator = top[[i]]$id, se.fit = TRUE)
-    top[[i]]$ci <- confint(p, parm = "pred")
-  }
-
-  compare <- list(
-    top = top,
-    predictions = predictions
-  )
-
-  return(compare)
+  return(predictions)
 }

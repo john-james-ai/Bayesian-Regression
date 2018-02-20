@@ -1,9 +1,9 @@
 #==============================================================================#
 #                       Bayes Model Averaging Reports                          #
 #==============================================================================#
-#' bmaSummary
+#' bmaAnalysis
 #'
-#' \code{bmaSummary} Reports results from a series of BMA Regression for a series of models.
+#' \code{bmaAnalysis} Reports results for a series of models.
 #'
 #' @param models List of BMA models
 #' @return list of reports
@@ -11,7 +11,7 @@
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family BMA functions
 #' @export
-bmaSummary <- function(models, top = FALSE) {
+bmaAnalysis <- function(models, top = FALSE) {
 
   #---------------------------------------------------------------------------#
   #                             Format Data                                   #
@@ -49,12 +49,6 @@ bmaSummary <- function(models, top = FALSE) {
   #---------------------------------------------------------------------------#
   # Get models for variables with minimum 50% inclusion across all models
   plotData <- as.data.frame(pip[2:nrow(pip),])
-  if (top == TRUE) {
-    MEAN <- rowMeans(plotData)
-    plotData <- cbind(plotData, MEAN)
-    plotData <- head(plotData[order(-MEAN),][-ncol(plotData)])
-  }
-  plots <- list()
   for (i in 1:nrow(plotData)) {
     plots[[i]] <- plotBar2(data = data.frame(x = priors,
                                              y = as.numeric(plotData[i,])),
@@ -92,7 +86,7 @@ bmaSummary <- function(models, top = FALSE) {
   #---------------------------------------------------------------------------#
   bicBMAPred <- predict(models[["BIC"]], estimator = "BMA")
   bicBMAPostProb <- bicBMAPred$postprobs[1]
-  bmaSummary <- rbindlist(lapply(seq_along(models), function(m) {
+  bmaAnalysis <- rbindlist(lapply(seq_along(models), function(m) {
     model <- list()
 
     # Obtain BMA Prediction for Highest Probability Model
@@ -104,7 +98,7 @@ bmaSummary <- function(models, top = FALSE) {
                                   bicBMAPostProb * 100, 3)
     model
   }))
-  names(bmaSummary) <- c("Prior","Size", "Posterior Probability", "% BIC")
+  names(bmaAnalysis) <- c("Prior","Size", "Posterior Probability", "% BIC")
 
   analysis = list(
     postProbsPlot = postProbsPlot,
@@ -112,7 +106,7 @@ bmaSummary <- function(models, top = FALSE) {
     pdc = pdc,
     pipTable = pipTable,
     pipPlots = plots,
-    bmaSummary = bmaSummary
+    bmaAnalysis = bmaAnalysis
   )
   return(analysis)
 }
