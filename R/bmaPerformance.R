@@ -13,12 +13,13 @@
 #' @export
 bmaPerformance <- function(yX, trials = 3) {
 
+  predictions <- list()
   set.seed(529)
   
-  mse <- data.frame()
+  predictions$mse <- data.frame()
   estimators <- c("BMA", "BPM", "HPM", "MPM")
 
-  lapply(seq_len(trials), function(i) {
+  predictions <- lapply(seq_len(trials), function(i) {
 
     # Sample Data
     sample <- sample.int(n = nrow(yX), size = floor(.8*nrow(yX)), replace = F)
@@ -31,8 +32,9 @@ bmaPerformance <- function(yX, trials = 3) {
 
     # Perform predictions on new data.
     p <- bmaPredictModels(models = models, yX = test, trial = i)
-    mse <<- rbind(mse, p$mse)
+    predictions$mse <<- rbind(predictions$mse, p$mse)
+    p
   })
   
-  return(mse)
+  return(predictions)
 }

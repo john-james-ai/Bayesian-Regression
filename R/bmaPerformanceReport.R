@@ -18,8 +18,8 @@ bmaPerformanceReport <- function(performance) {
   p$plots$box <- list()
   
   # Reshape results
-  p$dfl <- performance
-  p$dfw <- dcast(performance, PriorDesc ~ id, mean, value.var = 'mse')
+  p$dfl <- performance$mse
+  p$dfw <- dcast(performance$mse, PriorDesc ~ id, mean, value.var = 'mse')
   
   # Compute distribution of MSE by prior and model
   p$dist <- p$dfl %>% group_by(Prior, id) %>% summarise(Mean = mean(mse),
@@ -29,7 +29,7 @@ bmaPerformanceReport <- function(performance) {
            `2.5%` = Mean - qt(1 - (0.05 / 2), N - 1) * SE,
            `97.5%` = Mean + qt(1 - (0.05 / 2), N - 1) * SE) %>%
     select(Prior, id, Mean, `2.5%`, `97.5%`)
-  
+    
   # Conduct t-tests of difference in mean MSE
   mu <- min(p$dist$Mean)
   p$ttests <- p$dfl %>% select(Prior, PriorDesc, id, mse) %>%

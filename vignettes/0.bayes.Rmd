@@ -133,7 +133,7 @@ if (run == TRUE)  {
 ```
 
 ```{r bmaPerformance}
-trials <- 5
+trials <- 100
 if (run == TRUE) {
   performance <<- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
