@@ -162,12 +162,14 @@ plotQQ <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
 #' @param xLab Capital case character string containing the name of the x variable (optional)
 #' @param yLab Capital case character string containing the name of the y variable
 #' @param plotTitle Character case character string containing the title for the plot
+#' @param rotate Logical indicating whether to rotate the plot by 90 degrees
+#' @param showMean Logical indicating whether the mean value should be displayed.
 #'
 #' @return List containing a contingency table and a stacked bar plot.
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
+plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL, rotate = FALSE, showMean = TRUE) {
 
   if (length(data) > 2) stop(paste("Error in plotBox: Dimension of data frame must be 1 or 2, not", length(data)))
   if (length(data) == 1) {
@@ -198,18 +200,24 @@ plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
 
 
   bp <- ggplot2::ggplot(data = data,
-                             ggplot2::aes(x = data$x,
+                             ggplot2::aes(x = reorder(x, -y, mean),
                                           y = data$y,
                                           fill = data$x))  +
     ggplot2::geom_boxplot(outlier.colour = "black") +
-    ggplot2::stat_summary(fun.y = mean, colour = "white", geom = "point",
-                          shape = 18, size = 5, show.legend = FALSE) +
-    ggplot2::stat_summary(fun.data = means, geom = "text", colour = "white", vjust = -0.7) +
     ggplot2::theme_minimal(base_size = 16) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    legend.position = "none") +
     ggplot2::ggtitle(plotTitle) +
     ggplot2::scale_fill_manual(values = myPal(length(unique(data$x))))
+  
+  if (showMean == TRUE) {
+    bp <- bp + ggplot2::stat_summary(fun.y = mean, colour = "black", 
+                                     geom = "point", shape = 18, 
+                                     size = 5, show.legend = FALSE) + 
+      ggplot2::stat_summary(fun.data = means, geom = "text", 
+                            colour = "black", vjust = -0.0,
+                            hjust = -1)
+  }
 
   if (is.null(xLab)) {
     bp <- bp + ggplot2::coord_flip() +
@@ -221,8 +229,14 @@ plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
                      axis.title.x = ggplot2::element_blank(),
                      axis.title.y = ggplot2::element_blank())
   } else {
-    bp <- bp + ggplot2::labs(y = yLab, x = xLab, fill = xLab)
+    if (rotate == TRUE) {
+      bp <- bp + ggplot2::coord_flip() +
+        ggplot2::labs(y = yLab, x = xLab, fill = xLab)
+    } else {
+      bp <- bp + ggplot2::labs(y = yLab, x = xLab, fill = xLab)
+    }
   }
+  
 
   return(bp)
 }
@@ -529,7 +543,7 @@ plotBar2 <- function(data, yLab, xLab, plotTitle = NULL, values = FALSE) {
                                           y = data[[2]],
                                           fill = data[[1]]))  +
     ggplot2::geom_bar(stat='identity') +
-    ggplot2::theme_minimal(base_size = 20) +
+    ggplot2::theme_minimal(base_size = 18) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.title.x = ggplot2::element_blank(),
                    legend.position = "none") +

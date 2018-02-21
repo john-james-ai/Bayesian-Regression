@@ -54,12 +54,13 @@ library(statsr)
 ```{r source-functions}
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
-source("../R/bmaCompare.R")
-source("../R/bmaCompareReport.R")
+source("../R/bmaPerformance.R")
+source("../R/bmaPerformanceReport.R")
 source("../R/bmaImage.R")
 source("../R/bmaModel1.R")
 source("../R/bmaModel1Plots.R")
 source("../R/bmaPredict.R")
+source("../R/bmaPredictModels.R")
 source("../R/bmaPDC.R")
 source("../R/bmaPIP.R")
 source("../R/bmaPIPPlots.R")
@@ -85,6 +86,7 @@ if (run == FALSE) {
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
   load("./analysis/report.Rdata")
+  load("./analysis/performance.Rdata")
 }
 dir.create("./analysis", showWarnings = FALSE)
 ```
@@ -128,20 +130,20 @@ if (run == TRUE)  {
   analysis <<- bmaAnalysis(models = models)
   save(analysis, file = "./analysis/analysis.Rdata")
 }
-run <- FALSE
 ```
 
-```{r bmaCompare}
-trials <- 10
+```{r bmaPerformance}
+trials <- 5
 if (run == TRUE) {
-  compare <<- bmaCompare(yX, trials = trials) 
-  save(compare, file = "./analysis/compare.Rdata")
+  performance <<- bmaPerformance(yX, trials = trials) 
+  save(performance, file = "./analysis/performance.Rdata")
 }
 ```
 
-```{r bmaCompareReport}
+```{r bmaPerformanceReport}
+run == TRUE
 if (run == TRUE) {
-  report <<- bmaCompareReport(compare = compare)
+  report <<- bmaPerformanceReport(performance = performance)
   save(report, file = "./analysis/report.Rdata")
 }
 run <- FALSE  

@@ -39,7 +39,7 @@ bma <- function(yX) {
                                    best_dir_win + top200_box + imdb_num_votes_log,
                                  data = yX, prior = "AIC",
                                  modelprior = uniform(), method = "BAS")
-  models[["AIC"]]$priorDesc <- 'Akaike information criterion (AIC)'
+  models[["AIC"]]$priorDesc <- 'Akaike Information Criterion (AIC)'
   
   
   
@@ -51,7 +51,7 @@ bma <- function(yX) {
                                     best_dir_win + top200_box + imdb_num_votes_log,
                                   data = yX, prior = "EB-global", initprobs = "eplogp",
                                   modelprior = uniform(), method = "BAS")
-  models[["EB-G"]]$priorDesc <- 'EB-Global'
+  models[["EB-G"]]$priorDesc <- 'Empirical Bayes (Global)'
   
   
   models[["EB-L"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +
@@ -62,7 +62,7 @@ bma <- function(yX) {
                                     best_dir_win + top200_box + imdb_num_votes_log,
                                   data = yX, prior = "EB-local", initprobs = "eplogp",
                                   modelprior = uniform(), method = "BAS")
-  models[["EB-L"]]$priorDesc <- 'EB-Local'
+  models[["EB-L"]]$priorDesc <- 'Empirical Bayes (Local)'
   
   models[["g"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +
                                  runtime + mpaa_rating_R + thtr_rel_year +
@@ -72,7 +72,7 @@ bma <- function(yX) {
                                  best_dir_win + top200_box + imdb_num_votes_log,
                                data = yX, prior = "g-prior", alpha = 13,
                                modelprior = uniform(), method = "BAS")
-  models[["g"]]$priorDesc <- 'g-prior'
+  models[["g"]]$priorDesc <- "Zellner's g-prior"
   
   
   models[["HG"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +
@@ -127,7 +127,7 @@ bma <- function(yX) {
                                   best_dir_win + top200_box + imdb_num_votes_log, 
                                 data = yX, alpha = n, prior = "ZS-null", 
                                 modelprior = uniform(), method = "BAS")
-  models[["ZS"]]$priorDesc <- 'ZS-Null'
+  models[["ZS"]]$priorDesc <- 'Zellner-Siow (NULL)'
 
   return(models)
 }

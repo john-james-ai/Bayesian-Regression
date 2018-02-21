@@ -30,7 +30,7 @@ bmaModel1Plots <- function(m1s) {
                             values = TRUE)
   m1Plots$r2 <- plotBar2(data = m1s[,c(1,3)], yLab = "R2",
                             xLab = "Prior",
-                            plotTitle = "Coefficient of Determination (R2)",
+                            plotTitle = "R2",
                             values = TRUE)
   m1Plots$size <- plotBar2(data = m1s[,c(1,4)], yLab = "Model Size",
                        xLab = "Prior",
