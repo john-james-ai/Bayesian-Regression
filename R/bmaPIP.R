@@ -19,6 +19,7 @@ bmaPIP <- function(models) {
   #---------------------------------------------------------------------------#
   pip <-list()
   pip$data <- do.call(cbind, lapply(models, function(x) x$probne0))
+  pip$nSig <- do.call(cbind, lapply(models, function(x) sum(x$probne0[-1] > 0.5)))
   rownames(pip$data) <- gsub("yes", "", c(models[["BIC"]]$namesx))
   pip$plots <- bmaPIPPlots(pip$data)
   return(pip)

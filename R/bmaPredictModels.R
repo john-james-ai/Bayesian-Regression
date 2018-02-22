@@ -9,7 +9,7 @@
 #' @param yX Data frame containing test data
 #' @param trial Numeric indicator of the number of trials of repeated predictions
 #'
-#' @return mse frame containing MSE measures for each model
+#' @return MSE frame containing MSE measures for each model
 #'
 #' @author John James, \email{jjames@@yXsciencesalon.org}
 #' @family BMA functions
@@ -17,19 +17,19 @@
 bmaPredictModels <- function(models, yX, trial = NULL) {
   
   predictions <- list()
-  predictions$mse <- data.frame()
+  predictions$MSE <- data.frame()
   
   estimators <- c("BMA", "BPM", "HPM", "MPM")
 
   y <- yX$audience_score
   
-  predictions$mse <- data.frame()
+  predictions$MSE <- data.frame()
 
   predictions$modelResults <- lapply(models, function(m) {
     estimatorResults <- lapply(estimators, function(e) {
       p <- bmaPredict(model = m, estimator = e, yX = yX, prediction = TRUE,
                       trial = trial,  rvp = FALSE, pe = FALSE, pi = FALSE)
-      predictions$mse <<- rbind(predictions$mse, p$mse)
+      predictions$MSE <<- rbind(predictions$MSE, p$MSE)
       p
     })
     names(estimatorResults) <- estimators

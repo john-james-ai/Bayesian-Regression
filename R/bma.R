@@ -64,7 +64,7 @@ bma <- function(yX) {
                                   modelprior = uniform(), method = "BAS")
   models[["EB-L"]]$priorDesc <- 'Empirical Bayes (Local)'
   
-  models[["g"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +
+  models[["g-prior"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +
                                  runtime + mpaa_rating_R + thtr_rel_year +
                                  oscar_season + summer_season + imdb_rating +
                                  critics_score + best_pic_nom + best_pic_win + 
@@ -72,7 +72,7 @@ bma <- function(yX) {
                                  best_dir_win + top200_box + imdb_num_votes_log,
                                data = yX, prior = "g-prior", alpha = 13,
                                modelprior = uniform(), method = "BAS")
-  models[["g"]]$priorDesc <- "Zellner's g-prior"
+  models[["g-prior"]]$priorDesc <- "Zellner's g-prior"
   
   
   models[["HG"]] <- BAS::bas.lm(audience_score ~ feature_film + drama +

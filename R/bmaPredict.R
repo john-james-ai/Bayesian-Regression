@@ -44,22 +44,31 @@ bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = F
                             estimator = estimator, prediction = prediction)
   }
   
-  if (prediction == TRUE) {
-    Yhat <- pred$Ypred
-    se <- pred$se.pred
+  # Extract the standard errors for model with lowest MSE for the top BMA model 
+  if (estimator == "BMA") {
+    sePred <- pred$se.bma.pred
+    seFit <- pred$se.bma.fit
   } else {
-    Yhat <- pred$fit
-    se <- pred$se.fit
+    sePred <- pred$se.pred
+    seFit <- pred$se.fit
+  }
+    
+  
+  if (prediction == TRUE) {
+    se <- sePred
+  } else {
+    se <- seFit
   }
     
   
   # Prepare MSE
-  p$mse <- data.frame(Prior = model$prior,
+  Yhat <- pred$fit
+  p$MSE <- data.frame(Prior = model$prior,
                       PriorDesc = model$priorDesc,
-                      id = estimator,
-                      mse = mean((y - Yhat)^2))
+                      Estimator = estimator,
+                      MSE = mean((y - Yhat)^2))
   if (!(is.null(trial))) {
-    p$mse <- cbind(Trial = trial, p$mse)
+    p$MSE <- cbind(Trial = trial, p$MSE)
   }
   
   # Prepare residual vs prediction data frame 
@@ -81,7 +90,7 @@ bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = F
       p$ci <- confint(pred, parm = 'mean')
     }
     p$pi <- cbind(p$pi, p$ci[,c(1:2)])
-    names(pi) <- c("Yhat", "SE", "2.5%", "97.5%")
+    names(p$pi) <- c("Yhat", "SE", "2.5%", "97.5%")
   }
     
   

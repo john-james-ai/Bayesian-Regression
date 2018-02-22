@@ -20,7 +20,7 @@ editor_options:
 options(knitr.table.format = "html")
 options(max.print=100, scipen=999, width = 800)
 knitr::opts_chunk$set(echo=FALSE,
-	             cache=TRUE,
+	             cache=FALSE,
                prompt=FALSE,
 	             eval = TRUE,
                tidy=TRUE,
@@ -80,7 +80,7 @@ priors <- openxlsx::read.xlsx(xlsxFile = "../notes/priors.xlsx")
 ```
 
 ```{r set_run}
-run <- TRUE
+run <- FALSE
 if (run == FALSE) {
   load("./analysis/yX.Rdata")
   load("./analysis/models.Rdata")
@@ -97,7 +97,7 @@ load("../inst/extdata/movies.RData")
 
 ```{r preprocess}
 if (run == TRUE)  {
-  processedData  <<- preprocess(movies)
+  processedData  <- preprocess(movies)
   save(processedData, file = "./analysis/processedData.Rdata")
 }
 ```
@@ -112,7 +112,7 @@ if (run == TRUE)  {
 
 ```{r removetitle}
 if (run == TRUE)  {
-  yX <<- processedData %>% select(-title)
+  yX <- processedData %>% select(-title)
   save(yX, file = "./analysis/yX.Rdata")
 }
 ```
@@ -120,35 +120,45 @@ if (run == TRUE)  {
 
 ```{r bma}
 if (run == TRUE) {
-  models <<- bma(yX = yX)
+  models <- bma(yX = yX)
   save(models, file = "./analysis/models.Rdata")
 }
 ```
 
 ```{r bmaAnalysis}
 if (run == TRUE)  {
-  analysis <<- bmaAnalysis(models = models)
+  analysis <- bmaAnalysis(models = models)
   save(analysis, file = "./analysis/analysis.Rdata")
 }
 ```
 
 ```{r bmaPerformance}
-trials <- 100
+trials <- 400
 if (run == TRUE) {
-  performance <<- bmaPerformance(yX, trials = trials) 
+  performance <- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
 }
 ```
 
 ```{r bmaPerformanceReport}
-run == TRUE
+run <- TRUE
 if (run == TRUE) {
-  report <<- bmaPerformanceReport(performance = performance)
+  report <- bmaPerformanceReport(performance = performance)
   save(report, file = "./analysis/report.Rdata")
 }
-run <- FALSE  
 ```
 
+
+```{r reload}
+if (run == TRUE) {
+  load("./analysis/yX.Rdata")
+  load("./analysis/models.Rdata")
+  load("./analysis/analysis.Rdata")
+  load("./analysis/report.Rdata")
+  load("./analysis/performance.Rdata")
+}
+run <- FALSE
+```
 
 ```{r intro, child = '4.model.rmd'}
 ```

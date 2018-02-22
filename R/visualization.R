@@ -654,3 +654,47 @@ plotCIBars <- function(data, plotTitle = NULL) {
     ggplot2::scale_fill_manual(values = myPal(length(data[[1]])))
   return(confIntPlot)
 }
+
+#------------------------------------------------------------------------------#
+#                       Plot Two Lines with Two Y Axes                         #
+#------------------------------------------------------------------------------#
+#' plotLines2Y
+#'
+#' \code{plotLines2Y} Plots two lines on single plot with two Y axes.
+#'
+#' @param data Data frame containing three variables: (1) x data, (2), y1 data 
+#' (left axis), and (3) y2 data (right axis)
+#' @param xticks Logical indicating whether xticks should be rendered.
+#' @param xLab Capital case character string containing the name of the x variable (optional)
+#' @param yLabL Capital case character string containing the name of the y1 variable
+#' @param yLabR Capital case character string containing the name of the y2 variable
+#' @param plotTitle Character case character string containing the title for the plot
+#'
+#' @return List containing a contingency table and a stacked bar plot.
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family visualization functions
+#' @export
+plotLines2Y <- function(data, xticks = TRUE, xLab, yLabL, yLabR, yLow = NULL, yHigh = NULL, 
+                     plotTitle = NULL) {
+  
+  #TODO: Get working
+  
+  # Render plot
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
+  
+  lp <- ggplot2::ggplot(data = data, ggplot2::aes(x = data[[1]]))  +
+    ggplot2::geom_line(ggplot2::aes(y = data[[2]], colour = yLabL)) +
+    ggplot2::geom_line(ggplot2::aes(y = data[[3]], colour = yLabR)) +
+    ggplot2::scale_y_continuous(sec.axis = sec_axis(~., name = yLabR)) +
+    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                   legend.position = "right") +
+    ggplot2::ggtitle(plotTitle) +
+    ggplot2::scale_x_discrete()
+  
+  if (xticks == FALSE) {
+    lp <- lp + ggplot2::theme(axis.text.x = ggplot2::element_blank())
+  }
+  
+  return(lp)
+}
