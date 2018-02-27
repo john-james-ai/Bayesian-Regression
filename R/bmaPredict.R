@@ -18,7 +18,7 @@
 #' for making predictions. The default is FALSE for estimation of the mean.
 #' @param rvp Logical indicating whether to return residuals vs predicted (fitted) data frame
 #' @param pe Logical indicating whether to return paramater estimates
-#' @param pi Logical indicating whether to return prediction intervals
+#' @param predObj Logical.  If TRUE, the object from the predict function is returned.
 #'
 #' @return mse frame containing MSE measures for each model
 #'
@@ -26,15 +26,19 @@
 #' @family BMA functions
 #' @export
 bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = FALSE, rvp = FALSE, 
-                       pe = FALSE, pi = FALSE) {
+                       pe = FALSE, predObj = FALSE) {
   
   p <- list()
   estimators <- c("BMA", "BPM", "HPM", "MPM")
   
   if (!(estimator %in% estimators)) stop("Invalid estimator. Must be 'BMA', BPM', 'HPM', or 'MPM'.")
   
+  p$prior <- model$prior
+  p$priorDesc <- model$priorDesc
+  p$estimator <- estimator
+  
   # Perform prediction
-  if (is.null(yX)) {
+  if (missing(yX)) {
     y <- model$Y
     pred <- predict(object = model, se.fit = pi, 
                             estimator = estimator, prediction = prediction)
@@ -43,23 +47,7 @@ bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = F
     pred <- predict(object = model, newdata = yX, se.fit = pi, 
                             estimator = estimator, prediction = prediction)
   }
-  
-  # Extract the standard errors for model with lowest MSE for the top BMA model 
-  if (estimator == "BMA") {
-    sePred <- pred$se.bma.pred
-    seFit <- pred$se.bma.fit
-  } else {
-    sePred <- pred$se.pred
-    seFit <- pred$se.fit
-  }
-    
-  
-  if (prediction == TRUE) {
-    se <- sePred
-  } else {
-    se <- seFit
-  }
-    
+  if (predObj == TRUE) p$pred <- pred
   
   # Prepare MSE
   Yhat <- pred$fit
@@ -80,19 +68,6 @@ bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = F
   if (pe == TRUE) {
     p$pe <- bmaPDC(m = model, estimator = estimator)
   }
-  
-  # Prepare prediction intervals
-  if (pi == TRUE) {
-    p$pi <- data.frame(Yhat = Yhat, SE = se)
-    if (prediction == TRUE) {
-      p$ci <- confint(pred, parm = 'pred')
-    } else {
-      p$ci <- confint(pred, parm = 'mean')
-    }
-    p$pi <- cbind(p$pi, p$ci[,c(1:2)])
-    names(p$pi) <- c("Yhat", "SE", "2.5%", "97.5%")
-  }
-    
   
   return(p)
 }

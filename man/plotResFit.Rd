@@ -4,12 +4,12 @@
 \alias{plotResFit}
 \title{plotResFit}
 \usage{
-plotResFit(mod, yLab)
+plotResFit(x, model)
 }
 \arguments{
-\item{mod}{Linear model object}
+\item{x}{Linear model object or a data frame containing the residuals for each observation}
 
-\item{yLab}{Capital case character string for response variable}
+\item{model}{Capital case name of the model}
 }
 \value{
 resFit Residual vs. Fit Plot
@@ -18,13 +18,13 @@ resFit Residual vs. Fit Plot
 \code{plotResFit} Plots regression diagnostics
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBar}},
-  \code{\link{plotBox}}, \code{\link{plotCIBars}},
-  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
-  \code{\link{plotHist}}, \code{\link{plotLine}},
-  \code{\link{plotQQ}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBar}}, \code{\link{plotBox}},
+  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
+  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
+  \code{\link{plotLine}}, \code{\link{plotQQ}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

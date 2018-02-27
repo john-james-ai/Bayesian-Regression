@@ -39,17 +39,17 @@ do.call("grid.arrange", c(g, ncol = 2))
 `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")`: Model sizes and coefficients of determination $R^2$ values for the top model under each prior: model prior = uniform 
 
 **Model Coefficients of Determination**   
-The coefficients of determination $R^2$ are displayed for each prior in `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")` Naturally, the `r analysis$m1s$data %>% filter(R2 == max(R2)) %>% select(Prior)` had the highest $R^2$ as this metric favors large models. However, the larger model didn't produce an $R^2$ significantly greater than the mean of `r round(mean(analysis$m1s$data$R2), 2)`.
+The coefficients of determination $R^2$ are displayed for each prior in `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")` Naturally, the `r analysis$m1s$data %>% filter(R2 == max(R2)) %>% select(Prior)` had the highest $R^2$ as this metric favors large models. However, this larger model with its 12 predictors didn't produce an $R^2$ significantly greater than the mean of `r round(mean(analysis$m1s$data$R2), 2)`.
 
 **Model Size**
 As shown in `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")`, the AIC model was significantly larger than the mean model size of `r size <- analysis$m1s$data %>% filter(Size != max(Size)) %>% select(Size)` `r round(mean(size$Size), 2)` parameters.
 
 ## Model Performance 
-Now, the predictive performance of competing default priors are compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for the BMA, best predictive model (BPM), the highest probability model (HPM), and the median probability model (MPM) estimators on all nine priors simultaneously. The MSE of the prediction is:
+Now, the predictive performance of competing default priors are compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for the BMA, best predictive model (BPM), the highest probability model (HPM), and the median probability model (MPM) estimators on all nine priors simultaneously. The MSE of prediction is:
 $$1/n_{test}\displaystyle\sum_{y_{new}\in D_{test}}(y_{new} - \hat{y}_{new})^2$$
 where $n_{test}$ is the number of observations in $D_{test}$.
 
-The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to estimate the BMA predictive distribution, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions using the MSE of the prediction. This analysis was repeated 100 times for 100 different random splits, averaging the MSE over splits. `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")` shows the predictive performance of the nine parameter priors and four estimators, for a total of 36 predictions, in conjunction with the uniform model priors a evaluated by the MSE.
+The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to estimate the BMA predictive distribution, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions. The mean MSE was computed for each prior and this analysis was repeated 400 times for 400 different random splits, averaging the MSE over splits for each prior and estimator. `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")` shows the predictive performance of the nine parameter priors and four estimators, for a total of 36 predictions, in conjunction with the uniform model priors a evaluated by the MSE.
 
 `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors and predictive performance by prior and estimator (movie dataset, model prior: uniform); 100 subsamples 
 ```{r performance_table}
@@ -74,8 +74,19 @@ report$plots$box
 `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of MSE among top 4 models
 
 ## Model Evaluation
-Here, the top four models are evaluated in terms of residual versus predicted distributions, the parameter coefficients, and their prediction intervals. The model selected for final prediction on 2016 data would be that which performed well on squared error while meeting Bayesian regression inference conditions, specifically residual versus predicted homoscedacticity.
+The model selected for final prediction on 2016 data would be that which performed well on squared error while meeting Bayesian regression inference conditions, specifically residual versus predicted homoscedacticity. Here, the top four models are evaluated in terms of residual versus fitted distributions, the parameter coefficients, and their prediction intervals. All four priors generated similar distributions of residuals vs-a-vis fitted values. Residuals concentration tended to coincide with the proximity of fitted values. Three same three observations were influential and potentially outliers.  
 
+**Residuals vs Fitted**
+```{r rvf, fig.height = 8}
+par(mfrow = 3)
+for (i in 1:length(models)) plot(models[[i]], which = 1, caption = (paste0("Residuals vs Fitted (", models[[i]]$prior,")")))
+```
+`r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`: Residual vs Fitted Values
 
+**Parameter Estimates**
+```{r pdc, fig.height = 8}
+do.call("grid.arrange", c(eval$pdc, ncol = 2))
+```
+`r kfigr::figr(label = "pdc", prefix = TRUE, link = TRUE, type="Figure")`: Coefficient Estimates
 
 * * *

@@ -16,8 +16,13 @@ list of BMA models
 \code{bma} Performs Bayes Model Averaging using several default priors
 }
 \seealso{
-Other BMA functions: \code{\link{bmaCompare}},
-  \code{\link{bmaPredict}}, \code{\link{bmaReport}}
+Other BMA functions: \code{\link{bmaAnalysis}},
+  \code{\link{bmaEvaluation}},
+  \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
+  \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
+  \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
+  \code{\link{bmaPerformance}},
+  \code{\link{bmaPredictModels}}, \code{\link{bmaPredict}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

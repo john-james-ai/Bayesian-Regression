@@ -19,7 +19,7 @@ Data frame containing summary statistics
 }
 \seealso{
 Other analysis functions: \code{\link{getCSampleSize}},
-  \code{\link{getPSampleSize}}, \code{\link{slr}}
+  \code{\link{getPSampleSize}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

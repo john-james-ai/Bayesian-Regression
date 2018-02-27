@@ -4,10 +4,12 @@
 \alias{preprocess}
 \title{preprocess}
 \usage{
-preprocess(data)
+preprocess(data, trim = NULL)
 }
 \arguments{
-\item{data}{frame containing the data data set}
+\item{data}{Data frame containing the data data set}
+
+\item{trim}{Logical.  If TRUE, eliminate influential points}
 }
 \value{
 mdbSets movie data base training and test set

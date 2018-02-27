@@ -23,7 +23,7 @@ sample proportion with a designated level of confidence.
 }
 \seealso{
 Other analysis functions: \code{\link{getCSampleSize}},
-  \code{\link{getSummaryStats}}, \code{\link{slr}}
+  \code{\link{getSummaryStats}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

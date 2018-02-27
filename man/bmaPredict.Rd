@@ -4,22 +4,49 @@
 \alias{bmaPredict}
 \title{bmaPredict}
 \usage{
-bmaPredict(models, yX)
+bmaPredict(model, estimator, yX = NULL, trial = NULL, prediction = FALSE,
+  rvp = FALSE, pe = FALSE, pi = FALSE, predObj = FALSE)
 }
 \arguments{
-\item{models}{List of BMA models}
+\item{model}{BAS.LM object}
 
-\item{yX}{Data frame containing test data}
+\item{estimator}{String indicating which estimator to use. Options are 'BMA', 'BPM', 'HPM', & 'MPM'}
+
+\item{yX}{Optional data frame containing test data}
+
+\item{trial}{Numeric indicator of the trial number when repeated trials are being conducted.}
+
+\item{prediction}{Logical value to indicate whether the observed design matrix 
+used in fitting or the newdata will be used for estimating the mean or 
+for making predictions. The default is FALSE for estimation of the mean.}
+
+\item{rvp}{Logical indicating whether to return residuals vs predicted (fitted) data frame}
+
+\item{pe}{Logical indicating whether to return paramater estimates}
+
+\item{pi}{Logical indicating whether to return prediction intervals}
+
+\item{predObj}{Logical.  If TRUE, the object from the predict function is returned.}
 }
 \value{
 mse frame containing MSE measures for each model
 }
 \description{
-\code{bmaPredict} Predictions cross validation
+\code{bmaPredict} Performs prediction using a single model and estimator
+}
+\details{
+Performs predictions on a single model and estimator and returns MSE and
+optionally, residual vs fitted, parameter estimates and prediction
+distributions on existing training data or new test data.
 }
 \seealso{
-Other BMA functions: \code{\link{bmaCompare}},
-  \code{\link{bmaReport}}, \code{\link{bma}}
+Other BMA functions: \code{\link{bmaAnalysis}},
+  \code{\link{bmaEvaluation}},
+  \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
+  \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
+  \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
+  \code{\link{bmaPerformance}},
+  \code{\link{bmaPredictModels}}, \code{\link{bma}}
 }
 \author{
 John James, \email{jjames@yXsciencesalon.org}

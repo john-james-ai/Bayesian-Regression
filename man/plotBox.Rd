@@ -4,7 +4,8 @@
 \alias{plotBox}
 \title{plotBox}
 \usage{
-plotBox(data, xLab = NULL, yLab, plotTitle = NULL)
+plotBox(data, xLab = NULL, yLab, plotTitle = NULL, rotate = FALSE,
+  showMean = TRUE)
 }
 \arguments{
 \item{data}{Data frame or vector containing two columns:
@@ -16,6 +17,10 @@ plotBox(data, xLab = NULL, yLab, plotTitle = NULL)
 \item{yLab}{Capital case character string containing the name of the y variable}
 
 \item{plotTitle}{Character case character string containing the title for the plot}
+
+\item{rotate}{Logical indicating whether to rotate the plot by 90 degrees}
+
+\item{showMean}{Logical indicating whether the mean value should be displayed.}
 }
 \value{
 List containing a contingency table and a stacked bar plot.
@@ -24,13 +29,13 @@ List containing a contingency table and a stacked bar plot.
 \code{plotBox} Renders a single or grouped box plot.
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBar}},
-  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
-  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
-  \code{\link{plotLine}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBar}}, \code{\link{plotCIBars}},
+  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
+  \code{\link{plotHist}}, \code{\link{plotLine}},
+  \code{\link{plotQQ}}, \code{\link{plotResFit}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -54,6 +54,7 @@ library(statsr)
 ```{r source-functions}
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
+source("../R/bmaEvaluation.R")
 source("../R/bmaPerformance.R")
 source("../R/bmaPerformanceReport.R")
 source("../R/bmaImage.R")
@@ -80,17 +81,18 @@ priors <- openxlsx::read.xlsx(xlsxFile = "../notes/priors.xlsx")
 ```
 
 ```{r set_run}
-run <- FALSE
+run <- TRUE
 if (run == FALSE) {
   load("./analysis/yX.Rdata")
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
   load("./analysis/report.Rdata")
+  load("./analysis/eval.Rdata")
   load("./analysis/performance.Rdata")
 }
 dir.create("./analysis", showWarnings = FALSE)
 ```
-
+print(paste("sepred", sePred))  
 ```{r load-data}
 load("../inst/extdata/movies.RData")
 ```
@@ -119,7 +121,7 @@ if (run == TRUE)  {
 
 
 ```{r bma}
-if (run == TRUE) {
+if (isTRUE(run)) {
   models <- bma(yX = yX)
   save(models, file = "./analysis/models.Rdata")
 }
@@ -133,7 +135,7 @@ if (run == TRUE)  {
 ```
 
 ```{r bmaPerformance}
-trials <- 400
+trials <- 5
 if (run == TRUE) {
   performance <- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
@@ -141,19 +143,62 @@ if (run == TRUE) {
 ```
 
 ```{r bmaPerformanceReport}
-run <- TRUE
-if (run == TRUE) {
+if (isTRUE(run)) {
   report <- bmaPerformanceReport(performance = performance)
   save(report, file = "./analysis/report.Rdata")
 }
 ```
 
+```{r bmaEval}
+if (isTRUE(run)) {
+  eval <- bmaEvaluation(mList = models, candidates = report$best)
+  save(eval, file = "./analysis/eval.Rdata")
+}
+```
+
+```{r trim}
+trimmedData  <- preprocess(movies, trim = TRUE)
+yXTrimmed <- trimmedData %>% select(-title)
+save(yXTrimmed, file = "./analysis/yXTrimmed.Rdata")
+```
+
+
+```{r bmaTrim}
+modelsTrim <- bma(yX = yXTrimmed)
+save(modelsTrim, file = "./analysis/modelsTrim.Rdata")
+```
+
+```{r bmaAnalysisTrim}
+if (run == TRUE)  {
+  analysisTrim <- bmaAnalysis(models = modelsTrim)
+  save(analysisTrim, file = "./analysis/analysisTrim.Rdata")
+}
+```
+
+```{r bmaPerformanceTrim}
+trials <- 2
+if (run == TRUE) {
+  performanceTrim <- bmaPerformance(yX = yXTrimmed, trials = trials) 
+  save(performanceTrim, file = "./analysis/performanceTrim.Rdata")
+}
+```
+
+```{r bmaPerformanceReportTrim}
+reportTrim <- bmaPerformanceReport(performance = performanceTrim)
+save(reportTrim, file = "./analysis/reportTrim.Rdata")
+```
+
+```{r bmaEvalTrim}
+evalTrim <- bmaEvaluation(mList = modelsTrim, candidates = reportTrim$best)
+save(evalTrim, file = "./analysis/evalTrim.Rdata")
+```
 
 ```{r reload}
 if (run == TRUE) {
   load("./analysis/yX.Rdata")
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
+  load("./analysis/eval.Rdata")
   load("./analysis/report.Rdata")
   load("./analysis/performance.Rdata")
 }

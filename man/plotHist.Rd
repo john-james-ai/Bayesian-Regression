@@ -23,13 +23,13 @@ List containing a summary statistics and a histogram
 of summary statistics.
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBar}},
-  \code{\link{plotBox}}, \code{\link{plotCIBars}},
-  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
-  \code{\link{plotLine}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBar}}, \code{\link{plotBox}},
+  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
+  \code{\link{plotFreqProp}}, \code{\link{plotLine}},
+  \code{\link{plotQQ}}, \code{\link{plotResFit}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -14,13 +14,14 @@
 #'  \item summer_season: "yes" if thtr_rel_month is 5,6,7, or 8, "no" otherwise
 #' }
 #'
-#' @param data frame containing the data data set
+#' @param data Data frame containing the data data set
+#' @param trim Logical.  If TRUE, eliminate influential points
 #' @return mdbSets movie data base training and test set
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family data functions
 #' @export
-preprocess <- function(data) {
+preprocess <- function(data, trim = NULL) {
 
   # Add additional features
   data <- data[data$title_type != "TV Movie",]
@@ -36,6 +37,12 @@ preprocess <- function(data) {
                               imdb_rating, imdb_num_votes, critics_score,
                               best_pic_nom, best_pic_win, best_actor_win,
                               best_actress_win, best_dir_win, top200_box, audience_score)
+  
+  # Remove influential points if trim == TRUE
+  if (isTRUE(trim)) {
+    data <- data [c(-124,-214,-248),]
+  }
+
 
   # Transform number of IMDB votes
   data$imdb_num_votes_log <- log2(data$imdb_num_votes)
@@ -44,7 +51,6 @@ preprocess <- function(data) {
 
   data <- na.omit(data)
   data <- data %>% mutate_if(is.factor, as.character)
-
 
   return(data)
 }

@@ -22,13 +22,13 @@ Scatterplot object
 \code{plotScatter} Renders a scatterplot for two numerical variablesa
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBar}},
-  \code{\link{plotBox}}, \code{\link{plotCIBars}},
-  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
-  \code{\link{plotHist}}, \code{\link{plotLine}},
-  \code{\link{plotQQ}}, \code{\link{plotResFit}},
-  \code{\link{plotResQQ}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBar}}, \code{\link{plotBox}},
+  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
+  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
+  \code{\link{plotLine}}, \code{\link{plotQQ}},
+  \code{\link{plotResFit}}, \code{\link{plotResQQ}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

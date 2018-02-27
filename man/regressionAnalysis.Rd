@@ -23,12 +23,6 @@ analysis plots, summary statistics, test results and interpretive text
 \description{
 \code{regressionAnalysis} Performs regression analysis
 }
-\seealso{
-Other regression functions: \code{\link{associate}},
-  \code{\link{conclusion}}, \code{\link{correlate}},
-  \code{\link{evalForwardModel}}, \code{\link{forward}},
-  \code{\link{prediction}}
-}
 \author{
 John James, \email{jjames@datasciencesalon.org}
 }

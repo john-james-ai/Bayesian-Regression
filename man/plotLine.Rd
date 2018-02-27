@@ -4,10 +4,14 @@
 \alias{plotLine}
 \title{plotLine}
 \usage{
-plotLine(data, xLab = NULL, yLab, plotTitle = NULL)
+plotLine(data, xticks = TRUE, xLab, yLab, yLow = NULL, yHigh = NULL,
+  plotTitle = NULL)
 }
 \arguments{
-\item{data}{Data frame containing plokt data}
+\item{data}{Data frame containing three variables: (1) x data, (2), y data, and (3) 
+the grouping variable.}
+
+\item{xticks}{Logical indicating whether xticks should be rendered.}
 
 \item{xLab}{Capital case character string containing the name of the x variable (optional)}
 
@@ -22,13 +26,13 @@ List containing a contingency table and a stacked bar plot.
 \code{plotLine} Renders a line plot
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBar}},
-  \code{\link{plotBox}}, \code{\link{plotCIBars}},
-  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
-  \code{\link{plotHist}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBar}}, \code{\link{plotBox}},
+  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
+  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
+  \code{\link{plotQQ}}, \code{\link{plotResFit}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

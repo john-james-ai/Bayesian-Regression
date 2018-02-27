@@ -19,16 +19,16 @@ plotBar(data, yLab, xLab, plotTitle = NULL)
 Bar plot
 }
 \description{
-\code{plotBar} Renders a bar plot
+\code{plotBar} Renders a bar plot with bars sequenced by value left to right.
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar2}}, \code{\link{plotBox}},
-  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
-  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
-  \code{\link{plotLine}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar2}},
+  \code{\link{plotBox}}, \code{\link{plotCIBars}},
+  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
+  \code{\link{plotHist}}, \code{\link{plotLine}},
+  \code{\link{plotQQ}}, \code{\link{plotResFit}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

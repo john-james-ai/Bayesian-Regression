@@ -4,7 +4,7 @@
 \alias{plotBar2}
 \title{plotBar2}
 \usage{
-plotBar2(data, yLab, xLab, plotTitle = NULL)
+plotBar2(data, yLab, xLab, plotTitle = NULL, values = FALSE)
 }
 \arguments{
 \item{data}{Data frame or vector containing a single categorical factor variable}
@@ -22,13 +22,13 @@ Bar plot
 \code{plotBar2} Renders a bar plot
 }
 \seealso{
-Other visualization functions: \code{\link{pieChart}},
-  \code{\link{plotBar}}, \code{\link{plotBox}},
-  \code{\link{plotCIBars}}, \code{\link{plotCorr}},
-  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
-  \code{\link{plotLine}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotResQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{groupBarPlot}},
+  \code{\link{pieChart}}, \code{\link{plotBar}},
+  \code{\link{plotBox}}, \code{\link{plotCIBars}},
+  \code{\link{plotCorr}}, \code{\link{plotFreqProp}},
+  \code{\link{plotHist}}, \code{\link{plotLine}},
+  \code{\link{plotQQ}}, \code{\link{plotResFit}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}
