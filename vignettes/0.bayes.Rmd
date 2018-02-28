@@ -39,6 +39,7 @@ knitr::knit_hooks$set(inline = function(x) {
 ```{r load-libraries}
 library(BAS)
 library(broom)
+library(caret)
 library(data.table)
 library(dplyr)
 library(extrafont)
@@ -92,14 +93,14 @@ if (run == FALSE) {
 }
 dir.create("./analysis", showWarnings = FALSE)
 ```
-print(paste("sepred", sePred))  
+
 ```{r load-data}
 load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
 if (run == TRUE)  {
-  processedData  <- preprocess(movies)
+  processedData  <<- preprocess(movies)
   save(processedData, file = "./analysis/processedData.Rdata")
 }
 ```
@@ -114,7 +115,7 @@ if (run == TRUE)  {
 
 ```{r removetitle}
 if (run == TRUE)  {
-  yX <- processedData %>% select(-title)
+  yX <<- processedData %>% select(-title)
   save(yX, file = "./analysis/yX.Rdata")
 }
 ```
@@ -122,29 +123,29 @@ if (run == TRUE)  {
 
 ```{r bma}
 if (isTRUE(run)) {
-  models <- bma(yX = yX)
+  models <<- bma(yX = yX)
   save(models, file = "./analysis/models.Rdata")
 }
 ```
 
 ```{r bmaAnalysis}
 if (run == TRUE)  {
-  analysis <- bmaAnalysis(models = models)
+  analysis <<- bmaAnalysis(models = models)
   save(analysis, file = "./analysis/analysis.Rdata")
 }
 ```
 
 ```{r bmaPerformance}
-trials <- 5
+trials <- 2
 if (run == TRUE) {
-  performance <- bmaPerformance(yX, trials = trials) 
+  performance <<- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
 }
 ```
 
 ```{r bmaPerformanceReport}
 if (isTRUE(run)) {
-  report <- bmaPerformanceReport(performance = performance)
+  report <<- bmaPerformanceReport(performance = performance)
   save(report, file = "./analysis/report.Rdata")
 }
 ```
@@ -154,43 +155,6 @@ if (isTRUE(run)) {
   eval <- bmaEvaluation(mList = models, candidates = report$best)
   save(eval, file = "./analysis/eval.Rdata")
 }
-```
-
-```{r trim}
-trimmedData  <- preprocess(movies, trim = TRUE)
-yXTrimmed <- trimmedData %>% select(-title)
-save(yXTrimmed, file = "./analysis/yXTrimmed.Rdata")
-```
-
-
-```{r bmaTrim}
-modelsTrim <- bma(yX = yXTrimmed)
-save(modelsTrim, file = "./analysis/modelsTrim.Rdata")
-```
-
-```{r bmaAnalysisTrim}
-if (run == TRUE)  {
-  analysisTrim <- bmaAnalysis(models = modelsTrim)
-  save(analysisTrim, file = "./analysis/analysisTrim.Rdata")
-}
-```
-
-```{r bmaPerformanceTrim}
-trials <- 2
-if (run == TRUE) {
-  performanceTrim <- bmaPerformance(yX = yXTrimmed, trials = trials) 
-  save(performanceTrim, file = "./analysis/performanceTrim.Rdata")
-}
-```
-
-```{r bmaPerformanceReportTrim}
-reportTrim <- bmaPerformanceReport(performance = performanceTrim)
-save(reportTrim, file = "./analysis/reportTrim.Rdata")
-```
-
-```{r bmaEvalTrim}
-evalTrim <- bmaEvaluation(mList = modelsTrim, candidates = reportTrim$best)
-save(evalTrim, file = "./analysis/evalTrim.Rdata")
 ```
 
 ```{r reload}

@@ -74,17 +74,18 @@ report$plots$box
 `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of MSE among top 4 models
 
 ## Model Evaluation
-The model selected for final prediction on 2016 data would be that which performed well on squared error while meeting Bayesian regression inference conditions, specifically residual versus predicted homoscedacticity. Here, the top four models are evaluated in terms of residual versus fitted distributions, the parameter coefficients, and their prediction intervals. All four priors generated similar distributions of residuals vs-a-vis fitted values. Residuals concentration tended to coincide with the proximity of fitted values. Three same three observations were influential and potentially outliers.  
+The model selected for final prediction on 2016 data would be that which performed well on squared error while meeting Bayesian regression inference conditions, specifically residual versus predicted homoscedacticity. Here, the top four models are evaluated in terms of residual versus fitted distributions, and the parameter coefficients. As shown in `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`, all four priors generated similar distributions of residuals vis-a-vis fitted values. Residual concentration tended to align with the proximity of fitted values. The same three observations were influential and potential outliers across all priors.   
 
 **Residuals vs Fitted**
-```{r rvf, fig.height = 8}
-par(mfrow = 3)
+```{r rvf, fig.height = 12}
+par(mfrow = c(3, 3))
 for (i in 1:length(models)) plot(models[[i]], which = 1, caption = (paste0("Residuals vs Fitted (", models[[i]]$prior,")")))
 ```
 `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`: Residual vs Fitted Values
 
+
 **Parameter Estimates**
-```{r pdc, fig.height = 8}
+```{r pdc, fig.height = 12}
 do.call("grid.arrange", c(eval$pdc, ncol = 2))
 ```
 `r kfigr::figr(label = "pdc", prefix = TRUE, link = TRUE, type="Figure")`: Coefficient Estimates

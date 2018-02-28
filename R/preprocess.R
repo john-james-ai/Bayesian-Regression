@@ -38,19 +38,23 @@ preprocess <- function(data, trim = NULL) {
                               best_pic_nom, best_pic_win, best_actor_win,
                               best_actress_win, best_dir_win, top200_box, audience_score)
   
-  # Remove influential points if trim == TRUE
-  if (isTRUE(trim)) {
-    data <- data [c(-124,-214,-248),]
-  }
-
-
-  # Transform number of IMDB votes
-  data$imdb_num_votes_log <- log2(data$imdb_num_votes)
+  
   data <- data[complete.cases(data),]
-  data <- data %>% select(-imdb_num_votes)
-
   data <- na.omit(data)
   data <- data %>% mutate_if(is.factor, as.character)
+  
+  # Transformations
+  runtime_BC <- caret::BoxCoxTrans(data$runtime)
+  runtime_trans <- predict(runtime_BC, data$runtime)
+  imdb_rating_BC <- caret::BoxCoxTrans(data$imdb_rating)
+  imdb_rating_trans <- predict(imdb_rating_BC, data$imdb_rating)
+  imdb_num_votes_BC <- caret::BoxCoxTrans(data$imdb_num_votes)
+  imdb_num_votes_trans <- predict(imdb_num_votes_BC, data$imdb_num_votes)
+  critics_score_BC <- caret::BoxCoxTrans(data$critics_score)
+  critics_score_trans <- predict(critics_score_BC, data$critics_score)
+  
+  data <- data %>% select(-c(runtime, imdb_rating, imdb_num_votes, critics_score))
+  data <- cbind(data, runtime_trans, imdb_rating_trans, imdb_num_votes_trans, critics_score_trans)
 
   return(data)
 }

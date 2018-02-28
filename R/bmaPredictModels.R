@@ -28,7 +28,7 @@ bmaPredictModels <- function(models, yX, trial = NULL) {
   predictions$modelResults <- lapply(models, function(m) {
     estimatorResults <- lapply(estimators, function(e) {
       p <- bmaPredict(model = m, estimator = e, yX = yX, prediction = TRUE,
-                      trial = trial,  rvp = FALSE, pe = FALSE, pi = FALSE)
+                      trial = trial,  rvp = FALSE, pe = FALSE)
       predictions$MSE <<- rbind(predictions$MSE, p$MSE)
       p
     })

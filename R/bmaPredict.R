@@ -40,11 +40,11 @@ bmaPredict <- function(model, estimator, yX = NULL, trial = NULL, prediction = F
   # Perform prediction
   if (missing(yX)) {
     y <- model$Y
-    pred <- predict(object = model, se.fit = pi, 
+    pred <- predict(object = model, se.fit = pe, 
                             estimator = estimator, prediction = prediction)
   } else {
     y <- yX$audience_score
-    pred <- predict(object = model, newdata = yX, se.fit = pi, 
+    pred <- predict(object = model, newdata = yX, se.fit = pe, 
                             estimator = estimator, prediction = prediction)
   }
   if (predObj == TRUE) p$pred <- pred

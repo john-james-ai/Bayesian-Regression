@@ -5,7 +5,7 @@
 \title{bmaPredict}
 \usage{
 bmaPredict(model, estimator, yX = NULL, trial = NULL, prediction = FALSE,
-  rvp = FALSE, pe = FALSE, pi = FALSE, predObj = FALSE)
+  rvp = FALSE, pe = FALSE, predObj = FALSE)
 }
 \arguments{
 \item{model}{BAS.LM object}
@@ -23,8 +23,6 @@ for making predictions. The default is FALSE for estimation of the mean.}
 \item{rvp}{Logical indicating whether to return residuals vs predicted (fitted) data frame}
 
 \item{pe}{Logical indicating whether to return paramater estimates}
-
-\item{pi}{Logical indicating whether to return prediction intervals}
 
 \item{predObj}{Logical.  If TRUE, the object from the predict function is returned.}
 }
