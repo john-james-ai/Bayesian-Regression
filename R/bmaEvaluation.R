@@ -15,19 +15,27 @@ bmaEvaluation <- function(mList, candidates) {
   
   eval <- list()
   
-  eval <- apply(candidates[c(1:4),], 1, function(x) {
+  eval$models <- apply(candidates[c(1:4),], 1, function(x) {
     bmaPredict(model = mList[[getElement(x, "Prior")]], estimator = getElement(x, "Estimator"), prediction = FALSE, 
                     rvp = TRUE, pe = TRUE, predObj = TRUE)
   })
   
   eval$rvp <- lapply(seq(1:4), function(x) {
-    plotScatter(data = eval[[x]]$rvp, xLab = "Fitted", yLab = "Residuals",
+    plotScatter(data = eval$models[[x]]$rvp, xLab = "Fitted", yLab = "Residuals",
                           plotTitle = paste0( "Residual vs Fitted ",
-                                              eval[[x]]$prior, " (", 
-                                              eval[[x]]$estimator, ")"))
+                                              eval$models[[x]]$prior, " (", 
+                                              eval$models[[x]]$estimator, ")"))
   })
   
-  eval$pdc <- lapply(seq(1:4), function(x) { eval[[x]]$pe[[1]]$plot })
-  
+  eval$pdc <- lapply(seq(1:4), function(x) {
+    n <- rownames(eval$models[[1]]$pe[[1]]$df)
+    df <- eval$models[[x]]$pe[[1]]$df
+    df <- cbind(Terms = n, df)
+    df <- df %>% filter(Probability == 1) %>% select(-Probability)
+    df
+  }) 
+  names(eval$pdc) <- unlist(lapply(seq(1:4), function(x) {
+    paste0(eval$models[[x]]$prior, " (", eval$models[[x]]$estimator,")" )
+  }))
   return(eval)
 }

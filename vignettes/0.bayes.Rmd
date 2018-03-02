@@ -82,7 +82,7 @@ priors <- openxlsx::read.xlsx(xlsxFile = "../notes/priors.xlsx")
 ```
 
 ```{r set_run}
-run <- TRUE
+run <- FALSE
 if (run == FALSE) {
   load("./analysis/yX.Rdata")
   load("./analysis/models.Rdata")
@@ -136,7 +136,7 @@ if (run == TRUE)  {
 ```
 
 ```{r bmaPerformance}
-trials <- 2
+trials <- 400
 if (run == TRUE) {
   performance <<- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
@@ -151,10 +151,10 @@ if (isTRUE(run)) {
 ```
 
 ```{r bmaEval}
-if (isTRUE(run)) {
+#if (isTRUE(run)) {
   eval <- bmaEvaluation(mList = models, candidates = report$best)
   save(eval, file = "./analysis/eval.Rdata")
-}
+#}
 ```
 
 ```{r reload}
