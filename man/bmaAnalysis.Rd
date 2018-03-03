@@ -25,7 +25,8 @@ list of reports
 \code{bmaAnalysis} Reports results for a series of models.
 }
 \seealso{
-Other BMA functions: \code{\link{bmaEvaluation}},
+Other BMA functions: \code{\link{bmaBest}},
+  \code{\link{bmaEvaluation}},
   \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
   \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
   \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
@@ -33,7 +34,8 @@ Other BMA functions: \code{\link{bmaEvaluation}},
   \code{\link{bmaPredictModels}}, \code{\link{bmaPredict}},
   \code{\link{bma}}
 
-Other BMA functions: \code{\link{bmaEvaluation}},
+Other BMA functions: \code{\link{bmaBest}},
+  \code{\link{bmaEvaluation}},
   \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
   \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
   \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},

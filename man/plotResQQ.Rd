@@ -24,7 +24,8 @@ Other visualization functions: \code{\link{groupBarPlot}},
   \code{\link{plotCIBars}}, \code{\link{plotCorr}},
   \code{\link{plotFreqProp}}, \code{\link{plotHist}},
   \code{\link{plotLine}}, \code{\link{plotQQ}},
-  \code{\link{plotResFit}}, \code{\link{plotScatter}}
+  \code{\link{plotResFit}}, \code{\link{plotScatter}},
+  \code{\link{plotStackedBar}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

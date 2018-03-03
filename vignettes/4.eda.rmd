@@ -1,15 +1,16 @@
-# Part 3: Exploratory Data Analysis
+# Exploratory Data Analysis
 
-This exploratory data analysis (EDA) is comprised of two parts: (1) the univariate analysis examines the frequencies and proportions of categorical variables and the centrality, variability, spread and shape the distributions of quantitative variables, and (2) the bivariate analysis explores the relationship between the independent variables and audience scores.
+This exploratory data analysis (EDA) is comprised of two parts: (1) the univariate analysis which examines the frequencies and proportions of categorical variables and the centrality, variability, spread and shape of the distributions of quantitative variables, and (2) the bivariate analysis which explores the relationships between the independent variables and audience scores.
 
 ## Univariate Analysis
-### Best Actor / Actress / Director Oscar Winnings
- `r kfigr::figr(label = "best_dir_actor_actress", prefix = TRUE, link = TRUE, type="Figure")`, shows the counts and the percentages of films from the data set that have earned best director, actor and actress Oscars. 
+### Qualitative Variables
+#### Summary Variables
+ `r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`, shows the counts and percentages for three *summary* variables: the drama, the feature film, and the MPAA R rating indicator variables. Drama and R rated films comprised a slight plurality of films in the sample and nearly all the films were indeed, feature films.
 
-```{r best_dir_actor_actress, fig.height=8}
-gridExtra::grid.arrange(edaUni$best_dir_win$plot, edaUni$best_actor_win$plot, edaUni$best_actress_win$plot, ncol = 3)
+```{r films_summary}
+edaUni$qual$summary$plot
 ```
-`r kfigr::figr(label = "best_dir_actor_actress", prefix = TRUE, link = TRUE, type="Figure")`: Best Director/Actor/Actress Oscar Winnings
+`r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`: Drama, features and R Rated Films
 
 The winners in the best director, actor and actress categories accounted for `r round(edaUni$best_dir_win$stats$Proportion[1] * 100,1)`%, `r round(edaUni$best_actor_win$stats$Proportion[1] * 100,1)`%, and `r round(edaUni$best_actress_win$stats$Proportion[1] * 100,1)`%, of the sample respectively.
 

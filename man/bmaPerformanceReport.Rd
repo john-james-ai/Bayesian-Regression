@@ -14,7 +14,7 @@ bmaPerformanceReport(performance)
 }
 \seealso{
 Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaEvaluation}},
+  \code{\link{bmaBest}}, \code{\link{bmaEvaluation}},
   \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
   \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
   \code{\link{bmaPIP}}, \code{\link{bmaPerformance}},

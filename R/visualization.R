@@ -7,8 +7,7 @@
 #------------------------------------------------------------------------------#
 #' plotFreqProp
 #'
-#' \code{plotFreqPropTbl} Renders a stacked bar plot and a contingency table
-#' showing frequencies and proportions
+#' \code{plotFreqPropTbl} Renders a stacked bar plot 
 #'
 #' @param data Data frame containing the variables:
 #' \itemize{
@@ -21,12 +20,14 @@
 #' @param yLab Capital case character string describing the y variable
 #' @param xLab Capital case character string containing the name of the variable x variable
 #' @param plotTitle Capital case character string for the title of the plot
+#' @param lgnd Character string indicating position of the legend c("right", "bottom")
 #'
-#' @return List containing a contingency table and a stacked bar plot.
+#' @return A stacked bar plot.
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotFreqProp <- function(data, yLab = "Movies", xLab, plotTitle = NULL) {
+plotFreqProp <- function(data, yLab, xLab, plotTitle = NULL, 
+                         lgnd = "bottom") {
 
   # Format title
   if (is.null(plotTitle)) {
@@ -53,17 +54,13 @@ plotFreqProp <- function(data, yLab = "Movies", xLab, plotTitle = NULL) {
                    axis.title.x = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank(),
                    axis.text.x = ggplot2::element_blank(),
-                   legend.position = "right") +
+                   legend.position = lgnd) +
     ggplot2::scale_fill_manual(values = myPal(length(df[[1]]))) +
     ggplot2::ggtitle(plotTitle) +
     ggplot2::ylab(yLab) +
     ggplot2::labs(fill = xLab)
 
-    visual <- list(
-      stats = df[,1:4],
-      plot = barPlot
-    )
-    return(visual)
+    return(barPlot)
 }
 
 
@@ -598,7 +595,8 @@ pieChart <- function(data, xLab, plotTitle = NULL) {
     ggplot2::geom_bar(width = 1, stat = "identity") +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.line = ggplot2::element_blank(),
-                   plot.title = ggplot2::element_text(hjust=0.5)) +
+                   plot.title = ggplot2::element_text(hjust=0.5),
+                   legend.position = "bottom") +
     ggplot2::theme_minimal(base_size = 18) +
     ggplot2::labs(fill = xLab,
                   x = NULL,
@@ -651,4 +649,66 @@ plotCIBars <- function(data, plotTitle = NULL) {
     ggplot2::ggtitle(plotTitle) +
     ggplot2::scale_fill_manual(values = myPal(length(data[[1]])))
   return(confIntPlot)
+}
+
+#------------------------------------------------------------------------------#
+#                             Stacked Bar Plot                                 #
+#------------------------------------------------------------------------------#
+#' plotStackedBar
+#'
+#' \code{plotStackedBar} Renders a stacked bar plot and a contingency table
+#' showing frequencies and proportions
+#'
+#' @param data Data frame containing the variables:
+#' \itemize{
+#'  \item x Character string containing the values along the x-axis
+#'  \item Category Character string containing a categorical level
+#'  \item N: The number of observations for the categorical level
+#'  \item Proportion: The proportion of observation for the categorical level
+#'  \item Cumulative: The cumulative proportion
+#'  \item Pos: The y position for the frequency and proportion text
+#' }
+#' @param yLab Capital case character string describing the y variable
+#' @param xLab Capital case character string containing the name of the variable x variable
+#' @param plotTitle Capital case character string for the title of the plot
+#' @param lgnd Character string indicating position of the legend c("right", "bottom")
+#'
+#' @return List containing a contingency table and a stacked bar plot.
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family visualization functions
+#' @export
+plotStackedBar <- function(data, yLab, xLab, plotTitle = NULL, 
+                         lgnd = "bottom") {
+  
+  # Format title
+  if (is.null(plotTitle)) {
+    plotTitle <- paste(yLab, "by", xLab)
+  }
+  
+  # Render plot
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
+  barPlot <- ggplot2::ggplot(data = data,
+                             ggplot2::aes(x = data[[1]],
+                                          y = data[[3]],
+                                          fill = data[[2]]))  +
+    ggplot2::geom_bar(stat='identity') +
+    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::geom_text(
+      data = data,
+      ggplot2::aes(x = data[[1]],
+                   y = data[[6]],
+                   label = paste0(data[[3]], " (",
+                                  round(data[[4]] * 100, 0),
+                                  "%)")),
+      colour="black", family="Tahoma", size = 8) +
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                   axis.title.x = ggplot2::element_blank(),
+                   axis.ticks.x = ggplot2::element_blank(),
+                   legend.position = lgnd) +
+    ggplot2::scale_fill_manual(values = myPal(length(data[[1]]))) +
+    ggplot2::ggtitle(plotTitle) +
+    ggplot2::ylab(yLab) +
+    ggplot2::labs(fill = xLab)
+  
+  return(barPlot)
 }

@@ -4,22 +4,42 @@
 \alias{univariateQual}
 \title{univariateQual}
 \usage{
-univariateQual(data, xLab, yLab = NULL, plotTitle = NULL)
+univariateQual(data, type = "dichotomous", groups, xLab, yLab = NULL,
+  plotTitle = NULL)
 }
 \arguments{
-\item{data}{Single column data frame containing the categorical variable}
+\item{data}{Wide data frame containing:
+\itemize{
+ \item Character string containing the grouping variale
+ \item Character string containing the category level
+ \item Numeric containing the frequencies by category level
+ \item Numeric indicating the proportions by category level
+ \item Numeric containing the cumulative proportion by group and category level
+ \item pos the vertical position of the labels on the bars
+}}
 
-\item{xLab}{Capitalized character string for the variable name or label}
+\item{type}{Character string indicating whether data is dichotomous, ordinal, or nominal}
+
+\item{groups}{Character vector containing the group names to be rendered
+along the x-axis}
+
+\item{xLab}{Character string containing the label for the x-axis}
+
+\item{yLab}{Character string indicating the label for the y-axis}
+
+\item{plotTitle}{Character string indicating the plot title.}
 }
 \value{
 analysis List containing:
  1. Contingency table
- 2. Frequency Proportion Barplot
+ 2. Stacked Frequency Proportion Barplot
 }
 \description{
-\code{univariateQual} Performs univariate analysis on a single qualitative
-or categorical variable. The function returns a contingency table as well
-as a stacked bar plot showing frequencies and percentages.
+\code{univariateQual} Performs univariate analysis on a group of dichotomous
+qualitative variables with uniform category levels. The function returns
+a combined contingency table for all groups and categories, as well as
+a stacked bar plot showing frequencies and percentages of categories
+for each group.
 }
 \seealso{
 Other EDA functions: \code{\link{bivariateQual}},

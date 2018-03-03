@@ -1,0 +1,17 @@
+# Data
+The motivating example for this experiment is the prediction of audience scores for feature films based upon critics ratings, movie runtimes, MPAA rating, Oscar performance, box office returns, genre, and season of theatrical release (`r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`). Obtained from the Rotten Tomatoes website, audience scores reflect the percentage of ratings that were 3.5 stars or higher (on a scale from 1 to 5). 
+
+`r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`: Movie Dataset Variables 
+```{r vars}
+vars <- read.csv(file = "../inst/extdata/variables.csv")
+knitr::kable(vars) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") 
+```
+
+## Data Sources
+Launched in October 1990 by Col Needham, the Internet Movie Database (abbreviated IMDb) is an online database of film information, audience and critics ratings, plot summaries and reviews.  As of November 2017, the site contained over 4.6 million titles, 8.2 million personalities, and hosts 80 million registered users [@Needham1990].  Rotten Tomatoes.com, so named from the practice of audiences throwing rotten tomatoes when disapproving of a poor stage performance, was launched officially in April 2000 by Berkeley student, Senh Duong. It provides audience and critics ratings  for some 26 million users worldwide [@Flixter]. BoxOfficeMojo was founded in 1999 tracks box office information and publishes it on its site [@Fritz2008].
+
+## Generalizability & Causality
+The data were **randomly sampled** from available IMDb and Rotten Tomatoes website apis, and so the inference *should* be generalizable to the population. Since this was an observational study, random assignment was not performed, as such **causality is not indicated by this analysis**.
+
+* * *

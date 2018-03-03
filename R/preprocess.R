@@ -30,13 +30,15 @@ preprocess <- function(data, trim = NULL) {
   data$mpaa_rating_R <- ifelse(data$mpaa_rating == "R", "yes", "no")
   data$oscar_season <- ifelse(data$thtr_rel_month %in% c(10,11,12), "yes", "no")
   data$summer_season <- ifelse(data$thtr_rel_month %in% c(5,6,7,8), "yes", "no")
+  data$imdb_num_votes_log <- log2(data$imdb_num_votes)
 
   # Extract required features
   data <- data %>% select(title, feature_film, drama, runtime, mpaa_rating_R,
-                              thtr_rel_year, oscar_season, summer_season,
-                              imdb_rating, imdb_num_votes, critics_score,
-                              best_pic_nom, best_pic_win, best_actor_win,
-                              best_actress_win, best_dir_win, top200_box, audience_score)
+                          thtr_rel_year, oscar_season, summer_season,
+                          imdb_rating, imdb_num_votes, critics_score,
+                          best_pic_nom, best_pic_win, best_actor_win,
+                          best_actress_win, best_dir_win, top200_box, 
+                          imdb_num_votes_log, audience_score)
   
   
   data <- data[complete.cases(data),]

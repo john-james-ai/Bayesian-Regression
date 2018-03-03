@@ -77,14 +77,11 @@ source("../R/visualization.R")
 source("../R/analysis.R")
 ```
 
-```{r load_priors}
-priors <- openxlsx::read.xlsx(xlsxFile = "../notes/priors.xlsx")
-```
-
 ```{r set_run}
 run <- FALSE
 if (run == FALSE) {
   load("./analysis/yX.Rdata")
+  load("./analysis/processedData.Rdata")
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
   load("./analysis/report.Rdata")
@@ -99,18 +96,16 @@ load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-if (run == TRUE)  {
-  processedData  <<- preprocess(movies)
-  save(processedData, file = "./analysis/processedData.Rdata")
-}
+processedData  <<- preprocess(movies)
+save(processedData, file = "./analysis/processedData.Rdata")
 ```
 
 ```{r univariate}
-#if (run == TRUE) #edaUni <- univariate(data = processedData)
+edaUni <- univariate(data = processedData)
 ```
 
 ```{r bivariate}
-#if (run == TRUE) #edaBi <- bivariate(data = processedData)
+edaBi <- bivariate(data = processedData)
 ```
 
 ```{r removetitle}
@@ -170,7 +165,7 @@ if (run == TRUE) {
 run <- FALSE
 ```
 
-```{r intro, child = '4.model.rmd'}
+```{r intro, child = '4.eda.rmd'}
 ```
 
 # References

@@ -28,9 +28,10 @@ list of containing the following plots:
 }
 \seealso{
 Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaEvaluation}}, \code{\link{bmaModel1}},
-  \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
-  \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
+  \code{\link{bmaBest}}, \code{\link{bmaEvaluation}},
+  \code{\link{bmaModel1}}, \code{\link{bmaPDC}},
+  \code{\link{bmaPIPPlots}}, \code{\link{bmaPIP}},
+  \code{\link{bmaPerformanceReport}},
   \code{\link{bmaPerformance}},
   \code{\link{bmaPredictModels}}, \code{\link{bmaPredict}},
   \code{\link{bma}}

@@ -1,0 +1,18 @@
+Predictor,Type,Subtype,Source,Description
+audience_score,Qualitative,Continuous,rottentomatoes.com,The percentage of Rotten Tomatoes ratings that were 3.5 or greater out of 5
+feature_film,Qualitative,Dichotomous,imdb.com,"""yes"" if title_type is Feature Film, ""no"" otherwise"
+drama,Qualitative,Dichotomous,imdb.com,"""yes"" if genre is Drama, ""no"" otherwise"
+runtime,Quantitative,Continuous,imdb.com,film runtime in minutes
+mpaa_rating_R,Qualitative,Dichotomous,imdb.com,"""yes"" if mpaa_rating is R, ""no"" otherwise"
+thtr_rel_year,Qualitative,Ordinal,imdb.com,Year of theatrical release
+oscar_season,Qualitative,Dichotomous,imdb.com," ""yes"" if movie is released in November, October, or December (based on thtr_rel_month), ""no"" otherwise"
+summer_season,Qualitative,Dichotomous,imdb.com,"""yes""  if movie is released in May, June, July, or August (based on thtr_rel_month), ""no"" otherwise"
+imdb_rating,Quantitative,Continuous,imdb.com,Weighted average of votes (from 1 to 10) by IMDb registered users. 
+imdb_num_votes,Quantitative,Continuous,imdb.com,The number of votes placed by IMDb registered users.
+critics_score,Quantitative,Continuous,rottentomatoes.com,The percent score or Tomatometer score from critics ratings
+best_pic_nom,Qualitative,Dichotomous,imdb.com,"""yes"" if the film was nominated for Best Picture Oscar, ""no"" otherwise"
+best_pic_win,Qualitative,Dichotomous,imdb.com,"""yes"" if the film won Best Picture Oscar, ""no"" otherwise"
+best_actor_win,Qualitative,Dichotomous,imdb.com,"""yes"" if the film won Best Actor Oscar, ""no"" otherwise"
+best_actress_win,Qualitative,Dichotomous,imdb.com,"""yes"" if the film won Best Actress Oscar, ""no"" otherwise"
+best_dir_win,Qualitative,Dichotomous,imdb.com,"""yes"" if the film won Best Director Oscar, ""no"" otherwise"
+top200_box,Qualitative,Dichotomous,boxofficemojo.com,"""yes"" if the film was in the top 200 box office earners for the year of theatrical release,  ""no"" otherwise"
