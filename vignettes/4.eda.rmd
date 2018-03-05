@@ -1,227 +1,221 @@
 # Exploratory Data Analysis
 
-This exploratory data analysis (EDA) is comprised of two parts: (1) the univariate analysis which examines the frequencies and proportions of categorical variables and the centrality, variability, spread and shape of the distributions of quantitative variables, and (2) the bivariate analysis which explores the relationships between the independent variables and audience scores.
+This exploratory data analysis (EDA) is comprised of three parts: (1) the univariate analysis which examines the frequencies and proportions of categorical variables and the centrality, variability, spread and shape of the distributions of quantitative variables, (2) the bivariate analysis which explores the relationships between the independent variables and audience scores, and (3) an association/correlation analysis which reveals anh potential collinearity that may arise as a consequence of the relationships among the independent variables. 
 
 ## Univariate Analysis
-### Qualitative Variables
+### Qualitative Analysis
 #### Summary Variables
- `r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`, shows the counts and percentages for three *summary* variables: the drama, the feature film, and the MPAA R rating indicator variables. Drama and R rated films comprised a slight plurality of films in the sample and nearly all the films were indeed, feature films.
+ `r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`, shows the counts and percentages for three *summary* variables: the drama, the feature film, and the MPAA R rating indicator variables. The drama genre constituted nearly half of the observations in the sample. A plurality of films were R rated and nearly all films surveyed were indeed, feature films. 
 
 ```{r films_summary}
 edaUni$qual$summary$plot
 ```
 `r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`: Drama, features and R Rated Films
 
-The winners in the best director, actor and actress categories accounted for `r round(edaUni$best_dir_win$stats$Proportion[1] * 100,1)`%, `r round(edaUni$best_actor_win$stats$Proportion[1] * 100,1)`%, and `r round(edaUni$best_actress_win$stats$Proportion[1] * 100,1)`%, of the sample respectively.
+#### Film Performance Variables
+`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Figure")` summarizes the counts and proportions of films in the sample which have achieved notability at the box office or with the Academy. Best Picture winners, top 200 box office earners and Best Picture nominees claimed the top one, two, and thre percent of the films, respectively. Films earning best director, best actress, and best actor Oscars were slightly less rarefied at 7%, 11%, and 14% of the sample respectively.
 
-### Best Picture Nominations and Winnings
-The proportions of best picture Oscar nominations and winnings are summarized in `r kfigr::figr(label = "best_picture", prefix = TRUE, link = TRUE, type="Figure")`. 
-
-```{r best_picture, fig.height=8}
-gridExtra::grid.arrange(edaUni$best_pic_nom$plot, edaUni$best_pic_win$plot, ncol = 2)
+```{r performance, fig.height=8}
+edaUni$qual$performance$plot
 ```
-`r kfigr::figr(label = "best_picture", prefix = TRUE, link = TRUE, type="Figure")`: Best Picture Nominations and Winnings
+`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Figure")`: Oscar Awards and Top 200 Box Office Class
 
-Films nominated for and winning best picture Oscars represented approximately `r round(edaUni$best_pic_nom$stats$Proportion[1] * 100,1)`% and `r round(edaUni$best_pic_win$stats$Proportion[1] * 100,1)`% of the data sample, respectively.
-
-### Genre and MPAA R Rating
-The drama genre accounting for nearly half of the films in the data sample.
-```{r genre, fig.height=8}
-gridExtra::grid.arrange(edaUni$drama$plot, edaUni$mpaa_rating_R$plot, ncol = 2)
-```
-`r kfigr::figr(label = "genre", prefix = TRUE, link = TRUE, type="Figure")`: Films by Genre and MPAA R Rating
-
-Similary, MPAA R Rated films accounted for nearly `r round(edaUni$mpaa_rating_R$stats$Proportion[1] * 100, -1)`% of the releases in the data sample.
-
-### Theatrical Release Season and Top 200 Box Office
-The Oscar season, starting in October and lasting until 31 December, marks the period in which Hollywood studios release their more critically acclaimed films. As indicated in `r kfigr::figr(label = "Oscar", prefix = TRUE, link = TRUE, type="Figure")`, approximately `r round(edaUni$oscar_season$stats$Proportion[1] * 100, -1)`% of films in the data set were released during the Oscar season. 
+#### Theatrical Release Season 
+The Oscar season, starting in October and lasting until 31 December, marks the period in which Hollywood studios release their more critically acclaimed films. As indicated in `r kfigr::figr(label = "Oscar", prefix = TRUE, link = TRUE, type="Figure")`, approximately 30% of films in the data set were released during the Oscar season. 
 
 ```{r season, fig.height=8}
-gridExtra::grid.arrange(edaUni$oscar_season$plot, edaUni$summer_season$plot, edaUni$top200_box$plot, ncol = 3)
+edaUni$qual$season$plot
 ```
 `r kfigr::figr(label = "season", prefix = TRUE, link = TRUE, type="Figure")`: Oscar and Summer Season Releases
 
-The summer season, which starts the first weekend of May and ends on Labour Day, accounts for disproportionate share of Hollywood studio's annual box office revenue. As evinced in `r kfigr::figr(label = "season", prefix = TRUE, link = TRUE, type="Figure")`, some `r round(edaUni$summer_season$stats$Proportion[1] * 100, -1)`% of the feature films in the data set were launched during the summer months.
+The summer season, which starts the first weekend of May and ends on Labour Day, accounts for disproportionate share of Hollywood studio's annual box office revenue. Similarly, some 32% of the feature films in the data set were launched during the summer months.
 
-With respect to box office earnings, just `r edaUni$top200_box$stats$Proportion[1] * 100`% of the `r nrow(movies)` films in the data set were among the top 200 box office earners. 
-
-### Year of Theatrical Release
-The data set constains some `r nrow(movies)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Table")` and  `r kfigr::figr(label = "year_dist", prefix = TRUE, link = TRUE, type="Figure")`, the maximum number of releases for any one year was approximately `r edaUni$thtr_rel_year$stats$Max` films and occurred in 1985-1986 timeframe. The number of theatrical releases per year centered around a median of `r edaUni$thtr_rel_year$stats$Median` and a mean of `r edaUni$thtr_rel_year$stats$Mean`. 
-
-
-```{r year_dist}
-gridExtra::grid.arrange(edaUni$thtr_rel_year$plot)
+#### Year of Theatrical Release
+```{r year_summary}
+years <- edaUni$qual$year$data
+low <- years %>% filter(N == min(N))
+ave <- years %>% summarize(Mean = mean(N))
+med <- years %>% summarize(Median = median(N))
+high <- years %>% filter(N == max(N))
+last <- years %>% filter(Category == "2014")
 ```
-`r kfigr::figr(label = "year_dist", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical Releases by Year
 
+The data set constained some `r nrow(movies)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`, the number of films in the sample by year of release, tended to grow somewhat linearly from `r low$N` films in `r low$Category`until a peak of approximately `r high$N` films in `r high$Category[1]` and in `r high$Category[2]`, then drops until settling at `r last$Category` films in 2014. The number of films per year centered at a mean and median of `r ave$Mean` and `r med$Median` films, respectively.
 
-### Critics Score
+```{r year}
+edaUni$qual$year$plot
+```
+`r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical Releases by Year
+
+### Quantitative Analysis
+#### Critics Score
 Moving on to the quantitative variables, the critics score, ranging from 1 to 100, was obtained from the Rotten Tomatoes website and its summary statistics are described below in `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`.
 
 `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`: Critics score summary statistics
 ```{r critics_score_stats}
-knitr::kable(edaUni$critics_score$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$critics_score$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 The distribution of critics scores represented in `r kfigr::figr(label = "critics_score_dist", prefix = TRUE, link = TRUE, type="Figure")` and further supported by `r kfigr::figr(label = "critics_score_box", prefix = TRUE, link = TRUE, type="Figure")` departs rather substantitively from normality.  That said, bayesian inference does not rely upon an assumption of normality with respect to the distribution of predictors.
 ```{r critics_score_dist}
-gridExtra::grid.arrange(edaUni$critics_score$hist, edaUni$critics_score$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$critics_score$hist, edaUni$quant$critics_score$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "critics_score_dist", prefix = TRUE, link = TRUE, type="Figure")`: Critics score histogram and QQ Plot
 
 ```{r critics_score_box, fig.height=4}
-edaUni$critics_score$box
+edaUni$quant$critics_score$box
 ```
 `r kfigr::figr(label = "critics_score_box", prefix = TRUE, link = TRUE, type="Figure")`: Critics score boxplot
 
-**Central Tendency**: `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")` reports that `r edaUni$critics_score$central`
+**Central Tendency**: `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")` reports that `r edaUni$quant$critics_score$central`
 
-**Dispersion**: `r edaUni$critics_score$disp`
+**Dispersion**: `r edaUni$quant$critics_score$disp`
 
-**Shape of Distribution**:  `r edaUni$critics_score$skew` `r edaUni$critics_score$kurt` The histogram and QQ plot in `r kfigr::figr(label = "critics_score_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a left skewed distribution that departs from normality. Fortunately, bayesian inference is not based upon an assumption of normality of predictors.
+**Shape of Distribution**:  `r edaUni$quant$critics_score$skew` `r edaUni$quant$critics_score$kurt` The histogram and QQ plot in `r kfigr::figr(label = "critics_score_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a left skewed distribution that departs from normality. Fortunately, bayesian inference is not based upon an assumption of normality of predictors.
 
-**Outliers**: The boxplot in `r kfigr::figr(label = "critics_score_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$critics_score$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$critics_score$out`
+**Outliers**: The boxplot in `r kfigr::figr(label = "critics_score_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$quant$critics_score$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$quant$critics_score$out`
 
-### IMDb Number of Votes
+#### IMDb Number of Votes
 This variable, obtained from the IMDb website represents the number of IMDb votes cast for each film.
 
 `r kfigr::figr(label = "imdb_votes_stats", prefix = TRUE, link = TRUE, type="Table")`: IMDb votes summary statistics
 ```{r imdb_votes_stats}
-knitr::kable(edaUni$imdb_num_votes$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$imdb_num_votes$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ```{r imdb_votes_dist}
-gridExtra::grid.arrange(edaUni$imdb_num_votes$hist, edaUni$imdb_num_votes$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$imdb_num_votes$hist, edaUni$quant$imdb_num_votes$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "imdb_votes_dist", prefix = TRUE, link = TRUE, type="Figure")`: IMDb votes histogram and QQ Plot
 
 ```{r imdb_votes_box, fig.height=4}
-edaUni$imdb_num_votes$box
+edaUni$quant$imdb_num_votes$box
 ```
 `r kfigr::figr(label = "imdb_votes_box", prefix = TRUE, link = TRUE, type="Figure")`: IMDb votes boxplot
 
-**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_votes_stats", prefix = TRUE, link = TRUE, type="Table")`) show that `r edaUni$imdb_num_votes$central`
+**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_votes_stats", prefix = TRUE, link = TRUE, type="Table")`) show that `r edaUni$quant$imdb_num_votes$central`
 
-**Dispersion**: `r edaUni$imdb_num_votes$disp`
+**Dispersion**: `r edaUni$quant$imdb_num_votes$disp`
 
-**Shape of Distribution**:  `r edaUni$imdb_num_votes$skew` `r edaUni$imdb_num_votes$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_votes_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a distribution which departs significantly from normality.
+**Shape of Distribution**:  `r edaUni$quant$imdb_num_votes$skew` `r edaUni$quant$imdb_num_votes$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_votes_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a distribution which departs significantly from normality.
 
-**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_votes_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$imdb_num_votes$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$imdb_num_votes$out`
+**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_votes_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$quant$imdb_num_votes$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$quant$imdb_num_votes$out`
 
-### IMDb Number of Votes (Log)
+#### IMDb Number of Votes (Log)
 This was a log transformation of the IMDb votes variable.
 
 `r kfigr::figr(label = "imdb_votes_log_stats", prefix = TRUE, link = TRUE, type="Table")`: Log IMDb votes summary statistics
 ```{r imdb_votes_log_stats}
-knitr::kable(edaUni$imdb_num_votes_log$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$imdb_num_votes_log$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ```{r imdb_votes_log_dist}
-gridExtra::grid.arrange(edaUni$imdb_num_votes_log$hist, edaUni$imdb_num_votes_log$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$imdb_num_votes_log$hist, edaUni$quant$imdb_num_votes_log$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "imdb_votes_log_dist", prefix = TRUE, link = TRUE, type="Figure")`: Log IMDb votes histogram and QQ Plot
 
 ```{r imdb_votes_log_box, fig.height=4}
-edaUni$imdb_num_votes_log$box
+edaUni$quant$imdb_num_votes_log$box
 ```
 `r kfigr::figr(label = "imdb_votes_log_box", prefix = TRUE, link = TRUE, type="Figure")`: Log IMDb votes boxplot
 
-**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_votes_log_stats", prefix = TRUE, link = TRUE, type="Table")`) report that `r  edaUni$imdb_num_votes_log$central`
+**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_votes_log_stats", prefix = TRUE, link = TRUE, type="Table")`) report that `r  edaUni$quant$imdb_num_votes_log$central`
 
-**Dispersion**: `r edaUni$imdb_num_votes_log$disp`
+**Dispersion**: `r edaUni$quant$imdb_num_votes_log$disp`
 
-**Shape of Distribution**:  `r edaUni$imdb_num_votes_log$skew` `r edaUni$imdb_num_votes_log$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_votes_log_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a nearly normal distribution.
+**Shape of Distribution**:  `r edaUni$quant$imdb_num_votes_log$skew` `r edaUni$quant$imdb_num_votes_log$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_votes_log_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a nearly normal distribution.
 
-**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_votes_log_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$imdb_num_votes_log$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$imdb_num_votes_log$out`
+**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_votes_log_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$quant$imdb_num_votes_log$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$quant$imdb_num_votes_log$out`
 
-### IMDb Ratings
+#### IMDb Ratings
 This variable captured the IMDb rating for each film
 
 `r kfigr::figr(label = "imdb_rating_stats", prefix = TRUE, link = TRUE, type="Table")`: IMDb rating summary statistics
 ```{r imdb_rating_stats}
-knitr::kable(edaUni$imdb_rating$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$imdb_rating$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ```{r imdb_rating_dist}
-gridExtra::grid.arrange(edaUni$imdb_rating$hist, edaUni$imdb_rating$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$imdb_rating$hist, edaUni$quant$imdb_rating$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "imdb_rating_dist", prefix = TRUE, link = TRUE, type="Figure")`: IMDb rating histogram and QQ Plot
 
 ```{r imdb_rating_box, fig.height=4}
-edaUni$imdb_rating$box
+edaUni$quant$imdb_rating$box
 ```
 `r kfigr::figr(label = "imdb_rating_box", prefix = TRUE, link = TRUE, type="Figure")`: IMDb rating boxplot
 
-**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_rating_stats", prefix = TRUE, link = TRUE, type="Table")`) shows that `r edaUni$imdb_rating$central`
+**Central Tendency**: The summary statistics (`r kfigr::figr(label = "imdb_rating_stats", prefix = TRUE, link = TRUE, type="Table")`) shows that `r edaUni$quant$imdb_rating$central`
 
-**Dispersion**: `r edaUni$imdb_rating$disp`
+**Dispersion**: `r edaUni$quant$imdb_rating$disp`
 
-**Shape of Distribution**:  `r edaUni$imdb_rating$skew` `r edaUni$imdb_rating$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_rating_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a nearly normal distribution.
+**Shape of Distribution**:  `r edaUni$quant$imdb_rating$skew` `r edaUni$quant$imdb_rating$kurt` The histogram and QQ plot in `r kfigr::figr(label = "imdb_rating_dist", prefix = TRUE, link = TRUE, type="Figure")` reveal a nearly normal distribution.
 
-**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_rating_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$imdb_rating$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$imdb_rating$out`
+**Outliers**: The boxplot in `r kfigr::figr(label = "imdb_rating_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$quant$imdb_rating$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$quant$imdb_rating$out`
 
-### Runtime
+#### Runtime
 This is an analysis of moving runtimes.
 
 `r kfigr::figr(label = "runtime_stats", prefix = TRUE, link = TRUE, type="Table")`: Runtime summary statistics
 ```{r runtime_stats}
-knitr::kable(edaUni$runtime$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$runtime$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ```{r runtime_dist}
-gridExtra::grid.arrange(edaUni$runtime$hist, edaUni$runtime$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$runtime$hist, edaUni$quant$runtime$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "runtime_dist", prefix = TRUE, link = TRUE, type="Figure")`: Runtime histogram and QQ Plot
 
 ```{r runtime_box, fig.height=4}
-edaUni$runtime$box
+edaUni$quant$runtime$box
 ```
 `r kfigr::figr(label = "runtime_box", prefix = TRUE, link = TRUE, type="Figure")`: Runtime boxplot
 
-**Central Tendency**: The summary statistics (`r kfigr::figr(label = "runtime_stats", prefix = TRUE, link = TRUE, type="Table")`) show that `r edaUni$runtime$central`
+**Central Tendency**: The summary statistics (`r kfigr::figr(label = "runtime_stats", prefix = TRUE, link = TRUE, type="Table")`) show that `r edaUni$quant$runtime$central`
 
-**Dispersion**: `r edaUni$runtime$disp`
+**Dispersion**: `r edaUni$quant$runtime$disp`
 
-**Shape of Distribution**:  `r edaUni$runtime$skew` `r edaUni$runtime$kurt` The histogram and QQ plot in `r kfigr::figr(label = "runtime_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a left skewed distribution that appears reasonably normal.
+**Shape of Distribution**:  `r edaUni$quant$runtime$skew` `r edaUni$quant$runtime$kurt` The histogram and QQ plot in `r kfigr::figr(label = "runtime_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a left skewed distribution that appears reasonably normal.
 
-**Outliers**: The boxplot in `r kfigr::figr(label = "runtime_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$runtime$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$runtime$out`
+**Outliers**: The boxplot in `r kfigr::figr(label = "runtime_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$quant$runtime$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$quant$runtime$out`
 
-### Audience Score
+#### Audience Score
 At last, the dependent variable, "audience_score" is examined.
 
 `r kfigr::figr(label = "audience_score_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Score Summary Statistics
 ```{r audience_score_stats}
-knitr::kable(edaUni$audience_score$stats, digits = 2) %>%
+knitr::kable(edaUni$quant$audience_score$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ```{r audience_score_dist}
-gridExtra::grid.arrange(edaUni$audience_score$hist, edaUni$audience_score$qq, ncol = 2)
+gridExtra::grid.arrange(edaUni$quant$audience_score$hist, edaUni$quant$audience_score$qq, ncol = 2)
 ```
 `r kfigr::figr(label = "audience_score_dist", prefix = TRUE, link = TRUE, type="Figure")`: Audience Score Histogram and QQ Plot
 
 ```{r audience_score_box, fig.height=4}
-edaUni$audience_score$box
+edaUni$quant$audience_score$box
 ```
 `r kfigr::figr(label = "audience_score_box", prefix = TRUE, link = TRUE, type="Figure")`: Audience Score Boxplot
 
-**Central Tendency**: The summary statistics (`r kfigr::figr(label = "audience_score_stats", prefix = TRUE, link = TRUE, type="Table")`) shows that `r edaUni$audience_score$central`
+**Central Tendency**: The summary statistics (`r kfigr::figr(label = "audience_score_stats", prefix = TRUE, link = TRUE, type="Table")`) shows that `r edaUni$quant$audience_score$central`
 
-**Dispersion**: `r edaUni$audience_score$disp`
+**Dispersion**: `r edaUni$quant$audience_score$disp`
 
-**Shape of Distribution**:  `r edaUni$audience_score$skew` `r edaUni$audience_score$kurt` The histogram and QQ plot in `r kfigr::figr(label = "audience_score_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a slightly right skewed distribution that approximates normality.  
+**Shape of Distribution**:  `r edaUni$quant$audience_score$skew` `r edaUni$quant$audience_score$kurt` The histogram and QQ plot in `r kfigr::figr(label = "audience_score_dist", prefix = TRUE, link = TRUE, type="Figure")` reveals a slightly right skewed distribution that approximates normality.  
 
 **Outliers**: The boxplot in `r kfigr::figr(label = "audience_score_box", prefix = TRUE, link = TRUE, type="Figure")`, which graphically depicts the median, the IQR, and maximum and minimum values, suggested that `r ifelse(nrow(edaUni$audience_score$outliers) == 0, "no", " ")` outliers were extant. `r edaUni$audience_score$out`
 
 ## Bivariate Analysis
-Having examined the proportions, frequencies and summary statistics of the dependent and independent variables, exploring the relationships between the independent and dependent variables on a bivariate basis would inform the subsequent feature and model selection phases. The analysis continues with an exploration of the categorical variables vis-a-vis audience score, then a quantitative examination of the continuous variables and the dependent variable.
+Next, the relationships between the independent variables and audience scores are studied. The analysis continues with an exploration of the categorical variables vis-a-vis audience score, then an examination of the quantitative variables and the dependent variable.
 
-### Best Actor Oscar
+### Qualitative Analysis
+#### Best Actor Oscar
 The summary statistics in `r kfigr::figr(label = "bivariate_best_actor_stats", prefix = TRUE, link = TRUE, type="Table")` evince very similar distributions of audience scores between those films which have won the best actor Oscar and those that had not.  
 
 `r kfigr::figr(label = "bivariate_best_actor_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Best Actor Oscar Win Summary Statistics
@@ -239,7 +233,7 @@ edaBi$best_actor_win$boxPlot
 
 `r edaBi$best_actor_win$statement` As such, the data does not support an association between best actor Oscar award and audience score.
 
-### Best Actress Oscar
+#### Best Actress Oscar
 Similarly, the summary statistics in `r kfigr::figr(label = "bivariate_best_actress_stats", prefix = TRUE, link = TRUE, type="Table")` reveal almost identical distributions for audience score for both groups. 
 
 `r kfigr::figr(label = "bivariate_best_actress_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Best Actress Oscar Win Summary Statistics
@@ -257,7 +251,7 @@ edaBi$best_actress_win$boxPlot
 
 `r edaBi$best_actress_win$statement` 
 
-### Best Director Oscar
+#### Best Director Oscar
 The summary statistics shown in `r kfigr::figr(label = "bivariate_best_director_stats", prefix = TRUE, link = TRUE, type="Table")` suggest that films which have been awarded the best director Oscar are also associated with higher average audience scores.  
 
 `r kfigr::figr(label = "bivariate_best_director_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Best Director Oscar Win Summary Statistics
@@ -275,7 +269,7 @@ edaBi$best_dir_win$boxPlot
 
 `r edaBi$best_dir_win$statement` Though winning films tended to have slightly higher audience scores, the data do not indicate a statistically significant difference.
 
-### Best Picture Nomination
+#### Best Picture Nomination
 The association between Oscar performance and audience scores becomes extant for the first time with the best picture nomination. The summary statistics shown in `r kfigr::figr(label = "bivariate_best_pic_nom_stats", prefix = TRUE, link = TRUE, type="Table")` reveal a sizeable difference in average and median audience scores between the films so nominated and those that were not. 
 
 `r kfigr::figr(label = "bivariate_best_pic_nom_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Best Picture Nomination Summary Statistics
@@ -293,7 +287,7 @@ edaBi$best_pic_nom$boxPlot
 
 `r edaBi$best_pic_nom$statement` Indeed the data support an association between best picture nomination and audience scores. 
 
-### Best Picture Oscar
+#### Best Picture Oscar
 As one my expect, given prior results, the summary statistics shown in `r kfigr::figr(label = "bivariate_best_pic_win_stats", prefix = TRUE, link = TRUE, type="Table")` suggests an association between Oscar best picture acclaim and higher audience scores.   
 
 `r kfigr::figr(label = "bivariate_best_pic_win_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Best Picture Oscar Summary Statistics
@@ -311,8 +305,7 @@ edaBi$best_pic_win$boxPlot
 
 `r edaBi$best_pic_win$statement` Surely, the data do in fact support an association between best picture award and audience scores. 
 
-
-### Drama
+#### Drama
 The summary statistics in `r kfigr::figr(label = "bivariate_drama_stats", prefix = TRUE, link = TRUE, type="Table")` report a slight difference in the central audience scores between dramas and non-drama films.
 
 `r kfigr::figr(label = "bivariate_drama_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Genre Summary Statistics
@@ -330,7 +323,7 @@ edaBi$drama$boxPlot
 
 `r edaBi$drama$statement` Dramas are indeed, associated with slighly higher audience scores. 
 
-### Features Films
+#### Features Films
 The summary statistics in `r kfigr::figr(label = "bivariate_feature_film_stats", prefix = TRUE, link = TRUE, type="Table")` expose a rather sizeable difference in audience scores between feature films and other film types.  In fact, feature films appear to be associated with significantly lower average audience scores.
 
 `r kfigr::figr(label = "bivariate_feature_film_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by Film Type Summary Statistics
@@ -348,7 +341,7 @@ edaBi$feature_film$boxPlot
 
 `r edaBi$feature_film$statement` The data shows that non feature films are associated with higher audience scores.
 
-### Rated R
+#### Rated R
 The summary statistics in `r kfigr::figr(label = "bivariate_mpaa_rating_R_stats", prefix = TRUE, link = TRUE, type="Table")` suggest very similar distributions of audience scores between rated R and other films. 
 
 `r kfigr::figr(label = "bivariate_mpaa_rating_R_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores by MPAA Rating Summary Statistics
@@ -366,7 +359,7 @@ edaBi$mpaa_rating_R$boxPlot
 
 `r edaBi$mpaa_rating_R$statement` As such the data do not support an association between audience scores and MPAA R ratings. 
 
-### Oscar Season Release
+#### Oscar Season Release
 Again, the summary statistics in `r kfigr::figr(label = "bivariate_Oscar_season_stats", prefix = TRUE, link = TRUE, type="Table")` report nearly identical distributions of audience scores between films released during the Oscar season and those that were not.
 
 `r kfigr::figr(label = "bivariate_Oscar_season_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores and Oscar Season Release Summary Statistics
@@ -384,7 +377,7 @@ edaBi$oscar_season$boxPlot
 
 `r edaBi$oscar_season$statement` As such the data do not support an association between audience scores and Oscar season release dates. 
 
-### Summer Season Release
+#### Summer Season Release
 Similarly, the summary statistics in `r kfigr::figr(label = "bivariate_summer_season_stats", prefix = TRUE, link = TRUE, type="Table")` report nearly identical distributions of audience scores between films released during the summer season and those that were not.
 
 `r kfigr::figr(label = "bivariate_summer_season_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores and Summer Season Release Summary Statistics
@@ -402,7 +395,7 @@ edaBi$summer_season$boxPlot
 
 `r edaBi$summer_season$statement` Therefore the data do not indicate that an association between audience scores and summer release dates is extant. 
 
-### Top 200 Box Office
+#### Top 200 Box Office
 As one might conjecture, the top 200 box office films might be associated with higher audience scores, almost be definition. This is indicated by the summary statistics in `r kfigr::figr(label = "bivariate_top200_box_stats", prefix = TRUE, link = TRUE, type="Table")` which show significantly higher central audience scores  for the highest grossing films. 
 
 `r kfigr::figr(label = "bivariate_top200_box_stats", prefix = TRUE, link = TRUE, type="Table")`: Audience Scores and Summer Season Release Summary Statistics
@@ -420,7 +413,8 @@ edaBi$top200_box$boxPlot
 
 `r edaBi$top200_box$statement` Notwithstanding, the data doesn't support the assertion that the highest grossing films are more popular from an audience score perspective.
 
-### Critics Score
+### Quantitative Analysis
+#### Critics Score
 The scatterplot (`r kfigr::figr(label = "bivariate_critics_score", prefix = TRUE, link = TRUE, type="Figure")`) indicates a positive correlation between critics score and audience score.
 
 ```{r bivariate_critics_score}
@@ -430,7 +424,7 @@ edaBi$critics_score$scatterPlot
 
 `r edaBi$critics_score$statement`
 
-### IMDB Num Votes
+#### IMDB Num Votes
 The scatterplot (`r kfigr::figr(label = "bivariate_imdb_num_votes", prefix = TRUE, link = TRUE, type="Figure")`) indicates a moderate positive correlation between the number of IMDB votes and audience score.
 
 ```{r bivariate_imdb_num_votes}
@@ -440,7 +434,7 @@ edaBi$imdb_num_votes$scatterPlot
 
 `r edaBi$imdb_num_votes$statement`
 
-### IMDB Num Votes (Log)
+#### IMDB Num Votes (Log)
 The scatterplot (`r kfigr::figr(label = "bivariate_imdb_num_votes_log", prefix = TRUE, link = TRUE, type="Figure")`) reveals a slight positive correlation between the log of IMDB number of votes and audience score.
 
 ```{r bivariate_imdb_num_votes_log}
@@ -450,8 +444,7 @@ edaBi$imdb_num_votes_log$scatterPlot
 
 `r edaBi$imdb_num_votes_log$statement`
 
-
-### IMDB Rating
+#### IMDB Rating
 The scatterplot (`r kfigr::figr(label = "bivariate_imdb_rating", prefix = TRUE, link = TRUE, type="Figure")`) suggests a strong positive correlation between IMDB rating and audience score.
 
 ```{r bivariate_imdb_rating}
@@ -461,7 +454,7 @@ edaBi$imdb_rating$scatterPlot
 
 `r edaBi$imdb_rating$statement`
 
-### Runtime
+#### Runtime
 The scatterplot (`r kfigr::figr(label = "bivariate_runtime", prefix = TRUE, link = TRUE, type="Figure")`) suggests a weak positive correlation between runtime and audience score.
 
 ```{r bivariate_runtime}
@@ -471,7 +464,7 @@ edaBi$runtime$scatterPlot
 
 `r edaBi$runtime$statement`
 
-### Year of Theatrical Release
+#### Year of Theatrical Release
 The scatterplot (`r kfigr::figr(label = "bivariate_thtr_rel_year", prefix = TRUE, link = TRUE, type="Figure")`) suggests the lack of a correlation between the year of theatrical release and audience score.
 
 ```{r bivariate_thtr_rel_year}
@@ -480,6 +473,44 @@ edaBi$thtr_rel_year$scatterPlot
 `r kfigr::figr(label = "bivariate_thtr_rel_year", prefix = TRUE, link = TRUE, type="Figure")`: Audience Score and Year of Theatrical Release
 
 `r edaBi$thtr_rel_year$statement`
+
+## Association and Correlation
+Next, the signficance and strength of associations between categorical variables were examined. Pairwise chi-squared and association tests were conducted to reveal the significance (p.value) and the strength, Cramer's V [@Cramer1946] of each association. The chi-square results summarized in `r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")` reveal several associations that could present as collinearity issues for regression. Focusing on those regressors most highly associated with audience score, the degree of association among Academy awarded films was significant. There was also a strong association between films that won Best Picture and those that were nominated. Both significant and strong associations were observed among films with theatrical releases in the Oscar and Summer seasons.
+
+`r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")`: Chi-squared test of independence between categorical variables. Significant ($\alpha = 0.05$) differences between observed and expected differences under the null hypothesis are highlighted in bold text.
+```{r chi}
+chi <- x2(processedData)
+vars <- data.frame(Terms = as.character(rownames(chi)))
+chi <- lapply(chi, function(x) {
+  kableExtra::cell_spec(x, "html", bold = ifelse(x < .05 ,T,F))
+  })
+chi <- cbind(vars, chi)
+
+knitr::kable(chi, escape = F) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+`r kfigr::figr(label = "cramer", prefix = TRUE, link = TRUE, type="Table")`: Cramer's V measure of association between categorical variables. Associations with a medium strength (Cramer's V > .3) are highlighted in bold text.
+```{r cramer}
+cv <- cramers(processedData)
+vars <- data.frame(Terms = as.character(rownames(cv)))
+cv <- lapply(cv, function(x) {
+  kableExtra::cell_spec(x, "html", bold = ifelse(x > .3 ,T,F))
+  })
+cv <- cbind(vars, cv)
+knitr::kable(cv, escape = F) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+As shown in `r kfigr::figr(label = "cp", prefix = TRUE, link = TRUE, type="Figure")`, the correlations among the quantitatve variables did not surprise. As expected, a moderate correlation between critics scores and IMDb rating was observed. 
+```{r cp}
+cp <- pearsons(processedData)
+cp
+```
+`r kfigr::figr(label = "cp", prefix = TRUE, link = TRUE, type="Figure")`: Correlations among quantitative predictors
+
+## EDA Summary
+Whereas acknowledgements of individual achievement from the Academy had no statistically significant correlation with audience scores, films that were nominated for, or won Best Picture, were associated with higher audience scores to a statistically significant degree. It would appear that audiences prefer teamwork. Non-feature films were also associated with higher audience scores. As one might expect, high positive correlations were extant between critics scores, IMDb ratings and audience scores. Weak positive correlations between IMDb number of votes and runtime were observed and finally, audience scores saw a slight, but statistically significant downward trend over the time period observed. The associations between the qualitative and quantitative variables revealed potential collinearity among the Oscar award variables. There was a moderate to strong correlation between critics scors and IMDb ratings.
 
 
 * * *

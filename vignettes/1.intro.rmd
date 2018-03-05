@@ -1,61 +1,16 @@
 # Introduction
 Bayesian model averaging (BMA), now widely accepted as a principled way of accounting for model uncertainty, involves the challenge of the elicitation of priors for all parameters of each model and the probability of each model. It is this elicitation of prior knowledge about the parameters of interest which often leads to more reliable estimates and smaller uncertainties. In some cases, the elicitation of prior knowledge is essential to obtaining meaningful results. If substantial prior information is available in the form of a probability distributions, it should be used. In many cases; however, prior information may be unavailable or miniscule with respect to the information provided by the data. In such cases, default priors can be used to characterize prior probability distributions of model parameters. Still, inappropriate priors may unduly influence posterior-based inferences and decision making. 
 
-This paper examines the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance. These issues are illustrated in the context of a linear regression model to predict audience scores for movies, given 645 observations and 16 regression parameters. Nine candidate default parameter priors were evaluated.  BMA reference models, which best described knowledge about future observations, served as proxies for the "true" deta generating models. Candidate models were evaluated vis-a-vis the BMA reference models on the basis of predictive performance and the cross-validated predictive mean using mean squared error.   
+>This paper examines the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance. 
+
+These issues are illustrated in the context of a linear regression model to predict audience scores for movies, given 645 observations and 16 regression parameters. Nine candidate default parameter priors were evaluated.  BMA reference models, which best describe knowledge about future observations, served as proxies for the "true" data generating models. Candidate models were evaluated vis-a-vis the BMA reference models on the basis of predictive performance.   
 
 ## Background
 The effect of default priors on BMA, model selection, and predictive performance have been studied in range of disciplines including, econometrics, social sciences, biostatistics. Eicher, Papageorgiou, and Raftery [@Eicher2011] evaluated 12 priors which have been proposed in statistics and economics literature and found that the Unit Information Prior (UIP), which corresponds to the Bayesian Information Criteria (BIC) approximation of the marginal likelihood, combined with the uniform prior over the model space, outperformed, the 11 other priors. Fernandez *et al.* [@FernahNdez2001] evaluated nine priors based upon Zellner's g-prior structure [@ZELLNER1985187] and recommended a g-prior equal to $1/k^2$ when $n\leq k^2$ and $1/n$ when $n > k^2$, where $n$ is the number of observations and $k$ is the number of regressors. Gelman, *et al.*, [@Gelman2008] proposed the Cauchy distribution with center 0 and scale 2.5, for logistic and other regression models. 
 
-## Document Organization
-The papers is organized as follows. Section 2 summarizes BMA key concepts, with a focus on prior parameter specification. Section 3 introduces the motivating example and the data used for this experiment. Section 4 includes a univariate and bivariate exploratory data analysis (EDA). Section 5 covers model prior comparison, evaluation and selection. Section 6 reports the prediction accuracy of top performing models on unseen data. Finally, section 6 includes concluding remarks. Source code used to produce this report is included in the appendix and is available on github at https://github.com/DataScienceSalon/Bayesian-Regression. 
+The papers is organized as follows. Section 2 summarizes BMA key concepts, with a focus on prior parameter specification. Section 3 introduces the motivating example and the data used for this experiment. Section 4 includes a univariate and bivariate exploratory data analysis (EDA). Section 5 covers model prior comparison, evaluation and selection. Section 6 reports the prediction accuracy of top performing models on unseen data. Finally, section 6 includes concluding remarks. 
 
-## Bayesian Model Averaging (BMA)
-The objective of variable selection in linear regression is to identify a set of candidate predictors that produce the "best" model. Here, "best" model may mean the model that best predicts unseen cases, or that which is best explained by the data. Given an independent variable $Y$ and a set of $k$ candidate predictors $X_1, X_2, ..., X_k$, the "best" model is more concretely described as follows: 
-$$Y = \beta_0 + \displaystyle\sum_{j=1}^{p}\beta_jX_j + \epsilon = X\beta + \epsilon$$
-where:   
-$X_1, X_2, ..., X_p$  is a subset of $X_1, X_2, ..., X_k$  
-$X$ is a $n \times (p + 1)$ matrix containing the observed data on $p$ predictors  
-$\epsilon$ ~ $N(0,\sigma^2I)$  
-$\beta$ and $\sigma^2$ are the $(p + 1)$ individual unknown parameters  
+BMA modeling and prediction functionality was provided by the BAS package [@Clyde2017]. Core scripts and functions used in this study are included in the appendix. The complete source code used to produce this report is also available on github at https://github.com/DataScienceSalon/Bayesian-Regression. 
 
-However, model selection exercises that lead to a single "best" model ignore model uncertainty [@Hodges1987; @Draper1995; @Raftery1997], and leads to underestimation of uncertainty when making inferences about quantities of interest [@Raftery1997].
-
-Bayesian model averaging, employed when a variety of statistically reasonable models are extant, addresses model uncertainty and leads to optimal predictive ability [@Raftery1994] by average over *all* possible combinations of predictors when making inferences about quantities of interest. The final estimates are computed as a weighted average of the parameter estimates from each of the models. 
-
-The standard BMA solution, first introduced by Leamer in 1978, defines a set of all possible models as $M = ({M_1,..., M_k})$. If $\Delta$ is the quantity of interest, such as a movie prediction or tomorrow's stock price, then the posterior distribution of $\Delta$ given the data $D$ is:
-$$Pr(\Delta|D) = \displaystyle\sum_{k=1}^KPr(\Delta|M_k, D)Pr(M_k|D)$$
-This is an average of the posterior disteributions under each model weighted by the corresponding posterior model probabilities [@Raftery1997]. The posterior model probabilty of $M_k$ is then computed as the ratio of its marginal likelihood to the sum of the marginal likelihoods over the entire model space and is given by[@Amini]:
-
-$$Pr(M_k|D) = \frac{Pr(D|M_k)Pr(M_k)}{\displaystyle\sum_{i=1}^{K}Pr(D|M_i)Pr(M_i)}$$
-where:  
-$$Pr(D|M_k) = \int p(D|\theta_k, M_k)P(\theta_k|M_k)d\theta_k$$
-is the marginal likelihood of model $M_k$, $\theta_k$ is the vector of parameters of model $M_k$, $Pr(\theta_k|M_k)$ is the prior density of $\theta_k$ under model $M_k$, $Pr(D|\theta_k, M_k)$ is the likelihood of the data given the $M_k$ and $\theta_k$, and $Pr(M_k)$ is the prior probability that $M_k$ is the true model.
-
-
-As part of the model averaging process, BMA also obtains the *posterior inclusion probability* of each candidate predictor $\beta_p$, $Pr(\beta_p\neq0|D)$, by summing the posterior model probabilities over all models that include $\beta_p$. Here, the probability that a predictor has an effect on $Y$ is ascertained.
-
-Referring back to the linear regression model; we now have an estimate for the posterior means and standard deviations of coefficient vectors $\beta$, defined as:
-$$E[\hat{\beta}|D] = \displaystyle\sum_{j=1}^{2^k}\hat{\beta}Pr(M_j)|D),$$
-$$V[\hat{\beta}|D] = \displaystyle\sum_{j=1}^{2^k}Var[{\beta|D,M_j] +\hat\beta^2})Pr(M_j|D) - E[\beta|D]^2.$$
-Averaging over *all* models in this way provides better predictive results, as measured by the logarithmic scoring rule, than any single model $M_j$ $(j  1,...,K)$ [@Raftery1997]. 
-
-## Prior Distributions of Parameters
-To implement BMA, one must specify *prior distributions* over all parameters in all models, as well as prior probabilties of the models themselves. If prior information about the parameters and the models is available, it should be used. However, if the amount of prior information is small relative to the effort required to specify it, as is often the case, default or so-called "noninformative" or "reference" priors may be used for such analysis. The selection of default priors may effect the *integrated likelihood*, the key factor in computing posterior model weights, and so the prior density should be wide enough and reasonably flat over the region of the parameter space where the likelihood is large, but not so spread out as to decrease the prior at the posterior mode.  This decreases the integrated likelihood and may unnecessarily penalize larger models [@Raftery1994].
-
-`r kfigr::figr(label = "priors", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors 
-```{r priors}
-knitr::kable(priors,digits = 2) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-
-
-This experiment explores 9 default priors supported in literature (`r kfigr::figr(label = "priors", prefix = TRUE, link = TRUE, type="Table")`). ** Bayesian Information Criteria (BIC) prior**	is a reference prior based upon an approximation of the log marginal likelihood using the Bayesian information criterion.
-$$log Pr(D|M_k) \approx c - 1/2BIC_k$$
-where:   
-$$BIC_k = nlog(1-R^2_k) + p_klog(n)$$    
-The $R^2$ and $p_k$ variables are the coefficient of determination and the number of regressors for model $M_k$, respectively, $n$ is the number of observations, and $c$ is a constant that does not vary across models and so cancels in the model averaging. This prior is typically flat where the likelihood is large and contains the same amount of information that would be contained in a typical single observation [@Wasserman1996]. The **Akaike information criterion (AIC) prior**	is the same as the BIC prior above, except AIC is used to approximate the likelihood of the data given a model $M_k$. The remaining priors are based upon the multivariate normal-gamma conjugate prior where the conditional distribution $X|\theta \sim N(\mu,1/\lambda\sigma^2)$ and $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, where the scaled variance and covariances are obtained from the ordinary least squares (OLS). This reduces prior elicitation down to two components, the prior mean of $\beta_0$, taken to be 0, and the scalar g. **Empirical Bayes Global Prior(EP-G)** uses an EM algorithm to find a common or global estimate of g, averaged over all models [@Clyde2017]. **Empirical Bayes Local Prior(EP-L)** uses the MLE of g from the marginal likelhood within each model [@Clyde2017]. The **Zellner's g-prior**  is a multivariate normal-gamma conjugate prior where $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, $g = n$, and the scaled variance and covariances are obtained from the ordinary least squares (OLS).**Hyper-g** is a class of g-priors based upon continuous proper hyperprior f(g), giving a mixture of g-priors where the prior on g/(1+g) is a Beta(1, alpha/2) [@Clyde2017]. **Hyper-g-n** is a special case of the Hyper-g prior where  u = g/n and u ~ Beta(1, alpha/2), to provide consistency when the null model is true [@Clyde2017]. **Hyper-g Laplace** is the same as the Hyper-g prior, but uses Laplace approximation to integrate over the prior on g. Lastly, the **Zellner-Siow prior** places a gamma prior on n/g with G(shape = 1/2, scale = 1/2).
-
-## Model Priors
-For this experiment, the uniform distribution that assigns equal prior probability to all models was used such that $Pr(M_k) = 1 / K$ for each $k$ [@Raftery1988].
 
 * * *

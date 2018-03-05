@@ -6,6 +6,7 @@ output:
   rmdformats::readthedown:
     highlight: kate
     css: rmdStyles.css
+    number_sections: true
 bibliography: library.bib
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -40,6 +41,7 @@ knitr::knit_hooks$set(inline = function(x) {
 library(BAS)
 library(broom)
 library(caret)
+library(corrplot)
 library(data.table)
 library(dplyr)
 library(extrafont)
@@ -50,11 +52,13 @@ library(gridExtra)
 library(reshape2)
 library(rlist)
 library(statsr)
+library(vcd)
 ```
 
 ```{r source-functions}
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
+source("../R/bmaBest.R")
 source("../R/bmaEvaluation.R")
 source("../R/bmaPerformance.R")
 source("../R/bmaPerformanceReport.R")
@@ -66,6 +70,7 @@ source("../R/bmaPredictModels.R")
 source("../R/bmaPDC.R")
 source("../R/bmaPIP.R")
 source("../R/bmaPIPPlots.R")
+source("../R/corrAssociation.R")
 source("../R/preprocess.R")
 source("../R/univariate.R")
 source("../R/univariateQual.R")
@@ -165,7 +170,31 @@ if (run == TRUE) {
 run <- FALSE
 ```
 
+```{r intro, child = '1.intro.rmd'}
+```
+
+```{r intro, child = '2.bma.rmd'}
+```
+
+```{r intro, child = '3.data.rmd'}
+```
+
 ```{r intro, child = '4.eda.rmd'}
 ```
+
+```{r intro, child = '5.model.rmd'}
+```
+
+```{r intro, child = '6.prediction.rmd'}
+```
+
+```{r intro, child = '7.conclusion.rmd'}
+```
+
+
+
+
+
+
 
 # References

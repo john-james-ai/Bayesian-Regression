@@ -1,4 +1,4 @@
-# Part 6: Prediction
+# Prediction
 ```{r retrain}
 bestModels <<- bmaBest(yX = yX)
 save(bestModels, file = "./analysis/bestModels.Rdata")
@@ -19,14 +19,24 @@ predictions <- cbind("Film" = c(cases$title, "MSE"), predictions, `Audience Scor
 rownames(predictions) <- NULL
 ```
 
-Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten Tomatoes websites and predictions were rendered using the four models from the model evaluation section:  
+Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten Tomatoes websites and predictions were rendered using the four "best"  models from the model evaluation section:  
 * Akaike Information Criterion (Median Prediction Model)   
 * Zellner's g-prior (Median Predictive Model)   
 * Empirical Bayes-Global (Median Predictive Model)   
 * Hyper-g Laplace (Median Predictive Model)   
 
 ## Predictions
-The predictions, true values, and mean squared errors are summarized for each movie and model in `r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`.
+The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`) were so chosen to present a range of values for audience score and predictor values across the parameter space. Audience scores ranged from 34 to 87. The number of IMDb votes varied from approximately 8000 votes for Syncronicity,  to over 460,000 for Suicide Squad.  Similarly critics scores stretched from a low 26 points to a near perfect 98. Results at the Academy varied significantly among the chosen films in order to provide a reasonably diverse sampling.
+
+`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`: Movies selected for prediction
+```{r cases}
+names(cases) <- c("Title", "Feature", "Drama", "Run", "R", "Year", "Oscar", "Summer", "IMDb Rating", "Critics", "BP Nom",
+                  "BP Win", "Actor", "Actress", "Dir", "Top", "# Votes", "Audience")
+knitr::kable(cases, digits = 1) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: summarizes the predictions, true values, and mean squared errors for each movie and film. Mean MSE across the four models and five films ranged between 6.4 and 6.7., where the Zellner's g-prior performed best. All models underpredicted audience scores for Split, a 'middle-of-the-pack' film with no Academy awards, with critics scores and IMDB ratings in the 70th percentile. By contrast, all models overpredicted audience scores for Moonlight, a film enjoyed by the critics and the Academy, but had the 2nd lowest number of votes. The audience score for Rogue One was a blockbuster film with over 400,000 votes. The largest variance among all the models was the significant over prediction for Syncronicity, a relatively unknown outlier, as indicated by the number of votes, which was panned by the critics. Predictions for Suicide Squad, the most frequently rated of the five, were significantly lower than the true audience scores.
 
 `r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: Prediction Results
 ```{r results}
@@ -34,8 +44,10 @@ knitr::kable(predictions, digits = 1) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
+The thread that goes through all the predictions involves estimate for the IMDb (log) number of votes parameter.  Models over predicted audience scores for films with the highest number of votes and penalized those with few votes. A log transformation was applied to the this variable to address significant right skew. Future studies might experiment with more sophisticated transformations or higher order polynomials to more precisely characterize the relationship between votes and audience scores, 
 
-```{r ci}
+
+```{r ci, results='asis'}
 graphics::par(mfrow = c(2,2), family = "Open Sans")
 lapply(bestModels, function(m) {
   p <- predict(object = m, estimator = "MPM", newdata = cases, se.fit = TRUE)

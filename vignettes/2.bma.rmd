@@ -1,4 +1,5 @@
-# Bayesian Model Averaging (BMA)
+# Theoretical Framework
+## Bayesian Model Averaging (BMA)
 The objective of variable selection in linear regression is to identify a set of candidate predictors that produce the "best" model. Here, "best" model may mean the model that best predicts unseen cases, or that which is best explained by the data. Given an independent variable $Y$ and a set of $k$ candidate predictors $X_1, X_2, ..., X_k$, the "best" model is more concretely described as follows: 
 $$Y = \beta_0 + \displaystyle\sum_{j=1}^{p}\beta_jX_j + \epsilon = X\beta + \epsilon$$
 where:   

@@ -90,10 +90,12 @@ plotHist <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
       plotTitle <- paste(yLab, "by", xLab)
     }
   }
+  
+  colorCount <- 30
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
 
-  hist <- ggplot2::ggplot(data = data,
-                        ggplot2::aes(x = data[[1]])) +
-    ggplot2::geom_histogram(position ='identity', color = "white", fill = "palegreen4", bins = 30) +
+  hist <- ggplot2::ggplot(data = data) +
+    ggplot2::geom_histogram(ggplot2::aes(data[[1]]), fill = myPal(colorCount)) +
     ggplot2::theme_minimal(base_size = 16) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.title.x = ggplot2::element_blank(),
@@ -101,6 +103,7 @@ plotHist <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
     ggplot2::ggtitle(plotTitle) +
     ggplot2::ylab(yLab) +
     ggplot2::scale_x_continuous(labels = scales::comma)
+  
 
   return(hist)
 }
@@ -131,7 +134,6 @@ plotQQ <- function(data, xLab = NULL, yLab, plotTitle = NULL) {
       plotTitle <- paste("Normal Q-Q Plot:", yLab, "by", xLab)
     }
   }
-
 
   # Render QQ Plot
   qq <- ggplot2::ggplot(data = data, mapping = ggplot2::aes(sample = data[[1]])) +
@@ -201,7 +203,7 @@ plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL, rotate = FALSE, s
                                           y = data$y,
                                           fill = data$x))  +
     ggplot2::geom_boxplot(outlier.colour = "black") +
-    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme_minimal(base_size = 20) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    legend.position = "none") +
     ggplot2::ggtitle(plotTitle) +
@@ -213,7 +215,7 @@ plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL, rotate = FALSE, s
                                      size = 5, show.legend = FALSE) + 
       ggplot2::stat_summary(fun.data = means, geom = "text", 
                             colour = "black", vjust = -0.0,
-                            hjust = -1)
+                            hjust = -1, size = 10)
   }
 
   if (is.null(xLab)) {
@@ -348,12 +350,12 @@ plotResFit <- function(x, model) {
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotCorr <- function(data, yVar) {
+plotCorr <- function(data) {
 
   p <-corrplot::corrplot(cor(data), diag = FALSE,
                      order = "hclust", number.cex = 1,
                      addCoef.col = "black", tl.col = "black",
-                     tl.srt = 90, tl.pos = "td", tl.cex = 1,
+                     tl.srt = 90, tl.pos = "td", tl.cex = 1.5,
                      method = "color", type = "upper",
                      col = RColorBrewer::brewer.pal(n = 11,
                                                     name = "PiYG"))
@@ -692,7 +694,7 @@ plotStackedBar <- function(data, yLab, xLab, plotTitle = NULL,
                                           y = data[[3]],
                                           fill = data[[2]]))  +
     ggplot2::geom_bar(stat='identity') +
-    ggplot2::theme_minimal(base_size = 16) +
+    ggplot2::theme_minimal(base_size = 24) +
     ggplot2::geom_text(
       data = data,
       ggplot2::aes(x = data[[1]],

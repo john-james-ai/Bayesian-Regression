@@ -18,8 +18,10 @@ Data frame containing summary statistics
 \code{getSummaryStats} Provides summary stats for quantitative variable
 }
 \seealso{
-Other analysis functions: \code{\link{getCSampleSize}},
-  \code{\link{getPSampleSize}}
+Other analysis functions: \code{\link{cramers}},
+  \code{\link{getCSampleSize}},
+  \code{\link{getPSampleSize}}, \code{\link{pearsons}},
+  \code{\link{x2}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

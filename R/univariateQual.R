@@ -34,27 +34,30 @@
 #' @export
 univariateQual <- function(data, type = "dichotomous", groups, xLab, yLab = NULL, plotTitle = NULL) {
 
-  # Format Data
-  df <- rbindlist(lapply(seq_along(data), function(d) {
-    df <- data[d] %>%  group_by("Category" = .[[1]]) %>%
-      summarize(N = n()) %>%
-      arrange(desc(Category)) %>%
-      mutate(Group = groups[d],
-             Proportion = round(N / sum(N), 2),
-             Cumulative = round(cumsum(Proportion), 2),
-             pos = cumsum(N) - N /2) %>%
-      select(Group, Category, N, Proportion, Cumulative, pos)
-  }))
-  
   if (type == "dichotomous") {
+    df <- rbindlist(lapply(seq_along(data), function(d) {
+      df <- data[d] %>%  group_by("Category" = .[[1]]) %>%
+        summarize(N = n()) %>%
+        arrange(desc(Category)) %>%
+        mutate(Group = groups[d],
+               Proportion = round(N / sum(N), 2),
+               Cumulative = round(cumsum(Proportion), 2),
+               pos = cumsum(N) - N /2) %>%
+        select(Group, Category, N, Proportion, Cumulative, pos)
+    }))
     chart <- plotStackedBar(data = df, xLab = xLab, yLab = yLab, plotTitle = plotTitle)
+    df <- df[,1:6]
+    
   } else if (type == "ordinal") {
+    df <- data %>%  group_by("Category" = .[[1]]) %>%
+        summarize(N = n()) %>%
+        arrange(Category)
     chart <- plotBar2(data = df, yLab = yLab, xLab = xLab, plotTitle = plotTitle)
   }
+  
+  analysis <- list()
+  analysis$data <- df
+  analysis$plot <- chart
 
-  visual <- list(
-    stats = df[,1:5],
-    plot = chart
-  )
-  return(visual)
+  return(analysis)
 }

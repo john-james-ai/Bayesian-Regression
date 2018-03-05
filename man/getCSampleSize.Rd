@@ -22,8 +22,10 @@ that the population proportion is within a designated margin of error of the
 sample proportion with a designated level of confidence.
 }
 \seealso{
-Other analysis functions: \code{\link{getPSampleSize}},
-  \code{\link{getSummaryStats}}
+Other analysis functions: \code{\link{cramers}},
+  \code{\link{getPSampleSize}},
+  \code{\link{getSummaryStats}}, \code{\link{pearsons}},
+  \code{\link{x2}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

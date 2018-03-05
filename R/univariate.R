@@ -57,7 +57,7 @@ univariate <- function(data) {
   # Release Year
   #---------------------------------------------------------------------------#
   groups <- c("Year")
-  df <- data.frame(data$thtr_rel_year, stringsAsFactors = FALSE)
+  df <- data.frame(as.character(data$thtr_rel_year), stringsAsFactors = FALSE)
   analysis$qual$year <- univariateQual(data = df, type = "ordinal", groups = groups,
                                           xLab = "Year",
                                           yLab = "Films",
