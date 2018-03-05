@@ -1,4 +1,6 @@
 # Conclusion
+This paper documents the exploration of default priors and their effect on predictive accuracy in Bayesian model averaging. Predictive accuracy was evaluated for BIC and AIC model selection techniques, Zellner's g, local and global empirical Bayes, as well the g-prior mixtures, Zellner Siow, Hyper g and Hyper-g/n priors. BMA, highest probability, best predictive, and median predictive models were fit for each prior, for a model space of 36 separate models. A data set of 645 observations was randomly split into a training (80%) set, which was used to develop the models, and a test (20%) set which was used to evaluate the predictive accuracy of each model on a mean squared error basis. This process was repeated for 400 trials, MSE was recorded and averages were computed for each model and estimator. The AIC prior generated predictions with the lowest mean MSE of the 36 models during this experiment, followed by Zellner's g-prior, global empirical Bayes and Hyper-g using Laplace approximation. In each case, the median probability models estimators outperformed BMA, highest probability models, and the best predictive model. That said, the differences in mean MSE were not significant enough to make any conclusive statements with respect to the relative performance accuracy of these four priors.
+
 
 
 * * *

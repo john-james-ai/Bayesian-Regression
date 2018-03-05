@@ -1,6 +1,6 @@
 # Prediction
 ```{r retrain}
-bestModels <<- bmaBest(yX = yX)
+bestModels <- bmaBest(yX = yX)
 save(bestModels, file = "./analysis/bestModels.Rdata")
 ```
 
@@ -45,14 +45,3 @@ knitr::kable(predictions, digits = 1) %>%
 ```
 
 The thread that goes through all the predictions involves estimate for the IMDb (log) number of votes parameter.  Models over predicted audience scores for films with the highest number of votes and penalized those with few votes. A log transformation was applied to the this variable to address significant right skew. Future studies might experiment with more sophisticated transformations or higher order polynomials to more precisely characterize the relationship between votes and audience scores, 
-
-
-```{r ci, results='asis'}
-graphics::par(mfrow = c(2,2), family = "Open Sans")
-lapply(bestModels, function(m) {
-  p <- predict(object = m, estimator = "MPM", newdata = cases, se.fit = TRUE)
-  ci <- confint(p, parm = "pred")
-  print(plot(ci, main = m$prior))
-})
-```
-* * *

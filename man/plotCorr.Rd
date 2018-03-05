@@ -4,7 +4,7 @@
 \alias{plotCorr}
 \title{plotCorr}
 \usage{
-plotCorr(data, yVar)
+plotCorr(data)
 }
 \arguments{
 \item{data}{Data frame containing data for which the correlations will be plotted.}
