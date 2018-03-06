@@ -1,7 +1,7 @@
 #==============================================================================#
 #                    BMA Parameter Inclusion Probability                       #
 #==============================================================================#
-#' 
+#' bmaPIP 
 #'
 #' \code{bmaPIP} Summarizes parameter inclusing probabilities across models
 #'

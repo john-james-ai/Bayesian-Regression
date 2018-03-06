@@ -25,8 +25,8 @@ Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten 
 * Empirical Bayes-Global (Median Predictive Model)   
 * Hyper-g Laplace (Median Predictive Model)   
 
-## Predictions
-The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`) were so chosen to present a range of values for audience score and predictor values across the parameter space. Audience scores ranged from 34 to 87. The number of IMDb votes varied from approximately 8000 votes for Syncronicity,  to over 460,000 for Suicide Squad.  Similarly critics scores stretched from a low 26 points to a near perfect 98. Results at the Academy varied significantly among the chosen films in order to provide a reasonably diverse sampling.
+## Prediction Data
+The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`) were so chosen to present a range of values for audience score and predictor values across the parameter space. Audience scores ranged from 34 to 87. The number of IMDb votes varied from approximately 8000 votes for Synchronicity,  to over 460,000 for Suicide Squad.  Similarly critics scores stretched from a low 26 points to a near perfect 98. Results at the Academy varied significantly among the chosen films in order to provide a reasonably diverse sampling.
 
 `r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`: Movies selected for prediction
 ```{r cases}
@@ -36,7 +36,8 @@ knitr::kable(cases, digits = 1) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: summarizes the predictions, true values, and mean squared errors for each movie and film. Mean MSE across the four models and five films ranged between 6.4 and 6.7., where the Zellner's g-prior performed best. All models underpredicted audience scores for Split, a 'middle-of-the-pack' film with no Academy awards, with critics scores and IMDB ratings in the 70th percentile. By contrast, all models overpredicted audience scores for Moonlight, a film enjoyed by the critics and the Academy, but had the 2nd lowest number of votes. The audience score for Rogue One was a blockbuster film with over 400,000 votes. The largest variance among all the models was the significant over prediction for Syncronicity, a relatively unknown outlier, as indicated by the number of votes, which was panned by the critics. Predictions for Suicide Squad, the most frequently rated of the five, were significantly lower than the true audience scores.
+## Prediction Results
+`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: summarizes the predictions, true values, and mean squared errors for each movie and film. Mean MSE across the four models and five films ranged between 6.4 and 6.7., where the Zellner's g-prior performed best. All models under-predicted audience scores for Split, a 'middle-of-the-pack' film with no Academy awards, with critics scores and IMDB ratings in the 70th percentile. By contrast, all models over-predicted audience scores for Moonlight, a film enjoyed by the critics and the Academy, but had the 2nd lowest number of votes. The audience score for Rogue One was a blockbuster film with over 400,000 votes. The largest variance among all the models was the significant over prediction for Synchronicity, a relatively unknown outlier, as indicated by the number of votes, which was panned by the critics. Predictions for Suicide Squad, the most frequently rated of the five, were significantly lower than the true audience scores.
 
 `r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: Prediction Results
 ```{r results}

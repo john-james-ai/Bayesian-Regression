@@ -37,21 +37,21 @@ bmaPIPPlots <- function(pip) {
                                        bold =  ifelse(p$table$BIC > .5, TRUE, FALSE))
   p$table$AIC = kableExtra::cell_spec(x = p$table$AIC, "html",
                                        bold =  ifelse(p$table$AIC > .5, TRUE, FALSE))
-  p$table$`EB-G` = kableExtra::cell_spec(x = p$table$`EB-G`, "html",
-                                          bold =  ifelse(p$table$`EB-G` > .5, TRUE, FALSE))
-  p$table$`EB-L` = kableExtra::cell_spec(x = p$table$`EB-L`, "html",
-                                          bold =  ifelse(p$table$`EB-L` > .5, TRUE, FALSE))
-  p$table$g = kableExtra::cell_spec(x = p$table$g, "html",
-                                     bold =  ifelse(p$table$g > .5, TRUE, FALSE))
-  p$table$HG = kableExtra::cell_spec(x = p$table$HG, "html",
-                                      bold =  ifelse(p$table$HG > .5, TRUE, FALSE))
-  p$table$`HG-L` = kableExtra::cell_spec(x = p$table$`HG-L`,
-                                          "html", bold =  ifelse(p$table$`HG-L` > .5, TRUE, FALSE))
-  p$table$`HG-N` = kableExtra::cell_spec(x = p$table$`HG-N`,
-                                          "html", bold =  ifelse(p$table$`HG-N` > .5, TRUE, FALSE))
+  p$table$`EB-global` = kableExtra::cell_spec(x = p$table$`EB-global`, "html",
+                                          bold =  ifelse(p$table$`EB-global` > .5, TRUE, FALSE))
+  p$table$`EB-local` = kableExtra::cell_spec(x = p$table$`EB-local`, "html",
+                                          bold =  ifelse(p$table$`EB-local` > .5, TRUE, FALSE))
+  p$table$`g-prior` = kableExtra::cell_spec(x = p$table$`g-prior`, "html",
+                                     bold =  ifelse(p$table$`g-prior` > .5, TRUE, FALSE))
+  p$table$`hyper-g` = kableExtra::cell_spec(x = p$table$`hyper-g`, "html",
+                                      bold =  ifelse(p$table$`hyper-g` > .5, TRUE, FALSE))
+  p$table$`hyper-g-laplace` = kableExtra::cell_spec(x = p$table$`hyper-g-laplace`,
+                                          "html", bold =  ifelse(p$table$`hyper-g-laplace` > .5, TRUE, FALSE))
+  p$table$`hyper-g-n` = kableExtra::cell_spec(x = p$table$`hyper-g-n`,
+                                          "html", bold =  ifelse(p$table$`hyper-g-n` > .5, TRUE, FALSE))
   #  p$table$JZS = kableExtra::cell_spec(x = p$table$JZS, "html", bold =  ifelse(p$table$JZS > .5, TRUE, FALSE))
-  p$table$ZS = kableExtra::cell_spec(x = p$table$ZS,
-                                      "html", bold =  ifelse(p$table$ZS > .5, TRUE, FALSE))
+  p$table$`ZS-null` = kableExtra::cell_spec(x = p$table$`ZS-null`,
+                                      "html", bold =  ifelse(p$table$`ZS-null` > .5, TRUE, FALSE))
   
   return(p)
 }

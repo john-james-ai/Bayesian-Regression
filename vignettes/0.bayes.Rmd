@@ -101,7 +101,7 @@ load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-processedData  <<- preprocess(movies)
+processedData  <- preprocess(movies)
 save(processedData, file = "./analysis/processedData.Rdata")
 ```
 
@@ -115,7 +115,7 @@ edaBi <- bivariate(data = processedData)
 
 ```{r removetitle}
 if (run == TRUE)  {
-  yX <<- processedData %>% select(-title)
+  yX <- processedData %>% select(-title)
   save(yX, file = "./analysis/yX.Rdata")
 }
 ```
@@ -123,38 +123,37 @@ if (run == TRUE)  {
 
 ```{r bma}
 if (isTRUE(run)) {
-  models <<- bma(yX = yX)
+  models <- bma(yX = yX)
   save(models, file = "./analysis/models.Rdata")
 }
 ```
 
 ```{r bmaAnalysis}
-if (run == TRUE)  {
-  analysis <<- bmaAnalysis(models = models)
-  save(analysis, file = "./analysis/analysis.Rdata")
-}
+analysis <- bmaAnalysis(models = models)
+save(analysis, file = "./analysis/analysis.Rdata")
+
 ```
 
 ```{r bmaPerformance}
 trials <- 400
 if (run == TRUE) {
-  performance <<- bmaPerformance(yX, trials = trials) 
+  performance <- bmaPerformance(yX, trials = trials) 
   save(performance, file = "./analysis/performance.Rdata")
 }
 ```
 
 ```{r bmaPerformanceReport}
 if (isTRUE(run)) {
-  report <<- bmaPerformanceReport(performance = performance)
+  report <- bmaPerformanceReport(performance = performance)
   save(report, file = "./analysis/report.Rdata")
 }
 ```
 
 ```{r bmaEval}
-#if (isTRUE(run)) {
+if (isTRUE(run)) {
   eval <- bmaEvaluation(mList = models, candidates = report$best)
   save(eval, file = "./analysis/eval.Rdata")
-#}
+}
 ```
 
 
