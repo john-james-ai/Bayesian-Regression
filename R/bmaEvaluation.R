@@ -31,7 +31,7 @@ bmaEvaluation <- function(mList, candidates) {
     n <- rownames(eval$models[[1]]$pe[[1]]$df)
     df <- eval$models[[x]]$pe[[1]]$df
     df <- cbind(Terms = n, df)
-    df <- df %>% filter(Probability == 1) %>% select(-Probability)
+    df <- df %>% filter(Probability > 0) %>% select(-Probability)
     df
   }) 
   names(eval$pdc) <- unlist(lapply(seq(1:4), function(x) {

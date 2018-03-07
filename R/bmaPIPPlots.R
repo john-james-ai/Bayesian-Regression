@@ -20,17 +20,24 @@ bmaPIPPlots <- function(pip) {
   
   p <- list()
   
+  # Plot Posterior Inclusion Probabilities by Parameter
   plotData <- as.data.frame(pip[2:nrow(pip),])
-  
-  p$plots <- list()
+  p$param <- list()
   for (i in 1:nrow(plotData)) {
     predictor <- gsub("yes", "", rownames(plotData)[i], fixed = TRUE)
-    p$plots[[i]] <- plotBar2(data = data.frame(x = colnames(pip),
+    p$param[[i]] <- plotBar2(data = data.frame(x = colnames(pip),
                                              y = as.numeric(plotData[i,])),
                            yLab = "Inclusion Probability", xLab = "Prior", 
                            plotTitle = paste("Inclusion Probabilities:",predictor),
                            values = TRUE)
   }
+  
+  # Plot average posterior inclusion probability by parameter
+  plotData <- data.frame(Term = rownames(pip), Mean = rowMeans(pip), row.names = NULL)
+  p$meanPIP <- plotBar(data = plotData, yLab = 'Mean Posterior Inclusion Probability',
+                       xLab = 'Parameter', horizontal = TRUE, legend = FALSE,
+                       plotTitle = 'Mean Posterior Inclusion Probabilities')
+  
   
   p$table  <- as.data.frame(round(pip, 2))
   p$table$BIC = kableExtra::cell_spec(x = p$table$BIC, "html",

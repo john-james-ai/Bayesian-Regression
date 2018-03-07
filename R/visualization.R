@@ -257,7 +257,8 @@ plotBox <- function(data, xLab = NULL, yLab, plotTitle = NULL, rotate = FALSE, s
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotScatter <- function(data, xLab, yLab, plotTitle = NULL) {
+plotScatter <- function(data, xLab, yLab, plotTitle = NULL,
+                        smooth = TRUE) {
 
   if (is.null(plotTitle)) {
     plotTitle <- paste(yLab, "by", xLab)
@@ -269,13 +270,15 @@ plotScatter <- function(data, xLab, yLab, plotTitle = NULL) {
                              ggplot2::aes(y = as.numeric(unlist(data[,1])),
                                           x = as.numeric(unlist(data[,2])))) +
     ggplot2::geom_point() +
-    ggplot2::geom_smooth() +
     ggplot2::theme_minimal(base_size = 16) +
-    ggplot2::geom_smooth(method = lm, se = FALSE) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    legend.position = "right") +
     ggplot2::labs(x = xLab, y = yLab) +
     ggplot2::ggtitle(plotTitle)
+  
+  if (smooth) {
+    scatter <- scatter + ggplot2::geom_smooth(method = lm, se = FALSE) 
+  }
 
   return(scatter)
 
@@ -427,7 +430,8 @@ plotLine <- function(data, xticks = TRUE, xLab, yLab, yLow = NULL, yHigh = NULL,
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotBar <- function(data, yLab, xLab, plotTitle = NULL) {
+plotBar <- function(data, yLab, xLab, plotTitle = NULL, values = TRUE,
+                    horizontal = FALSE, legend = TRUE) {
 
   # Format title
   if (is.null(plotTitle)) {
@@ -436,23 +440,54 @@ plotBar <- function(data, yLab, xLab, plotTitle = NULL) {
 
   # Render plot
   myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
-  barPlot <- ggplot2::ggplot(data = data,
-                             ggplot2::aes(x = reorder(data[[1]], -data[[2]]),
-                                          y = data[[2]],
-                                          fill = data[[1]]))  +
+  if (horizontal) {
+    barPlot <- ggplot2::ggplot(data = data,
+                               ggplot2::aes(x = reorder(data[[1]], data[[2]]),
+                                            y = data[[2]],
+                                            fill = data[[1]]))  
+  } else {
+    barPlot <- ggplot2::ggplot(data = data,
+                               ggplot2::aes(x = reorder(data[[1]], -data[[2]]),
+                                            y = data[[2]],
+                                            fill = data[[1]]))
+  }
+  barPlot <- barPlot +
     ggplot2::geom_bar(stat='identity') +
-    ggplot2::theme_minimal(base_size = 16) +
-    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
-                   axis.title.x = ggplot2::element_blank(),
-                   axis.ticks.x = ggplot2::element_blank(),
-                   axis.text.x = ggplot2::element_blank(),
-                   legend.position = "bottom") +
+    ggplot2::theme_minimal(base_size = 20) +
     ggplot2::scale_fill_manual(values = myPal(length(data[[1]]))) +
     ggplot2::ggtitle(plotTitle) +
     ggplot2::ylab(yLab) +
+    ggplot2::xlab(NULL) +
     ggplot2::labs(fill = xLab) +
     ggplot2::scale_y_continuous(labels = scales::comma)
 
+  if (values == TRUE) {
+    barPlot <- barPlot + ggplot2::geom_text(aes(label=round(data[[2]], 3)),
+                                            family="Open Sans",
+                                            vjust=.2, color="black",
+                                            size=5)
+  }
+  
+  if (legend) {
+    barPlot <- barPlot + 
+      ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank(),
+                     legend.position = "bottom")
+    
+  } else {
+    barPlot <- barPlot + 
+      ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.ticks.x = ggplot2::element_blank(),
+                     legend.position = "none")
+  }
+  
+  if (horizontal) {
+    barPlot <- barPlot + ggplot2::coord_flip() 
+  }
+  
 
   return(barPlot)
 }

@@ -23,7 +23,8 @@ of a single predictor across the  series of models.
 }
 \seealso{
 Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaBest}}, \code{\link{bmaEvaluation}},
+  \code{\link{bmaBest}}, \code{\link{bmaComplexity}},
+  \code{\link{bmaEvaluation}},
   \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
   \code{\link{bmaPDC}}, \code{\link{bmaPIP}},
   \code{\link{bmaPerformanceReport}},

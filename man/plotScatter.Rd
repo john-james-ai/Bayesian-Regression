@@ -4,7 +4,7 @@
 \alias{plotScatter}
 \title{plotScatter}
 \usage{
-plotScatter(data, xLab, yLab, plotTitle = NULL)
+plotScatter(data, xLab, yLab, plotTitle = NULL, smooth = TRUE)
 }
 \arguments{
 \item{data}{Data frame containing the quantitative variables}

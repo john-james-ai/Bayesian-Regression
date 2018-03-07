@@ -4,7 +4,8 @@
 \alias{plotBar}
 \title{plotBar}
 \usage{
-plotBar(data, yLab, xLab, plotTitle = NULL)
+plotBar(data, yLab, xLab, plotTitle = NULL, values = TRUE,
+  horizontal = FALSE, legend = TRUE)
 }
 \arguments{
 \item{data}{Data frame or vector containing a single categorical factor variable}

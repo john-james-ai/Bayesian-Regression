@@ -16,8 +16,8 @@ bmaAnalysis <- function(models, top = FALSE) {
   # Obtain parameter inclusion probabilities
   pip <- bmaPIP(models = models)
   
-  # Obtain top model summaries
-  m1s <- bmaModel1(models = models)
+  # Plot model complexity vis-a-vis posterior probability
+  complexity <- bmaComplexity(models = models) 
   
   # Obtain posterior probability of coefficients under BMA
   pdc <- lapply(models, function(m) {
@@ -26,8 +26,8 @@ bmaAnalysis <- function(models, top = FALSE) {
   
   analysis = list(
     pip = pip,
-    m1s = m1s,
-    pdc = pdc
+    pdc = pdc,
+    complexity = complexity
   )
   return(analysis)
 }

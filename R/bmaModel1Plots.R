@@ -24,8 +24,8 @@
 #' @export
 bmaModel1Plots <- function(m1s) {
   m1Plots <- list()
-  m1Plots$postProbs <- plotBar2(data = m1s[,c(1,2)], yLab = "Posterior Probability",
-                            xLab = "Prior",
+  m1Plots$postProbs <- plotBar(data = m1s[,c(1,2)], yLab = "Posterior Probability",
+                            xLab = "Prior", legend = FALSE, horizontal = TRUE,
                             plotTitle = "Highest Probability Model",
                             values = TRUE)
   m1Plots$r2 <- plotBar2(data = m1s[,c(1,3)], yLab = "R2",

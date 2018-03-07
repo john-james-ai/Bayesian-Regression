@@ -1,13 +1,13 @@
 # Models
-Here the principle question of this paper. the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance, is investigated in four steps. First,  explore **BMA** within the context of each of the nine default parameter priors under consideration. Second, evaluate **model performance**  in terms of **predictive accuracy** of the BMA, highest probability, best predictive and median predictive models for each of the default priors. Lastly, examine the parameter estimates for the models which performed **best** on a squared error basis. The best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
+Here the principle question of this paper. the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance, is investigated in four steps. First, explore **BMA** within the context of each of the nine default parameter priors under consideration. Second, evaluate **model performance**  in terms of **predictive accuracy** of the BMA, highest probability, best predictive and median predictive models for each of the default priors. Lastly, examine the parameter estimates for the models which performed **best** on a squared error basis. The best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
 
 ## Bayesian Model Averaging
 Bayesian model averaging was conducted on the full data of `r nrow(yX)` observations.
 
 ### Model Spaces
-`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")` shows the model spaces for each of the nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, which is indicated along the x-axis.  The models are sorted from the left, models with the highest posterior probability, to the left. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
+`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")` shows the model spaces for each of the nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, the value of which is indicated along the x-axis.  The models are sorted left to right, from highest posterior probability to lowest. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
 
-The AIC prior stands out as having the largest model sizes (`r min(summary(models[[2]])[21,-1])` - `r max(summary(models[[2]])[21,-1])`) among its top five models. Zellner's g-prior models average between `r min(summary(models[[5]])[21,-1])` - `r max(summary(models[[5]])[21,-1])` parameters for its top five models. The remaining models were almost identical. Run time, imdb_rating, and critics_score were most common among the remaining models.
+The largest models were those based upon the AIC prior, with model sizes ranging from `r min(summary(models[[2]])[21,-1])` to `r max(summary(models[[2]])[21,-1])` regressors for the top five models. The top five Zellner's g-prior models included between `r min(summary(models[[5]])[21,-1])` and `r max(summary(models[[5]])[21,-1])` parameters. The BIC and Empirical Bayes (Global) priors generated nearly identical model spaces ranging from `r min(summary(models[[1]])[21,-1])` to `r max(summary(models[[1]])[21,-1])` predictors for the top five models. The remaining model spaces, containing between `r min(summary(models[[4]])[21,-1])` to `r max(summary(models[[4]])[21,-1])` predictors, were almost identical.
 
 ```{r model_spaces, fig.height = 4}
 graphics::par(mfrow = c(1,3), family = "Open Sans")
@@ -16,10 +16,18 @@ for (i in 1:length(models)) {
   title(sub = "")
 }
 ```
-`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")`: Model spaces for under BMA for the nine candidate parameter priors: model prior = uniform
+`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")`: Model spaces under BMA for the nine candidate parameter priors: model prior = uniform
 
-### Parameter Posterior Inclusion Probabilities
-`r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")` reports the BMA posterior inclusion probabilities for all nine prior distributions applied to the complete movie dataset. The number of predictors with inclusion probability exceeding 50%, (not including the intercept) ranged from a low of `r min(analysis$pip$nSig)` (BIC, EB-Global, Hyper-g, Hyper g/n, Hyper-g Laplace and Zellner-Siow priors) to a high of `r max(analysis$pip$nSig)` regressors for the AIC prior. The posterior inclusion probabilities for IMDb rating and critics score were significant across all priors ($\approx 90%$). 
+### Model Complexity
+The relationships between model complexity and posterior probability (`r kfigr::figr(label = "complexity", prefix = TRUE, link = TRUE, type="Figure")`) align with, and to an extent, explain the model spaces above.  Recall, the AIC and g-prior models were characterized by their larger sizes relative to the those of the other models.  Similarly, posterior probabilities for the AIC and g-prior models tended to occur at the higher dimensions. On the other hand, the maximum posterior probabilities for the other priors tended to occur with models containing between three and four predictors. 
+
+```{r complexity, fig.height=12}
+do.call("grid.arrange", c(analysis$complexity, ncol = 3))
+```
+`r kfigr::figr(label = "complexity", prefix = TRUE, link = TRUE, type="Figure")`: Model posterior probabilities vis-a-vis complexity
+
+### Parameter Posterior Inclusion Probabilities under BMA
+`r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")` reports the BMA posterior inclusion probabilities for all nine prior distributions. The number of predictors with an inclusion probability exceeding 50%, (not including the intercept) ranged from a low of `r min(analysis$pip$nSig)` (BIC, EB-Local, Hyper-g, Hyper g/n, Hyper-g Laplace and Zellner-Siow priors) to a high of `r max(analysis$pip$nSig)` regressors for the AIC prior. 
 
 `r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")`: Posterior inclusion probabilities across parameter priors: model prior = uniform
 ```{r pip}
@@ -28,37 +36,25 @@ knitr::kable(analysis$pip$plots$table, escape = F, digits = 2) %>%
   kableExtra::footnote(general = "Posterior inclusion probabilities that exceed 50% are in bold font.")
 ```
 
-### Model Posterior Probabilities
-Of the posterior probabilities for the highest probability model under each prior shown in `r kfigr::figr(label = "model_post_probs", prefix = TRUE, link = TRUE, type="Figure")` the `r analysis$m1s$data[1,1]` prior yielded the model with the greatest probability, given the data. The `r analysis$m1s$data[1,1]` prior was followed by `r analysis$m1s$data[2,1]` and `r analysis$m1s$data[3,1]` priors. The `r mins <- analysis$m1s$data %>% filter(pctMean < 0)` `r mins[[1,1]]` and `r mins[[2,1]]` priors gave models with posterior probabilities `r abs(mins$pctMean[[1]])` and `r abs(mins$pctMean[[2]])` percent below the mean posterior model probability, respectively.
+With respect to the relative importance of the predictors, `r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")` shows the average posterior inclusion probability across all priors for each parameter. IMDb ratings, critics score, and runtime had average inclusion probabilities exceeding 50% across all priors. 
 
-```{r model_post_probs}
-analysis$m1s$plots$postProbs
+```{r mean_pip}
+analysis$pip$plots$meanPIP
 ```
-`r kfigr::figr(label = "model_post_probs", prefix = TRUE, link = TRUE, type="Figure")`: Posterior probabilities for the top model under each prior: model prior = uniform 
+`r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")`: Mean posterior inclusion probabilities across all nine priors.
 
-```{r model_R2_size}
-g <- list(analysis$m1s$plots$r2, analysis$m1s$plots$size)
-do.call("grid.arrange", c(g, ncol = 2))
-```
-`r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")`: Model sizes and coefficients of determination $R^2$ values for the top model under each prior: model prior = uniform 
-
-### Model Coefficients of Determination
-The coefficients of determination $R^2$ are displayed for each prior in `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")` Naturally, the `r analysis$m1s$data %>% filter(R2 == max(R2)) %>% select(Prior)` had the highest $R^2$ as this metric favors large models. However, this larger model with its 12 predictors didn't produce an $R^2$ significantly greater than the mean of `r round(mean(analysis$m1s$data$R2), 2)`.
-
-### Model Size
-As shown in `r kfigr::figr(label = "model_R2_size", prefix = TRUE, link = TRUE, type="Figure")`, the AIC model was significantly larger than the mean model size of `r size <- analysis$m1s$data %>% filter(Size != max(Size)) %>% select(Size)` `r round(mean(size$Size), 2)` parameters.
 
 ## Model Performance 
-Now, the predictive performance of competing default priors are compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for four model estimators: (1) the BMA model, (2) the best predictive model (BPM), (3) the highest probability model (HPM), and (4) the median probability model (MPM) estimators. Predictions for each of the nine priors and the four model estimators were rendered for a total of 36 predictions. The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to train the model, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions. The mean MSE was computed for each prior and estimator, for a total of 36 models.  This analysis was repeated for the 36 models, 400 times for 400 different random splits. The average MSE of predictions for each model was computed as follows:
+Now, the predictive performance of competing default priors are compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for four model estimators: (1) the BMA model, (2) the best predictive model (BPM), (3) the highest probability model (HPM), and (4) the median probability model (MPM). Predictions for each of the nine priors and the four model estimators were rendered for a total of 36 predictions. The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to train the model, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions. The mean MSE was computed for each prior and estimator, for a total of 36 models.  This analysis was repeated for the 36 models, 400 times for 400 different random splits. The average MSE of predictions for each model was computed as follows:
 $$1/j * 1/n_{test}\displaystyle\sum_{j = 1}^{t}\displaystyle\sum_{i = 1}^{n_{test}^{t}}(y_{test} - \hat{y}_{test})^2$$
 where:    
-$t$ is the total number of trials  
-$n_{test}^{t}$ is the total number of observations in in $D_{test}^j$ 
-$y_{test}$ is the observed audience score for an observation in $D_{test}^j$   
-$\hat{y}_{test}$ is the *predicted* audience score for an observation in $D_{test}$   
+$t$ is the total number of trials    
+$n_{test}^{t}$ is the total number of observations in $D_{test}^j$     
+$y_{test}$ is the observed audience score for an observation in $D_{test}^j$      
+$\hat{y}_{test}$ is the *predicted* audience score for an observation in $D_{test}$      
 
 
-`r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")` shows the predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors a evaluated by the MSE.
+The predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors and evaluated by MSE, are shown in `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`.
 
 `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors and predictive performance by prior and estimator (movie dataset, model prior: uniform); 100 subsamples 
 ```{r performance_table}
@@ -67,7 +63,7 @@ knitr::kable(report$table, escape = F, digits = 2) %>%
   kableExtra::footnote(general = "The five lowest MSE scores are in bold font. The lowest MSE is in red font.")
 ```
 
-The top five scores are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator outperformed the other 35 models; however not decisively. To ascertain the significance of the differences in mean MSE among the models, t-tests of the MSE means were conducted at an $\alpha = .05$ significance level. `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")` reports the top four models in order of ascending mean MSE and the p.value for the probability that $\mu_m = \mu_{best}$, where $\mu_m$ is the mean MSE for model $m$ and $\mu_{best}$ is the lowest MSE among all models and estimators. As indicated by the p.values, the differences in mean MSE were not significant. Further, the box plot of the distribution of MSE scores in `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`, reveals significant overlap in the distributions of MSE. Though other experiments showed differences which were significant, this plot supports the notion that the each of the four models should be given some consideration.
+The top five scores (lowest average MSE) are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator decisively outperformed the other 35 models. To ascertain the significance of the differences in mean MSE among the models, t-tests of the MSE means were conducted at an $\alpha = .05$ significance level. `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")` reports the top four models in order of ascending mean MSE and the p.value for the probability that $\mu_m = \mu_{best}$, where $\mu_m$ is the mean MSE for model $m$ and $\mu_{best}$ is the lowest MSE among all models and estimators. As indicated by the p.values, the differences in mean MSE were significant. 
 
 `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE by prior and estimator for top four models with p.values for the probability that $\mu_m = \mu_{best}$, where $\mu_m$ is the mean MSE for model $m$ and $\mu_{best}$ is the lowest MSE among all models and estimators. 
 ```{r performance_compare}
@@ -77,22 +73,61 @@ knitr::kable(scores, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
+Notwithstanding, the box plot of the distribution of MSE scores in `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`, reveals significant overlap in the distributions of MSE. In fact, a similar analysis performed on 100 trials showed no statistically significant differences in the mean MSEs of the top four models. Thus, it was decided that each of the four top models would advance to the prediction stage.
+
 ```{r top5}
 report$plots$box
 ```
 `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of MSE among top 4 models
 
 ## Parameter Estimates
-As indicated in `r kfigr::figr(label = "pdc", prefix = TRUE, link = TRUE, type="Table")`, there was some variation among the selected predictors as well as their estimates.  Markedly, all four models produced precisely the same estimate for the intercept, although with slightly different levels of uncertainty. The single greatest positive influencer of audience scores, **IMDb ratings** would generate between 14-15 audience score points for each point on the IMDb rating scale. All estimates had similar variations with $SD \approx 0.58$. Like IMDB rating, **critics score** was a positive factor in all four models, but with far less influence on audience scores than was IMDb rating. A point on the critics score scale would result in an estimated 0.7 points on the audience score scale. There was a slight negative association between **runtimes** and audience scores (approximate 0.05 point drop for each minute of run time) in the AIC (MPM and the g-prior (MPM) models. Run time wasn't a factor in the EB-Global (MPM) and Hyper-G-Laplace (MPM) models. An **MPAA R** rating wasn't necessarily good for a film's audience score. The AIC (MPM) and g-prior (MPM) models associated an R rating with a drop of approximately 1.5 points in the audience score. The **Oscar performance** of the films were relatively significant predictors in the AIC(MPM) model, but the devil is in the details.  Only **Best Picture nominations** were positively associated with audience scores, with a relatively high estimate of 5 points; however, individual performance was not rewarded. Best actor and best actress winners were negatively associated with audience scores. It would appear that audiences prefer ensembles.
-
-`r kfigr::figr(label = "pdc", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates by Prior and Estimator
-```{r pdc, results='asis'}
+```{r}
 n <- names(eval$pdc)
-for (i in 1:length(eval$pdc)) {
-  print(knitr::kable(eval$pdc[[i]], digits = 4) %>%
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
-  kableExtra::group_rows(n[i], 1,nrow(eval$pdc[[i]])))
-}
+```
+The model complexity for the top four models, ranging from `r nrow(eval$pdc[[4]])` predictors for the `r n[4]` prior to `r nrow(eval$pdc[[2]])` regressors for the `r n[4]` prior, and their parameter estimates varied significantly. 
+
+### `r n[1]` Prior
+As shown in `r kfigr::figr(label = "pdc1", prefix = TRUE, link = TRUE, type="Table")`, the `r n[1]` prior produced a model `r nrow(eval$pdc[[1]])` regressors, where the IMDb rating had by far the greatest influence on audience scores. A one point increase in IMDb rating increases an audience score by approximately `r round(eval$pdc[[1]]$Mean[7],1)`points, all else equal. The next moste influential variable was the film type. Audience scores for feature films were predicted to be approximately `r abs(round(eval$pdc[[1]]$Mean[2],1))` points lower than those for other film types. Success at the Academy also had an significant effect on audience scores, but the devil is in the details. Films nominated for Best Picture were associated with audience scores about `r abs(round(eval$pdc[[1]]$Mean[9],1))` higher than other films, all else held equal. On the other hand, films earning Best Actor or Best Actress awards were associated with a reduction in audience scores of `r abs(round(eval$pdc[[1]]$Mean[10],1))` and `r abs(round(eval$pdc[[1]]$Mean[11],1))` points respectively, all else equal. This may be a consequence of collinearity among the Academy variables, or it could represent the audiences preference for team work over individual achievement. Critics score, somewhat surprisingly, had very little influence on audience scores in this model. This was likely due to collinearity with IMDb ratings. 
+`r kfigr::figr(label = "pdc1", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[1]` prior.
+```{r pdc1, results='asis'}
+print(knitr::kable(eval$pdc[[1]], digits = 4) %>%
+kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+kableExtra::group_rows(n[1], 1,nrow(eval$pdc[[1]])))
+
+```
+
+
+### `r n[2]` Prior
+As shown in `r kfigr::figr(label = "pdc2", prefix = TRUE, link = TRUE, type="Table")`, the `r n[2]` and `r n[1]` priors were very similar in some important respects. Both models shared the top three most influential variables, IMDb rating, film type, and Best Picture nomination. In fact, the magnitude and direction of their effects on audience scores were congruent. The estimates for IMDb rating were `r round(eval$pdc[[1]]$Mean[7],1)` and `r round(eval$pdc[[2]]$Mean[9],1)` for the `r n[1]` and `r n[2]` models, respectively. Feature films were negatively associated with audience scores in both models. Estimates were `r round(eval$pdc[[1]]$Mean[2],1)` and `r round(eval$pdc[[2]]$Mean[2],1)` for the `r n[1]` and `r n[2]` models, respectively. Films nominated for Best Picture also did well in this model, boosting audience scores by approximately `r round(eval$pdc[[2]]$Mean[11],1)` points. As in the `r n[1]` prior, individual achievement at the Oscars was negatively associated with audience scores. Again, this may be a consequence of collinearity. Other variables with positive influence on audience scores included the critics scores, the drama genre, the log number of IMDB votes, summer season release, and top 200 box office achievement. Runtime, R-rating, Oscar season release each had a slight negative influence on audience scores.
+
+`r kfigr::figr(label = "pdc2", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[2]` prior.
+```{r pdc2, results='asis'}
+print(knitr::kable(eval$pdc[[2]], digits = 4) %>%
+kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+kableExtra::group_rows(n[2], 1,nrow(eval$pdc[[2]])))
+
+```
+
+### `r n[3]` Prior
+Again, IMDb rating was the dominated influence on audience scores for the `r n[3]` prior model. As indicated in `r kfigr::figr(label = "pdc3", prefix = TRUE, link = TRUE, type="Table")`, the parameter estimate for IMDb rating was `r round(eval$pdc[[3]]$Mean[5],1)`, slightly higher than those of the `r n[1]` and `r n[2]` priors. The log number of IMDb votes had a slight influence on audience scores; whereas a one percent increase in the number of IMDb votes, resulted in an `r round(eval$pdc[[3]]$Mean[7],1)` percent increase in audience score.
+
+`r kfigr::figr(label = "pdc3", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[3]` prior.
+```{r pdc3, results='asis'}
+print(knitr::kable(eval$pdc[[3]], digits = 4) %>%
+kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+kableExtra::group_rows(n[3], 1,nrow(eval$pdc[[3]])))
+
+```
+
+### `r n[4]` Prior
+The model depicted `r kfigr::figr(label = "pdc4", prefix = TRUE, link = TRUE, type="Table")` could be characterized as the most parsimonious of the top performing models. Audience scores were entirely a function of IMDb rating and critics score.
+
+`r kfigr::figr(label = "pdc4", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[4]` prior.
+```{r pdc4, results='asis'}
+print(knitr::kable(eval$pdc[[4]], digits = 4) %>%
+kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+kableExtra::group_rows(n[4], 1,nrow(eval$pdc[[4]])))
+
 ```
 
 ## Top Model Evaluations
