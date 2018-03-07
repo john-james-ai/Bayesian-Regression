@@ -45,17 +45,16 @@ library(corrplot)
 library(data.table)
 library(dplyr)
 library(extrafont)
-library(GGally)
 library(ggplot2)
 library(graphics)
 library(gridExtra)
 library(reshape2)
-library(rlist)
 library(statsr)
 library(vcd)
 ```
 
 ```{r source-functions}
+source("../R/bestPredictions.R")
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
 source("../R/bmaBest.R")
@@ -155,6 +154,13 @@ if (isTRUE(run)) {
 }
 ```
 
+```{r bestPredictions}
+cases <- read.csv(file = "../inst/extdata/movies2predict.csv", stringsAsFactors = FALSE)
+predictions <- bestPredictions(best = report$best[c(1:4),], models = models, newdata = cases)
+save(predictions, file = "./analysis/predictions.Rdata")
+```
+
+
 
 ```{r reload}
 if (run == TRUE) {
@@ -164,6 +170,7 @@ if (run == TRUE) {
   load("./analysis/eval.Rdata")
   load("./analysis/report.Rdata")
   load("./analysis/performance.Rdata")
+  load("./analysis/predictions.Rdata")
 }
 run <- FALSE
 ```

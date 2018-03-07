@@ -1,6 +1,6 @@
-title,feature_film,drama,runtime,mpaa_rating_R,thtr_rel_year,oscar_season,summer_season,imdb_rating,critics_score,best_pic_nom,best_pic_win,best_actor_win,best_actress_win,best_dir_win,top200_box,imdb_num_votes,audience_score
-Split,yes,no,117,no,2016,no,no,7.3,75,no,no,no,no,no,no,252594,78
-Moonlight,yes,yes,111,yes,2016,yes,no,7.5,98,yes,yes,no,no,no,no,184405,79
-Rogue One: A Star Wars Story,yes,no,133,no,2016,yes,no,7.8,85,no,no,no,no,no,yes,411283,87
-Syncronicity,yes,yes,101,yes,2016,no,no,5.5,46,no,no,no,no,no,no,8176,34
-Suicide Squad,yes,no,130,no,2016,no,yes,6.1,26,no,no,no,no,no,yes,466363,60
+title,feature_film,drama,runtime,mpaa_rating_R,thtr_rel_year,oscar_season,summer_season,imdb_rating,critics_score,best_pic_nom,best_pic_win,best_actor_win,best_actress_win,best_dir_win,top200_box,imdb_num_votes,imdb_num_votes_log,audience_score
+Split,yes,no,117,no,2016,no,no,7.3,75,no,no,no,no,no,no,252594,17.94646084,78
+Moonlight,yes,yes,111,yes,2016,yes,no,7.5,98,yes,yes,no,no,no,no,184405,17.49251825,79
+Rogue One: A Star Wars Story,yes,no,133,no,2016,yes,no,7.8,85,no,no,no,no,no,yes,411283,18.64977192,87
+Synchronicity,yes,yes,101,yes,2016,no,no,5.5,46,no,no,no,no,no,no,8176,12.99717948,34
+Suicide Squad,yes,no,130,no,2016,no,yes,6.1,26,no,no,no,no,no,yes,466363,18.83109381,60

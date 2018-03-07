@@ -1,24 +1,4 @@
 # Prediction
-```{r retrain}
-bestModels <- bmaBest(yX = yX)
-save(bestModels, file = "./analysis/bestModels.Rdata")
-```
-
-
-```{r prediction}
-cases <- read.csv(file = "../inst/extdata/movies2predict.csv", stringsAsFactors = FALSE)
-p <- rbindlist(lapply(bestModels, function(m) {
-  p <- predict(object = m, estimator = "MPM", newdata = cases)
-  e <- cv.summary.bas(pred = p$fit, ytrue = as.numeric(cases$audience_score))
-  p$fit <- c(p$fit,e)
-  as.list(round(as.numeric(p$fit), 1))
-}))
-predictions <- t(as.data.frame(p, rownames = FALSE))
-colnames(predictions) <- names(bestModels)
-predictions <- cbind("Film" = c(cases$title, "MSE"), predictions, `Audience Score` = c(cases$audience_score, ""))
-rownames(predictions) <- NULL
-```
-
 Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten Tomatoes websites and predictions were rendered using the four "best"  models from the model evaluation section:  
 * Akaike Information Criterion (Median Prediction Model)   
 * Zellner's g-prior (Median Predictive Model)   
@@ -31,13 +11,13 @@ The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix 
 `r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`: Movies selected for prediction
 ```{r cases}
 names(cases) <- c("Title", "Feature", "Drama", "Run", "R", "Year", "Oscar", "Summer", "IMDb Rating", "Critics", "BP Nom",
-                  "BP Win", "Actor", "Actress", "Dir", "Top", "# Votes", "Audience")
+                  "BP Win", "Actor", "Actress", "Dir", "Top", "# Votes", "# Votes (Log)", "Audience")
 knitr::kable(cases, digits = 1) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 ## Prediction Results
-`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: summarizes the predictions, true values, and mean squared errors for each movie and film. Mean MSE across the four models and five films ranged between 6.4 and 6.7., where the Zellner's g-prior performed best. All models under-predicted audience scores for Split, a 'middle-of-the-pack' film with no Academy awards, with critics scores and IMDB ratings in the 70th percentile. By contrast, all models over-predicted audience scores for Moonlight, a film enjoyed by the critics and the Academy, but had the 2nd lowest number of votes. The audience score for Rogue One was a blockbuster film with over 400,000 votes. The largest variance among all the models was the significant over prediction for Synchronicity, a relatively unknown outlier, as indicated by the number of votes, which was panned by the critics. Predictions for Suicide Squad, the most frequently rated of the five, were significantly lower than the true audience scores.
+`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")` summarizes the predictions, true values, and mean squared errors for each movie and film. MSE across the four models and five films ranged between 5.8 and 6.7, where the Zellner's g-prior performed best overall. 
 
 `r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: Prediction Results
 ```{r results}
@@ -45,4 +25,6 @@ knitr::kable(predictions, digits = 1) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-The thread that goes through all the predictions involves estimate for the IMDb (log) number of votes parameter.  Models over predicted audience scores for films with the highest number of votes and penalized those with few votes. A log transformation was applied to the this variable to address significant right skew. Future studies might experiment with more sophisticated transformations or higher order polynomials to more precisely characterize the relationship between votes and audience scores, 
+All models under-predicted audience scores for Split, a 'middle-of-the-pack' film with no Academy awards and critics scores and IMDB ratings in the 70th percentile. By contrast, all models over-predicted audience scores for Moonlight, a film enjoyed by the critics and the Academy, but had the 2nd lowest number of votes. All models under-predicted audience score for Rogue One, a blockbuster film in the 200 box office category, with over 400,000 votes, and the highest IMDb rating of the group. The largest prediction errors were for Synchronicity, a relatively unknown outlier which was panned by the critics and audiences alike. Predictions for Suicide Squad, the most frequently rated of the five, were significantly lower than the true audience scores.
+
+* * *
