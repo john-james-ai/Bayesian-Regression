@@ -1,11 +1,13 @@
 # Models
-The principle question of this paper - the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, and on predictive performance - was investigated in four steps. First, the model averages under **BMA** were explored for each of the nine default parameter priors under consideration. Second, **model performance**  for the BMA, highest probability models (HPM), best predictive models (BPM) and the median predictive models (MPM) was assessed based upon mean squared error (MSE). Third, the **parameter estimates** for the top four models are interpreted and lastly, **model assessments** revealed the extent to which model assumptions for inference were met. The best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
+The principle question of this paper - the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, inference and on predictive performance - was investigated in four steps. First, the model averages under **BMA** were explored for each of the nine default parameter priors under consideration. Two sets of models, based upon two different data sets, were fit.  Model set Alpha was based upon the full data set and model set Beta was developed using the full data set without the imdb_rating variable. Model set Beta, as will be shown in the next step, produced less heteroskedactic errors, and therefore, would be the preferred model for inference. Second, **model assessments** were conducted to reveal the extent to which model assumptions for inference were met. Third, **model performance**  of the BMA, highest probability models (HPM), best predictive models (BPM) and the median predictive models (MPM) was evaluated for both model sets. Mean squared error was the metric used for evaluating model performance. Fourth, the **parameter estimates** for the top models in model sets Alpha and Beta were interpreted and lastly, the best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
 
 ## Bayesian Model Averaging
-Bayesian model averaging was conducted on the full data of `r nrow(yX)` observations.
+Bayesian model averaging was conducted for both model sets Alpha and Beta.  Both model sets were based upon the full data of `r nrow(yX)` observations with a log transformation of the imdb_num_votes variable.  Model set Beta was fit without the imdb_rating variable. 
 
 ### Model Spaces
-`r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")` shows the model spaces for each of the nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, the values of which are indicated along the x-axis.  The models are sorted left to right, from highest posterior probability to lowest. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
+The following figures show the model spaces for each model set and nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, the values of which are indicated along the x-axis.  The models are sorted left to right, from highest posterior probability to lowest. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
+
+#### Model Set Alpha
 
 The largest models were those based upon the AIC prior, with model sizes ranging from `r min(summary(models[[2]])[21,-1])` to `r max(summary(models[[2]])[21,-1])` regressors for the top five models. The top five Zellner's g-prior models included between `r min(summary(models[[5]])[21,-1])` and `r max(summary(models[[5]])[21,-1])` parameters. The remaining model spaces, containing between `r min(summary(models[[4]])[21,-1])` to `r max(summary(models[[4]])[21,-1])` predictors, were almost identical.
 
@@ -45,7 +47,7 @@ analysis$pip$plots$meanPIP
 
 
 ## Model Performance 
-The predictive performance of competing default priors were compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for four model estimators: (1) the BMA model, (2) the best predictive model (BPM), (3) the highest probability model (HPM), and (4) the median probability model (MPM). Predictions for each of the nine priors and the four model estimators were rendered for a total of 36 predictions. The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to train the model, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions. The mean MSE was computed for each prior and estimator, for a total of 36 models.  This analysis was repeated 400 times for 400 different random splits. The average MSE of predictions for each model was computed as follows:
+The predictive performance of competing default priors were compared on the basis of mean squared error (MSE) on hold-out samples. Predictions were rendered using the BAS package [@Clyde2017], for four model estimators: (1) the BMA model, (2) the best predictive model (BPM), (3) the highest probability model (HPM), and (4) the median probability model (MPM). Predictions for each of the nine priors and the four model estimators were rendered for a total of 36 predictions. The movie data set was randomly split into a training set, $D_{train}$, (80% of observations) which was used to train the model, and a test set, $D_{test}$, (20% of observations) which was used to assess the quality of the resulting predictive distributions. The mean MSE was computed for each prior and estimator, for a total of 36 models.  This analysis was repeated `r trials` times for `r trials` different random splits. The average MSE of predictions for each model was computed as follows:
 $$1/j * 1/n_{test}\displaystyle\sum_{j = 1}^{t}\displaystyle\sum_{i = 1}^{n_{test}^{t}}(y_{test} - \hat{y}_{test})^2$$
 where:    
 $t$ is the total number of trials    
@@ -54,7 +56,7 @@ $y_{test}$ is the observed audience score for an observation in $D_{test}^j$
 $\hat{y}_{test}$ is the *predicted* audience score for an observation in $D_{test}$      
 
 
-The predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors and evaluated by MSE, are shown in `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`.
+The predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors and evaluated by MSE, are shown in `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`. The top five scores (lowest average MSE) are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator decisively outperformed the other 35 models.
 
 `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors and predictive performance by prior and estimator (movie dataset, model prior: uniform); `r trials` subsamples 
 ```{r performance_table}
@@ -63,17 +65,17 @@ knitr::kable(report$table, escape = F, digits = 2) %>%
   kableExtra::footnote(general = "The five lowest MSE scores are in bold font. The lowest MSE is in red font.")
 ```
 
-The top five scores (lowest average MSE) are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator decisively outperformed the other 35 models. To ascertain the significance of the differences in mean MSE among the models, t-tests of the MSE means were conducted at an $\alpha = .05$ significance level. `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")` reports the top four models in order of ascending mean MSE. The p.values indicate the probability of observing a difference between the mean MSE for each model and the lowest MSE, under the null hypothesis. As indicated by the p.values, the differences in mean MSE were significant. 
+To ascertain the significance of the differences in mean MSE among the models, t-tests of the MSE means were conducted at an $\alpha = .05$ significance level. `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")` reports the top ten models in order of ascending mean MSE. The p.values indicate the probability of observing a difference between the mean MSE for each model and the lowest MSE, under the null hypothesis. As indicated by the p.values, their was no statistically significant difference among the top nine models. 
 
-`r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE by prior and estimator for top four models with p.values for the $MSE -MSE_{best} = 0$. 
+`r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE by prior and estimator for top ten models with p.values for the $MSE -MSE_{best} = 0$. 
 ```{r performance_compare}
-scores <- report$best[c(1:4),c(2,3,4,5)]
+scores <- report$best[c(1:10),c(2,3,4,5)]
 colnames(scores) <- c("Prior", "Estimator", "Mean MSE", "p.value")
 knitr::kable(scores, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-Notwithstanding, the box plot of the distribution of MSE scores in `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`, reveals significant overlap in the distributions of MSE. In fact, a similar analysis performed on 100 trials showed no statistically significant differences in the mean MSEs of the top four models. Thus, it was decided that each of the four top models would advance to the prediction stage.
+Moreover, the box plot of the distribution of MSE scores in `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`, reveals almost identical distributions of MSE. The data 
 
 ```{r top5}
 report$plots$box

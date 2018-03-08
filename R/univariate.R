@@ -74,6 +74,8 @@ univariate <- function(data) {
                                yLab = "IMDB Num Votes", units = "votes")
   analysis$quant$imdb_num_votes_log <- univariateQuant(data.frame(data$title, data$imdb_num_votes_log),
                                     yLab = "IMDB Num Votes (Log)", units = "votes")
+  analysis$quant$imdb_num_votes_sqrt <- univariateQuant(data.frame(data$title, data$imdb_num_votes_sqrt),
+                                                       yLab = "IMDB Num Votes (Sqrt)", units = "votes")
   analysis$quant$critics_score <- univariateQuant(data.frame(data$title, data$critics_score),
                                    yLab = "Critics Score", units = "points")
   analysis$quant$audience_score <- univariateQuant(data.frame(data$title, data$audience_score),

@@ -81,10 +81,15 @@ bivariate <- function(data) {
   imdb_num_votes_log <- bivariateQuant(data.frame(y = data$audience_score,
                                                   x = data$imdb_num_votes_log),
                                        xLab = "IMDB Num Votes (Log)")
+  
+  imdb_num_votes_sqrt <- bivariateQuant(data.frame(y = data$audience_score,
+                                                  x = data$imdb_num_votes_sqrt),
+                                       xLab = "IMDB Num Votes (Sqrt)")
 
   critics_score <- bivariateQuant(data.frame(y = data$audience_score,
                                              x = data$critics_score),
                                   xLab = "Critics Score")
+  
 
   # Return analysis
   analysis <- list(
@@ -104,6 +109,7 @@ bivariate <- function(data) {
     imdb_rating = imdb_rating,
     imdb_num_votes = imdb_num_votes,
     imdb_num_votes_log = imdb_num_votes_log,
+    imdb_num_votes_sqrt = imdb_num_votes_sqrt,
     critics_score = critics_score
   )
   return(analysis)

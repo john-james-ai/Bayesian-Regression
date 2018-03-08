@@ -20,6 +20,8 @@ bmaPerformance <- function(yX, trials = 3) {
   
   predictions$trials <- lapply(seq_len(trials), function(i) {
     
+    cat("\r", paste("Processing trial number", i))
+    
     resample <- TRUE
     
     # Sample Data

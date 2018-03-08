@@ -15,9 +15,8 @@ bmaEvaluation(mList, candidates)
 \code{bmaEvaluation} Prepares data by which the designated models would be evaluated.
 }
 \seealso{
-Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaBest}}, \code{\link{bmaComplexity}},
-  \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
+Other BMA functions: \code{\link{bestPredictions}},
+  \code{\link{bmaAnalysis}}, \code{\link{bmaComplexity}},
   \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
   \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
   \code{\link{bmaPerformance}},

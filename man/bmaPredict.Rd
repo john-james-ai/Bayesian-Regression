@@ -38,12 +38,11 @@ optionally, residual vs fitted, parameter estimates and prediction
 distributions on existing training data or new test data.
 }
 \seealso{
-Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaBest}}, \code{\link{bmaComplexity}},
-  \code{\link{bmaEvaluation}},
-  \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
-  \code{\link{bmaPDC}}, \code{\link{bmaPIPPlots}},
-  \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
+Other BMA functions: \code{\link{bestPredictions}},
+  \code{\link{bmaAnalysis}}, \code{\link{bmaComplexity}},
+  \code{\link{bmaEvaluation}}, \code{\link{bmaPDC}},
+  \code{\link{bmaPIPPlots}}, \code{\link{bmaPIP}},
+  \code{\link{bmaPerformanceReport}},
   \code{\link{bmaPerformance}},
   \code{\link{bmaPredictModels}}, \code{\link{bma}}
 }

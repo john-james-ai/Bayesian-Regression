@@ -10,8 +10,9 @@ The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix 
 
 `r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`: Movies selected for prediction
 ```{r cases}
-names(cases) <- c("Title", "Feature", "Drama", "Run", "R", "Year", "Oscar", "Summer", "IMDb Rating", "Critics", "BP Nom",
-                  "BP Win", "Actor", "Actress", "Dir", "Top", "# Votes", "# Votes (Log)", "Audience")
+names(cases) <- c("Title", "Feature", "Drama", "Run", "R", "Year", "Oscar", "Summer", "IMDb Rating", "Critics",
+                  "Critics (Log)","BP Nom", "BP Win", "Actor", "Actress", "Dir", "Top", "# Votes", "# Votes (Log)", 
+                  "# Votes (sqrt)", "Audience")
 knitr::kable(cases, digits = 1) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```

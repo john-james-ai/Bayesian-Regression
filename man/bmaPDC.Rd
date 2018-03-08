@@ -18,12 +18,10 @@ List with descriptive statistics and credible intervals for the means
 \code{bmaPDC} Reports the posterior distribution of coefficients for a model
 }
 \seealso{
-Other BMA functions: \code{\link{bmaAnalysis}},
-  \code{\link{bmaBest}}, \code{\link{bmaComplexity}},
-  \code{\link{bmaEvaluation}},
-  \code{\link{bmaModel1Plots}}, \code{\link{bmaModel1}},
-  \code{\link{bmaPIPPlots}}, \code{\link{bmaPIP}},
-  \code{\link{bmaPerformanceReport}},
+Other BMA functions: \code{\link{bestPredictions}},
+  \code{\link{bmaAnalysis}}, \code{\link{bmaComplexity}},
+  \code{\link{bmaEvaluation}}, \code{\link{bmaPIPPlots}},
+  \code{\link{bmaPIP}}, \code{\link{bmaPerformanceReport}},
   \code{\link{bmaPerformance}},
   \code{\link{bmaPredictModels}}, \code{\link{bmaPredict}},
   \code{\link{bma}}

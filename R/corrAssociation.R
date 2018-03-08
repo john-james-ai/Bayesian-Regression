@@ -101,9 +101,10 @@ cramers <- function(data) {
 #' @export
 pearsons <- function(data) {
   
-  vars <- c("Runtime", "IMDb Rating", "IMDb Num Votes (Log)", "Critics Score")
+  vars <- c("Runtime", "IMDb Rating", "IMDb Num Votes (Log)", "Critics Score",
+            "Critics Score (Log)")
   df <- data.frame(data$runtime, data$imdb_rating, data$imdb_num_votes_log,
-                   data$critics_score)
+                   data$critics_score, data$imdb_num_votes_sqrt)
   
   cp <- plotCorr(data = df)
   return(cp)

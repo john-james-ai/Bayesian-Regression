@@ -479,7 +479,7 @@ Next, the significance and strength of associations between categorical variable
 
 `r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")`: Chi-squared test of independence between categorical variables. Significant ($\alpha = 0.05$) differences between observed and expected differences under the null hypothesis are highlighted in bold text.
 ```{r chi}
-chi <- x2(processedData)
+chi <- x2(preprocessed)
 vars <- data.frame(Terms = as.character(rownames(chi)))
 chi <- lapply(chi, function(x) {
   kableExtra::cell_spec(x, "html", bold = ifelse(x < .05 ,T,F))
@@ -492,7 +492,7 @@ knitr::kable(chi, escape = F) %>%
 
 `r kfigr::figr(label = "cramer", prefix = TRUE, link = TRUE, type="Table")`: Cramer's V measure of association between categorical variables. Associations with a medium strength (Cramer's V > .3) are highlighted in bold text.
 ```{r cramer}
-cv <- cramers(processedData)
+cv <- cramers(preprocessed)
 vars <- data.frame(Terms = as.character(rownames(cv)))
 cv <- lapply(cv, function(x) {
   kableExtra::cell_spec(x, "html", bold = ifelse(x > .3 ,T,F))
@@ -504,7 +504,7 @@ knitr::kable(cv, escape = F) %>%
 
 As shown in `r kfigr::figr(label = "cp", prefix = TRUE, link = TRUE, type="Figure")`, the correlations among the quantitative variables did not surprise. As expected, a moderate correlation between critics scores and IMDb rating was observed. 
 ```{r cp}
-cp <- pearsons(processedData)
+cp <- pearsons(preprocessed)
 cp
 ```
 `r kfigr::figr(label = "cp", prefix = TRUE, link = TRUE, type="Figure")`: Correlations among quantitative predictors

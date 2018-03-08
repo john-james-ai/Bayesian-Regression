@@ -57,7 +57,6 @@ library(vcd)
 source("../R/bestPredictions.R")
 source("../R/bma.R")
 source("../R/bmaAnalysis.R")
-source("../R/bmaBest.R")
 source("../R/bmaComplexity.R")
 source("../R/bmaEvaluation.R")
 source("../R/bmaPerformance.R")
@@ -84,7 +83,7 @@ source("../R/analysis.R")
 run <- FALSE
 if (run == FALSE) {
   load("./analysis/yX.Rdata")
-  load("./analysis/processedData.Rdata")
+  load("./analysis/preprocessed.Rdata")
   load("./analysis/models.Rdata")
   load("./analysis/analysis.Rdata")
   load("./analysis/report.Rdata")
@@ -99,21 +98,21 @@ load("../inst/extdata/movies.RData")
 ```
 
 ```{r preprocess}
-processedData  <- preprocess(movies)
-save(processedData, file = "./analysis/processedData.Rdata")
+preprocessed  <- preprocess(movies)
+save(preprocessed, file = "./analysis/preprocessed.Rdata")
 ```
 
 ```{r univariate}
-edaUni <- univariate(data = processedData)
+edaUni <- univariate(data = preprocessed)
 ```
 
 ```{r bivariate}
-edaBi <- bivariate(data = processedData)
+edaBi <- bivariate(data = preprocessed)
 ```
 
 ```{r removetitle}
 if (run == TRUE)  {
-  yX <- processedData %>% select(-title)
+  yX <- preprocessed %>% select(-title)
   save(yX, file = "./analysis/yX.Rdata")
 }
 ```
@@ -156,22 +155,14 @@ if (isTRUE(run)) {
 
 ```{r bestPredictions}
 cases <- read.csv(file = "../inst/extdata/movies2predict.csv", stringsAsFactors = FALSE)
-predictions <- bestPredictions(best = report$best[c(1:4),], models = models, newdata = cases)
+
+predictions <- bestPredictions(best = report$best[c(1:10),], models = models, newdata = cases)
 save(predictions, file = "./analysis/predictions.Rdata")
 ```
 
 
 
-```{r reload}
-if (run == TRUE) {
-  load("./analysis/yX.Rdata")
-  load("./analysis/models.Rdata")
-  load("./analysis/analysis.Rdata")
-  load("./analysis/eval.Rdata")
-  load("./analysis/report.Rdata")
-  load("./analysis/performance.Rdata")
-  load("./analysis/predictions.Rdata")
-}
+```{r reset}
 run <- FALSE
 ```
 
