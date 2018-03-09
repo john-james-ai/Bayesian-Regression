@@ -30,9 +30,9 @@ univariateQuant <- function(data, yLab, xLab = NULL, units = NULL) {
   d <- ifelse(stats$CV <= 25, "low",
               ifelse(stats$CV <= 50, "moderate",
                      ifelse(stats$CV <= 75, "high", "very high")))
-  s <- ifelse(round(stats$Skewness,0) == 0, "approximately symmetric",
-              ifelse(round(stats$Skewness,0) < 0, "left-skewed", "right-skewed"))
-  k <- ifelse(stats$Kurtosis == 0, "approximately normal",
+  s <- ifelse(round(stats$Skewness,3) == 0, "approximately symmetric",
+              ifelse(stats$Skewness < 0, "left-skewed", "right-skewed"))
+  k <- ifelse(round(stats$Kurtosis,3) == 0, "approximately normal",
               ifelse(stats$Kurtosis < 0, "platykurtic or light-tailed",
                      "leptokurtic or heavy-tailed"))
   lower <- stats$Q1 - (1.5 * stats$IQR)

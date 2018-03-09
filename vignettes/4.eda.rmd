@@ -40,7 +40,7 @@ high <- years %>% filter(N == max(N))
 last <- years %>% filter(Category == "2014")
 ```
 
-The data set contained some `r nrow(movies)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`, the number of films in the sample by year of release, tended to grow somewhat linearly from `r low$N` films in `r low$Category`until a peak of approximately `r high$N` films in `r high$Category[1]` and in `r high$Category[2]`, then drops until settling at `r last$Category` films in 2014. The number of films per year centered at a mean and median of `r ave$Mean` and `r med$Median` films, respectively.
+The data set contained some `r nrow(preprocessed)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`, the number of films in the sample by year of release, tended to grow somewhat linearly from `r low$N` film in `r as.character(low$Category)`to a peak of approximately `r high$N[1]` films in `r as.character(high$Category[1])` and in `r as.character(high$Category[2])`, then drops until settling at `r last$N` films in 2014. The number of films per year centered at a mean and median of `r ave$Mean` and `r med$Median` films, respectively.
 
 ```{r year}
 edaUni$qual$year$plot

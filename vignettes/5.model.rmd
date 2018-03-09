@@ -1,13 +1,11 @@
 # Models
-The principle question of this paper - the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, inference and on predictive performance - was investigated in four steps. First, the model averages under **BMA** were explored for each of the nine default parameter priors under consideration. Two sets of models, based upon two different data sets, were fit.  Model set Alpha was based upon the full data set and model set Beta was developed using the full data set without the imdb_rating variable. Model set Beta, as will be shown in the next step, produced less heteroskedactic errors, and therefore, would be the preferred model for inference. Second, **model assessments** were conducted to reveal the extent to which model assumptions for inference were met. Third, **model performance**  of the BMA, highest probability models (HPM), best predictive models (BPM) and the median predictive models (MPM) was evaluated for both model sets. Mean squared error was the metric used for evaluating model performance. Fourth, the **parameter estimates** for the top models in model sets Alpha and Beta were interpreted and lastly, the best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
+The principle question of this paper - the effect of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, inference and on predictive performance - was investigated in four steps. First, the model averages under **BMA** were explored in terms of model spaces, complexity and parameter inclusion probabilities for each of the nine default parameter priors under consideration. Second, **model assumptions** for inference, specifically, the distribution of residuals versus fitted values,  were assessed. Third, **model performance**  of the BMA, highest probability models (HPM), best predictive models (BPM) and the median predictive models (MPM) was evaluated for all nine priors. Mean squared error was the metric used for evaluating model performance. Lastly, the **parameter estimates** for the top models were interpreted.  The best of the models would be used to predict audience scores for a heretofore, unobserved set of feature films released in 2016.
 
 ## Bayesian Model Averaging
-Bayesian model averaging was conducted for both model sets Alpha and Beta.  Both model sets were based upon the full data of `r nrow(yX)` observations with a log transformation of the imdb_num_votes variable.  Model set Beta was fit without the imdb_rating variable. 
+Bayesian model averaging was conducted on the full data of `r nrow(yX)` observations with a log transformation of the imdb_num_votes variable. To mitigate heteroskedacticity, the imdb_rating variable was removed from the data set.
 
 ### Model Spaces
 The following figures show the model spaces for each model set and nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, the values of which are indicated along the x-axis.  The models are sorted left to right, from highest posterior probability to lowest. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
-
-#### Model Set Alpha
 
 The largest models were those based upon the AIC prior, with model sizes ranging from `r min(summary(models[[2]])[21,-1])` to `r max(summary(models[[2]])[21,-1])` regressors for the top five models. The top five Zellner's g-prior models included between `r min(summary(models[[5]])[21,-1])` and `r max(summary(models[[5]])[21,-1])` parameters. The remaining model spaces, containing between `r min(summary(models[[4]])[21,-1])` to `r max(summary(models[[4]])[21,-1])` predictors, were almost identical.
 
@@ -44,6 +42,18 @@ With respect to the relative importance of the predictors, `r kfigr::figr(label 
 analysis$pip$plots$meanPIP
 ```
 `r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")`: Mean posterior inclusion probabilities across all nine priors.
+
+## Model Assumptions
+Having explored prediction accuracy, and characterized the parameter estimates in terms of their effects on audience score, the focus turned to determining the quality of those model inferences. Specifically, the distribution of errors vis-a-vis predictions were evaluated for homoscedacticity. `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`, presented very similar distributions of errors vis-a-vis fitted values for each of the nine priors. A greater concentration of residuals was observed at the higher audience scores; whereas the residuals for lower scores were more dispersed. The quality of the predictions tended to be positively associated with the quantity of observations at any particular range of audience scores. 
+
+### Residuals vs Fitted
+```{r rvf, fig.height = 12}
+par(mfrow = c(3, 3))
+for (i in 1:length(models)) plot(models[[i]], which = 1, caption = (paste0("Residuals vs Fitted (", models[[i]]$prior,")")))
+```
+`r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`: Residual vs Fitted Values
+
+Though residuals appeared to center at zero, the complete lack of homoscedacticity among the models could not be ignored. As such, the quality and reliability of the above inferences that depend upon $\epsilon \sim N(0, \sigma^2)$ are suspect.  That said, the overarching objective was to explore relative *prediction accuracy* of various default parameter priors and estimators. It was therefore concluded that inference using any of the nine priors and four estimators would be suspect; however, the 36 models were on "equal footing" with respect to prediction. Hence all four models would advance to the prediction phase.
 
 
 ## Model Performance 
@@ -132,18 +142,6 @@ kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsiv
 kableExtra::group_rows(n[4], 1,nrow(eval$pdc[[4]])))
 
 ```
-
-## Top Model Evaluations
-Having explored prediction accuracy, and characterized the parameter estimates in terms of their effects on audience score, the focus turned to determining the quality of those model inferences. Specifically, the distribution of errors vis-a-vis predictions were evaluated for homoscedacticity. `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`, presented very similar distributions of errors vis-a-vis fitted values for each of the nine priors. A greater concentration of residuals was observed at the higher audience scores; whereas the residuals for lower scores were more dispersed. The quality of the predictions tended to be positively associated with the quantity of observations at any particular range of audience scores. 
-
-### Residuals vs Fitted
-```{r rvf, fig.height = 12}
-par(mfrow = c(3, 3))
-for (i in 1:length(models)) plot(models[[i]], which = 1, caption = (paste0("Residuals vs Fitted (", models[[i]]$prior,")")))
-```
-`r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`: Residual vs Fitted Values
-
-Though residuals appeared to center at zero, the complete lack of homoscedacticity among the models could not be ignored. As such, the quality and reliability of the above inferences that depend upon $\epsilon \sim N(0, \sigma^2)$ are suspect.  That said, the overarching objective was to explore relative *prediction accuracy* of various default parameter priors and estimators. It was therefore concluded that inference using any of the nine priors and four estimators would be suspect; however, the 36 models were on "equal footing" with respect to prediction. Hence all four models would advance to the prediction phase.
 
 
 * * *

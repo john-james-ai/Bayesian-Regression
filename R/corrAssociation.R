@@ -29,9 +29,13 @@ x2 <- function(data) {
   for (i in 1:ncol(df)) {
     for (j in 1:ncol(df)) {
       if (i != j) {
-        tbl <- table(unlist(df[,i]), unlist(df[,j]))
-        test <- chisq.test(tbl)
-        x[i,j] = round(test$p.value, 3)
+        if (i < j) {
+          tbl <- table(unlist(df[,i]), unlist(df[,j]))
+          test <- chisq.test(tbl)
+          x[i,j] <- round(test$p.value, 3)
+        } else {
+          x[i,j] <- ""
+        }
       }
     }
   }
@@ -71,9 +75,13 @@ cramers <- function(data) {
   for (i in 1:ncol(df)) {
     for (j in 1:ncol(df)) {
       if (i != j) {
-        tbl <- table(unlist(df[,i]), unlist(df[,j]))
-        test <- assocstats(tbl)
-        y[i,j] = round(test$cramer, 3)
+        if (i < j) { 
+          tbl <- table(unlist(df[,i]), unlist(df[,j]))
+          test <- assocstats(tbl)
+          y[i,j] = round(test$cramer, 3)
+        } else {
+          y[i,j] <- ""
+        }
       }
     }
   }

@@ -1,7 +1,7 @@
 # Introduction
 Bayesian model averaging (BMA), now widely accepted as a principled way of accounting for model uncertainty, involves the challenge of the elicitation of priors for all parameters of each model and the probability of each model. It is this elicitation of prior knowledge about the parameters of interest which often leads to more reliable estimates and smaller uncertainties. In some cases, the elicitation of prior knowledge is essential to obtaining meaningful results. If substantial prior information is available in the form of a probability distributions, it should be used. In many cases; however, prior information may be unavailable or minuscule with respect to the information provided by the data. In such cases, default priors can be used to characterize prior probability distributions of model parameters. Still, inappropriate priors may unduly influence posterior-based inferences and decision making. 
 
-## Research Questions
+## Research Question
 This paper documents an examination of the following question.
 
 > What are the effects of default priors on Bayesian regression model selection, model size, posterior inclusion probabilities of regressors, inference and predictive performance.
