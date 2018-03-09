@@ -148,7 +148,7 @@ if (isTRUE(run)) {
 
 ```{r bmaEval}
 if (isTRUE(run)) {
-  eval <- bmaEvaluation(mList = models, candidates = report$best)
+  eval <- bmaEvaluation(mList = models, candidates = report$best, top = 10)
   save(eval, file = "./analysis/eval.Rdata")
 }
 ```

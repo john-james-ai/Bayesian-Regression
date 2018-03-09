@@ -7,7 +7,7 @@ Bayesian model averaging was conducted on the full data of `r nrow(yX)` observat
 ### Model Spaces
 The following figures show the model spaces for each model set and nine default parameter priors. The rows correspond to each of the variables and the intercept term, the names of which are indicated along the y-axis.  The columns pertain to the models used in the averaging process, whereby the width of the columns represent the posterior  probabilities of the models. A wider column indicates a higher posterior probability, the values of which are indicated along the x-axis.  The models are sorted left to right, from highest posterior probability to lowest. Variables excluded from the model are shown in black for each column. The colored areas represent variables included in the model, whereby the color is associated with, and proportional to, the log posterior probability of the variable. Models that have the same color have similar log probabilities.
 
-The largest models were those based upon the AIC prior, with model sizes ranging from `r min(summary(models[[2]])[21,-1])` to `r max(summary(models[[2]])[21,-1])` regressors for the top five models. The top five Zellner's g-prior models included between `r min(summary(models[[5]])[21,-1])` and `r max(summary(models[[5]])[21,-1])` parameters. The remaining model spaces, containing between `r min(summary(models[[4]])[21,-1])` to `r max(summary(models[[4]])[21,-1])` predictors, were almost identical.
+The largest models were those based upon the AIC prior, with model sizes ranging from `r min(summary(models[[2]])[20,-1])` to `r max(summary(models[[2]])[20,-1])` regressors for the top five models. The top five Zellner's g-prior models included between `r min(summary(models[[5]])[20,-1])` and `r max(summary(models[[5]])[20,-1])` parameters. The remaining model spaces, containing between `r min(summary(models[[4]])[20,-1])` to `r max(summary(models[[4]])[20,-1])` predictors, were almost identical.
 
 ```{r model_spaces, fig.height = 4}
 graphics::par(mfrow = c(1,3), family = "Open Sans")
@@ -19,7 +19,7 @@ for (i in 1:length(models)) {
 `r kfigr::figr(label = "model_spaces", prefix = TRUE, link = TRUE, type="Figure")`: Model spaces under BMA for the nine candidate parameter priors: model prior = uniform
 
 ### Model Complexity
-The relationships between model complexity and posterior probability (`r kfigr::figr(label = "complexity", prefix = TRUE, link = TRUE, type="Figure")`) align with, and to an extent, explain the model spaces above.  Recall, the AIC and g-prior models were characterized by their larger sizes relative to the those of the other models.  Similarly, posterior probabilities for the AIC and g-prior models tended to occur at the higher dimensions. On the other hand, the maximum posterior probabilities for the other priors tended to occur with models containing between three and four predictors. 
+The relationships between model complexity and posterior probability (`r kfigr::figr(label = "complexity", prefix = TRUE, link = TRUE, type="Figure")`) align with, and to an extent, explain the model spaces above.  Recall, the AIC and g-prior models were characterized by their larger sizes relative to the those of the other models.  Similarly, distributions of posterior probabilities for the AIC and g-prior models tended to center at the higher dimensions. On the other hand, the distribibutions of posterior probabilities for the other priors tended to occur with models containing between three and four predictors. 
 
 ```{r complexity, fig.height=12}
 do.call("grid.arrange", c(analysis$complexity, ncol = 3))
@@ -27,7 +27,7 @@ do.call("grid.arrange", c(analysis$complexity, ncol = 3))
 `r kfigr::figr(label = "complexity", prefix = TRUE, link = TRUE, type="Figure")`: Model posterior probabilities vis-a-vis complexity
 
 ### Parameter Posterior Inclusion Probabilities under BMA
-`r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")` reports the BMA posterior inclusion probabilities for all nine prior distributions. The number of predictors with an inclusion probability exceeding 50%, (not including the intercept) ranged from a low of `r min(analysis$pip$nSig)` (BIC, EB-Local, Hyper-g, Hyper g/n, Hyper-g Laplace and Zellner-Siow priors) to a high of `r max(analysis$pip$nSig)` regressors for the AIC prior. 
+`r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")` reports the BMA posterior inclusion probabilities for all nine prior distributions. The number of predictors with an inclusion probability exceeding 50%, (not including the intercept) ranged from a low of `r min(analysis$pip$nSig)` to a high of `r max(analysis$pip$nSig)` regressors for the AIC prior. 
 
 `r kfigr::figr(label = "pip", prefix = TRUE, link = TRUE, type="Table")`: Posterior inclusion probabilities across parameter priors: model prior = uniform
 ```{r pip}
@@ -36,7 +36,7 @@ knitr::kable(analysis$pip$plots$table, escape = F, digits = 2) %>%
   kableExtra::footnote(general = "Posterior inclusion probabilities that exceed 50% are in bold font.")
 ```
 
-With respect to the relative importance of the predictors, `r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")` shows the average posterior inclusion probability across all priors for each parameter. IMDb ratings, critics score, and runtime had average inclusion probabilities exceeding 50% across all priors. 
+With respect to the relative importance of the predictors, `r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")` shows the average posterior inclusion probabilities for each parameter across all priors. 
 
 ```{r mean_pip}
 analysis$pip$plots$meanPIP
@@ -44,7 +44,7 @@ analysis$pip$plots$meanPIP
 `r kfigr::figr(label = "mean_pip", prefix = TRUE, link = TRUE, type="Figure")`: Mean posterior inclusion probabilities across all nine priors.
 
 ## Model Assumptions
-Having explored prediction accuracy, and characterized the parameter estimates in terms of their effects on audience score, the focus turned to determining the quality of those model inferences. Specifically, the distribution of errors vis-a-vis predictions were evaluated for homoscedacticity. `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`, presented very similar distributions of errors vis-a-vis fitted values for each of the nine priors. A greater concentration of residuals was observed at the higher audience scores; whereas the residuals for lower scores were more dispersed. The quality of the predictions tended to be positively associated with the quantity of observations at any particular range of audience scores. 
+To ascertain the degree to which inference assumptions were met, the distribution of errors vis-a-vis predictions were evaluated for homoscedacticity. `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`, presented very similar distributions of errors vis-a-vis fitted values for each of the nine priors. A greater concentration of residuals was observed at the higher audience scores; whereas the residuals for lower scores were more dispersed. The quality of the predictions tended to be positively associated with the quantity of observations at any particular range of audience scores. 
 
 ### Residuals vs Fitted
 ```{r rvf, fig.height = 12}
@@ -53,7 +53,7 @@ for (i in 1:length(models)) plot(models[[i]], which = 1, caption = (paste0("Resi
 ```
 `r kfigr::figr(label = "rvf", prefix = TRUE, link = TRUE, type="Figure")`: Residual vs Fitted Values
 
-Though residuals appeared to center at zero, the complete lack of homoscedacticity among the models could not be ignored. As such, the quality and reliability of the above inferences that depend upon $\epsilon \sim N(0, \sigma^2)$ are suspect.  That said, the overarching objective was to explore relative *prediction accuracy* of various default parameter priors and estimators. It was therefore concluded that inference using any of the nine priors and four estimators would be suspect; however, the 36 models were on "equal footing" with respect to prediction. Hence all four models would advance to the prediction phase.
+Though residuals appeared to center at zero, the variance in residuals across the fitted values indicates a degree of heteroscedacticity. As such, standard errors for the parameter estimates may be biased. That said, the ordinary least squares estimates for the parameter coefficients are not effected.  the overarching objective was to explore relative *prediction accuracy* of various default parameter priors and estimators. It was therefore concluded that inference using any of the nine priors and four estimators should be taken with caution; however, the 36 models were on "equal footing" with respect to prediction. 
 
 
 ## Model Performance 
@@ -63,10 +63,10 @@ where:
 $t$ is the total number of trials    
 $n_{test}^{t}$ is the total number of observations in $D_{test}^j$     
 $y_{test}$ is the observed audience score for an observation in $D_{test}^j$      
-$\hat{y}_{test}$ is the *predicted* audience score for an observation in $D_{test}$      
+$\hat{y}_{test}$ is the *predicted* audience score for an observation in $D_{test}^j$      
 
 
-The predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors and evaluated by MSE, are shown in `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`. The top five scores (lowest average MSE) are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator decisively outperformed the other 35 models.
+The predictive performance of the nine parameter priors and four estimators, in conjunction with the uniform model priors and evaluated by MSE, are shown in `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`. The top five scores (lowest average MSE) are highlighted in **bold** and the lowest average MSE is noted in red font. The `r report$best$PriorDesc[1]` prior using the `r report$best$Estimator[1]` estimator outperformed the other 35 models, but not decisively. 
 
 `r kfigr::figr(label = "performance_table", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors and predictive performance by prior and estimator (movie dataset, model prior: uniform); `r trials` subsamples 
 ```{r performance_table}
@@ -84,13 +84,6 @@ colnames(scores) <- c("Prior", "Estimator", "Mean MSE", "p.value")
 knitr::kable(scores, escape = F, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
-
-Moreover, the box plot of the distribution of MSE scores in `r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`, reveals almost identical distributions of MSE. The data 
-
-```{r top5}
-report$plots$box
-```
-`r kfigr::figr(label = "top5", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of MSE among top 4 models
 
 ## Parameter Estimates
 ```{r}
