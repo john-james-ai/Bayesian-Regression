@@ -147,16 +147,14 @@ if (isTRUE(run)) {
 ```
 
 ```{r bmaEval}
-if (isTRUE(run)) {
-  eval <- bmaEvaluation(mList = models, candidates = report$best, top = 10)
-  save(eval, file = "./analysis/eval.Rdata")
-}
+eval <- bmaEvaluation(mList = models, candidates = report$best, top = 10)
+save(eval, file = "./analysis/eval.Rdata")
 ```
 
 ```{r bestPredictions}
 cases <- read.csv(file = "../inst/extdata/movies2predict.csv", stringsAsFactors = FALSE)
 
-predictions <- bestPredictions(best = report$best[c(1:10),], models = models, newdata = cases)
+predictions <- bestPredictions(best = report$best[c(1, 7, 8, 9),], models = models, newdata = cases)
 save(predictions, file = "./analysis/predictions.Rdata")
 ```
 

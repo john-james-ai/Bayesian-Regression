@@ -18,7 +18,7 @@ knitr::kable(cases, digits = 1) %>%
 ```
 
 ## Prediction Results
-`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")` summarizes the predictions, true values, and mean squared errors for each movie and film. MSE across the four models and five films ranged between 5.8 and 6.7, where the Zellner's g-prior performed best overall. 
+`r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")` summarizes the audience score predictions, true values, and mean squared errors for each prior.
 
 `r kfigr::figr(label = "results", prefix = TRUE, link = TRUE, type="Table")`: Prediction Results
 ```{r results}

@@ -75,6 +75,8 @@ knitr::kable(report$table, escape = F, digits = 2) %>%
   kableExtra::footnote(general = "The five lowest MSE scores are in bold font. The lowest MSE is in red font.")
 ```
 
+It is also worth noting that the median probability models (MPM) outperformed the BMA, HPM, and BPM models across all priors. 
+
 To ascertain the significance of the differences in mean MSE among the models, t-tests of the MSE means were conducted at an $\alpha = .05$ significance level. `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")` reports the top ten models in order of ascending mean MSE. The p.values indicate the probability of observing a difference between the mean MSE for each model and the lowest MSE, under the null hypothesis. As indicated by the p.values, their was no statistically significant difference among the top nine models. 
 
 `r kfigr::figr(label = "performance_compare", prefix = TRUE, link = TRUE, type="Table")`: Mean MSE by prior and estimator for top ten models with p.values for the $MSE -MSE_{best} = 0$. 
@@ -86,13 +88,29 @@ knitr::kable(scores, escape = F, digits = 2) %>%
 ```
 
 ## Parameter Estimates
-```{r}
+The parameter estimates for the top ten models are listed in `r kfigr::figr(label = "pe", prefix = TRUE, link = TRUE, type="Table")`. Since the estimates for models one through six, nine and ten are almost identical, the following analysis will be limited to models 1, 7, 8 and 9.
+
+`r kfigr::figr(label = "pe", prefix = TRUE, link = TRUE, type="Table")`: Parameter estimates for top 10 models
+```{r pe}
 n <- names(eval$pdc)
+knitr::kable(eval$pe, digits = 3) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+  kableExtra::add_header_above(c(" " = 1, "(1)" = 1, "(2)" = 1,"(3)" = 1,"(4)" = 1,"(5)" = 1,"(6)" = 1,"(7)" = 1,"(8)" = 1,"(9)" = 1,"(10)" = 1))
 ```
-The model parameters for the top four models ranged from `r nrow(eval$pdc[[4]])` predictors for the `r n[4]` prior to `r nrow(eval$pdc[[2]])` regressors for the `r n[2]` prior. Despite significant variation in model complexity, similarities were extant among certain influential parameters. 
 
 ### `r n[1]` Prior
-As shown in `r kfigr::figr(label = "pdc1", prefix = TRUE, link = TRUE, type="Table")`, the `r n[1]` prior produced a model `r nrow(eval$pdc[[1]])` regressors, where the IMDb rating had by far the greatest influence on audience scores. A one point increase in IMDb rating increases audience scores by approximately `r round(eval$pdc[[1]]$Mean[7],1)`points, all else equal. The next most influential variable was the film type. Audience scores for feature films were predicted to be approximately `r abs(round(eval$pdc[[1]]$Mean[2],1))` points lower than those for other film types. Success at the Academy also had a significant effect on audience scores, but the devil is in the details. Films nominated for Best Picture were associated with audience scores about `r abs(round(eval$pdc[[1]]$Mean[9],1))` points higher than other films, all else held equal. On the other hand, films earning Best Actor or Best Actress awards were associated with a reduction in audience scores of `r abs(round(eval$pdc[[1]]$Mean[10],1))` and `r abs(round(eval$pdc[[1]]$Mean[11],1))` points respectively, all else equal. This may be a consequence of collinearity among the Academy variables, or it could represent the audiences' preference for team work over individual achievement. Critics score, somewhat surprisingly, had very little influence on audience scores in this model. This was likely due to collinearity with IMDb ratings. 
+The regression equation for `r n[1]` prior is stated as follows:
+
+$Y$ = `r round(eval$pdc[[1]][1,2], 3)` + `r round(eval$pdc[[1]][2,2], 3)`$x_1$ + `r round(eval$pdc[[1]][3,2], 3)`$x_2$ + `r round(eval$pdc[[1]][4,2], 3)`$x_3$ + `r round(eval$pdc[[1]][5,2], 3)`$x_4$ + `r round(eval$pdc[[1]][6,2], 3)`$x_5$  
+
+where:  
+$x_1$ is the feature film indicator variable (1 = yes, 0 = no)  
+$x_2$ is the drama genre indicator variable (1 = yes, 0 = no)    
+$x_3$ is the year of theatrical release   
+$x_4$ is the critics score    
+$x_5$ is the log number of IMDb votes    
+
+The single most influential parameter was the feature film indicator.  All else equal, feature films received audience scores approximately `r abs(round(eval$pdc[[1]][2,2], 3))` points lower than non-feature films. The next most influential variables were the drama indicator variable, which added an additional `r round(eval$pdc[[1]][3,2], 3)` points to audience score, and the number of IMDb votes, which increased audience scores by `r round(eval$pdc[[1]][6,2], 3)` percent, for each percent increase in the number of IMDb votes. Critics score had a slight positive effect of `r round(eval$pdc[[1]][5,2], 3)` points for each critics point received, all else equal. The year of theatrical release had a slight negative effect on audience scores (`r abs(round(eval$pdc[[1]][4,2], 3))` points). `r kfigr::figr(label = "pdc1", prefix = TRUE, link = TRUE, type="Table")` which states the standard deviations and 95% credible intervals, reflects the uncertainty around these estimates. 
 
 `r kfigr::figr(label = "pdc1", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[1]` prior.
 ```{r pdc1, results='asis'}
@@ -102,39 +120,77 @@ kableExtra::group_rows(n[1], 1,nrow(eval$pdc[[1]])))
 
 ```
 
+### `r n[7]` Prior
+The regression equation for `r n[7]` prior is stated as follows:
 
-### `r n[2]` Prior
-As shown in `r kfigr::figr(label = "pdc2", prefix = TRUE, link = TRUE, type="Table")`, the `r n[2]` and `r n[1]` priors were very similar in some important respects. Both models shared the top three most influential variables, IMDb rating, film type, and Best Picture nomination. In fact, the magnitude and direction of their effects on audience scores were congruent. The estimates for IMDb rating were `r round(eval$pdc[[1]]$Mean[7],1)` and `r round(eval$pdc[[2]]$Mean[9],1)` for the `r n[1]` and `r n[2]` models, respectively. Feature films were negatively associated with audience scores in both models. Estimates were `r round(eval$pdc[[1]]$Mean[2],1)` and `r round(eval$pdc[[2]]$Mean[2],1)` for the `r n[1]` and `r n[2]` models, respectively. Films nominated for Best Picture also did well in this model, boosting audience scores by approximately `r round(eval$pdc[[2]]$Mean[11],1)` points. As in the `r n[1]` prior, individual achievement at the Oscars was negatively associated with audience scores. Again, this may be a consequence of collinearity. Other variables with positive influence on audience scores included the critics scores, the drama genre, the log number of IMDB votes, summer season release, and top 200 box office achievement. Runtime, R-rating, Oscar season release each had a slight negative influence on audience scores.
+$Y$ = `r round(eval$pdc[[7]][1,2], 3)` + `r round(eval$pdc[[7]][2,2], 3)`$x_1$ + `r round(eval$pdc[[7]][3,2], 3)`$x_2$ + `r round(eval$pdc[[7]][4,2], 3)`$x_3$ + `r round(eval$pdc[[7]][5,2], 3)`$x_4$ + `r round(eval$pdc[[7]][6,2], 3)`$x_5$ + `r round(eval$pdc[[7]][7,2], 3)`$x_6$   
 
-`r kfigr::figr(label = "pdc2", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[2]` prior.
-```{r pdc2, results='asis'}
-print(knitr::kable(eval$pdc[[2]], digits = 4) %>%
+where:  
+$x_1$ is the feature film indicator variable (1 = yes, 0 = no)  
+$x_2$ is the drama genre indicator variable (1 = yes, 0 = no)    
+$x_3$ is the year of theatrical release   
+$x_4$ is the critics score    
+$x_5$ is the Best Picture nomination indicator (1 = yes, 0 = no)
+$x_6$ is the log number of IMDb votes    
+
+Again, the single most influential parameter was the feature film indicator.  All else equal, feature films received audience scores approximately `r abs(round(eval$pdc[[7]][2,2], 3))` points lower than non-feature films. The next most influential parameter was the Best Picture nomination indicator variable.  Films nominated for Best Picture earned an additional `r round(eval$pdc[[7]][6,2], 3)` audience score points, all else held equal.  Next, the drama indicator effect was `r round(eval$pdc[[7]][3,2], 3)` points in the positive direction. The log number of IMDb votes also had a slight positive effect on audience scores (`r round(eval$pdc[[7]][7,2], 3)` points), as did critics score (`r round(eval$pdc[[7]][5,2], 3)` points). The year of theatrical release had a slight negative effect on audience scores (`r abs(round(eval$pdc[[7]][4,2], 3))` points). The standard deviations and 95% credible intervals for the parameters are listed in `r kfigr::figr(label = "pdc7", prefix = TRUE, link = TRUE, type="Table")`. 
+
+`r kfigr::figr(label = "pdc7", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[7]` prior.
+```{r pdc7, results='asis'}
+print(knitr::kable(eval$pdc[[7]], digits = 3) %>%
 kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
-kableExtra::group_rows(n[2], 1,nrow(eval$pdc[[2]])))
+kableExtra::group_rows(n[7], 1,nrow(eval$pdc[[7]])))
 
 ```
 
-### `r n[3]` Prior
-Again, IMDb rating was the dominated influence on audience scores for the `r n[3]` prior model. As indicated in `r kfigr::figr(label = "pdc3", prefix = TRUE, link = TRUE, type="Table")`, the parameter estimate for IMDb rating was `r round(eval$pdc[[3]]$Mean[5],1)`, slightly higher than those of the `r n[1]` and `r n[2]` priors. The log number of IMDb votes had a slight influence on audience scores; whereas a one percent increase in the number of IMDb votes, resulted in a `r round(eval$pdc[[3]]$Mean[7],1)` percent increase in audience score.
 
-`r kfigr::figr(label = "pdc3", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[3]` prior.
-```{r pdc3, results='asis'}
-print(knitr::kable(eval$pdc[[3]], digits = 4) %>%
+### `r n[8]` Prior
+The regression equation for `r n[8]` prior is stated as follows:
+
+$Y$ = `r round(eval$pdc[[8]][1,2], 3)` + `r round(eval$pdc[[8]][2,2], 3)`$x_1$ + `r round(eval$pdc[[8]][3,2], 3)`$x_2$ + `r round(eval$pdc[[8]][4,2], 3)`$x_3$ + `r round(eval$pdc[[8]][5,2], 3)`$x_4$ + `r round(eval$pdc[[8]][6,2], 3)`$x_5$ + `r round(eval$pdc[[8]][7,2], 3)`$x_6$ + `r round(eval$pdc[[8]][8,2], 3)`$x_7$  
+
+where:  
+$x_1$ is the feature film indicator variable (1 = yes, 0 = no)  
+$x_2$ is the drama genre indicator variable (1 = yes, 0 = no)    
+$x_3$ is the year of theatrical release   
+$x_4$ is the critics score    
+$x_5$ is the Best Picture nomination indicator (1 = yes, 0 = no)
+$x_6$ is the Best Actor indicator (1 = yes, 0 = no)
+$x_6$ is the log number of IMDb votes         
+
+Once again, feature films earned audience scores approximately `r abs(round(eval$pdc[[8]][2,2], 3))` points lower than non-feature films. The next most influential parameter was the Best Picture nomination indicator variable.  Films nominated for Best Picture earned an additional `r round(eval$pdc[[8]][6,2], 3)` audience score points, all else held equal.  Next, the drama indicator effect was `r round(eval$pdc[[8]][3,2], 3)` points in the positive direction. The log number of IMDb votes also had a slight positive effect on audience scores (`r round(eval$pdc[[8]][8,2], 3)` points); whereas, films earning Best Actor award were associated with a `r abs(round(eval$pdc[[8]][7,2], 3))` point reduction in audience scores. Critics scores had a slight positive effect, resulting in `r abs(round(eval$pdc[[8]][5,2], 3))` audience score points for each point from the critics. The year of theatrical release had a slight negative effect on audience scores (`r abs(round(eval$pdc[[8]][4,2], 3))` points). The standard deviations and 95% credible intervals for the parameters are listed in `r kfigr::figr(label = "pdc8", prefix = TRUE, link = TRUE, type="Table")`.
+
+`r kfigr::figr(label = "pdc8", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[8]` prior.
+```{r pdc8, results='asis'}
+print(knitr::kable(eval$pdc[[8]], digits = 3) %>%
 kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
-kableExtra::group_rows(n[3], 1,nrow(eval$pdc[[3]])))
+kableExtra::group_rows(n[8], 1,nrow(eval$pdc[[8]])))
 
 ```
 
-### `r n[4]` Prior
-The model depicted `r kfigr::figr(label = "pdc4", prefix = TRUE, link = TRUE, type="Table")` could be characterized as the most parsimonious of the top performing models. Audience scores were entirely a function of IMDb rating and critics score.
+### `r n[9]` Prior
+The regression equation for `r n[9]` prior is stated as follows:
 
-`r kfigr::figr(label = "pdc4", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[4]` prior.
-```{r pdc4, results='asis'}
-print(knitr::kable(eval$pdc[[4]], digits = 4) %>%
+$Y$ = `r round(eval$pdc[[9]][1,2], 3)` + `r round(eval$pdc[[9]][2,2], 3)`$x_1$ + `r round(eval$pdc[[9]][3,2], 3)`$x_2$ + `r round(eval$pdc[[9]][4,2], 3)`$x_3$ + `r round(eval$pdc[[9]][5,2], 3)`$x_4$ + `r round(eval$pdc[[9]][6,2], 3)`$x_5$ 
+
+where:  
+$x_1$ is the feature film indicator variable (1 = yes, 0 = no)  
+$x_2$ is the drama genre indicator variable (1 = yes, 0 = no)    
+$x_3$ is the year of theatrical release   
+$x_4$ is the critics score    
+$x_5$ is the log number of IMDb votes         
+
+As with the other priors, feature films under this model earned audience scores approximately `r abs(round(eval$pdc[[9]][2,2], 3))` points lower than non-feature films. Drama films were associated with a `r round(eval$pdc[[9]][3,2], 3)` point increase in audience score points, all else held equal.  The log number of IMDb votes also had a slight positive effect on audience scores (`r round(eval$pdc[[9]][6,2], 3)` points), as did critics score (`r round(eval$pdc[[9]][5,2], 3)` points). The year of theatrical release had a slight negative effect on audience scores (`r abs(round(eval$pdc[[9]][4,2], 3))` points). The standard deviations and 95% credible intervals for the parameters are listed in `r kfigr::figr(label = "pdc9", prefix = TRUE, link = TRUE, type="Table")`.
+
+`r kfigr::figr(label = "pdc9", prefix = TRUE, link = TRUE, type="Table")`: Coefficient Estimates for `r n[9]` prior.
+```{r pdc9, results='asis'}
+print(knitr::kable(eval$pdc[[9]], digits = 3) %>%
 kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
-kableExtra::group_rows(n[4], 1,nrow(eval$pdc[[4]])))
+kableExtra::group_rows(n[9], 1,nrow(eval$pdc[[9]])))
 
 ```
+
+The above four models will now be used to predict the audience scores for heretofore, unseen films released in 2016.
 
 
 * * *
