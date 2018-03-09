@@ -20,6 +20,10 @@ bmaPerformanceReport <- function(performance) {
   # Reshape results
   p$dfl <- performance$MSE
   p$dfw <- dcast(performance$MSE, PriorDesc ~ Estimator, mean, value.var = 'MSE')
+  p$dfs <- performance$MSE %>%  group_by(PriorDesc, Estimator) %>%
+    summarize(`Average MSE` = mean(MSE)) %>% 
+    select(PriorDesc, Estimator, `Average MSE`) %>% arrange(`Average MSE`)
+  names(p$dfs) <- c("Prior", "Estimator", 'Average MSE')
   
   # Compute distribution of MSE by prior and model
   p$dist <- p$dfl %>% group_by(Prior, Estimator) %>% summarise(Mean = mean(MSE),

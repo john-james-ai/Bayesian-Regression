@@ -190,7 +190,7 @@ kableExtra::group_rows(n[9], 1,nrow(eval$pdc[[9]])))
 
 ```
 
-The above four models will now be used to predict the audience scores for heretofore, unseen films released in 2016.
+The performance of the above four models was further evaluated on five heretofore, unseen films released in 2016.
 
 
 * * *
