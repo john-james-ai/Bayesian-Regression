@@ -1,34 +1,31 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # Appendix
-## Appendix A: Model Analyses
-### `r models[[1]]$priorDesc`
-#### Model Space: `r models[[1]]$priorDesc`
-```{r a_model_space_1}
-image(models[[1]], rotate = F, cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(10,4,4,2) + 0.1)
+## Appendix A: Functions Overview
+`r kfigr::figr(label = "functions", prefix = TRUE, link = TRUE, type="Table")`: Package functions
+```{r functions}
+functions <- read.csv(file = "../vignettes/figs_tables/functions.csv")
+functions <- functions %>% select(Function, Description)
+knitr::kable(functions) %>%
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
+  kableExtra::group_rows("Data", 1,1) %>%
+  kableExtra::group_rows("Exploratory Data Analysis", 2,9) %>%
+  kableExtra::group_rows("Models", 10,21) %>%
+  kableExtra::group_rows("Predictions", 22,22) %>%
+  kableExtra::group_rows("All", 23,23)
 ```
-`r kfigr::figr(label = "model_space_1", prefix = TRUE, link = TRUE, type="Figure")`: Model space `r models[[1]]$priorDesc`
 
-#### Model Analysis: `r models[[1]]$priorDesc`
-```{r a_BIC_analysis, fig.height=15}
-par(mfrow = c(2,2), cex.axis = 2, cex.lab = 2, cex.sub = 2, cex.main = 2, mar = c(10,5,4,2) + 0.1)
-plot(models[[1]], ask = F)
+The primary functions are outlined below. The complete source code is available at https://github.com/DataScienceSalon/Bayesian-Regression.
+
+## Appendix B: Data Function (Preprocessing)
+```{r a-preprocess, code=readLines('../R/preprocess.R')[4:51], echo=TRUE, eval=FALSE}
 ```
-`r kfigr::figr(label = "a_rvf1", prefix = TRUE, link = TRUE, type="Figure")`: Residuals vs Fitted `r models[[1]]$priorDesc`
+`r kfigr::figr(label = "a-preprocess", prefix = TRUE, link = TRUE, type="Code")`: Preprocessing function
 
-#### Parameter Estimates: `r models[[1]]$priorDesc`
-
-```{r a_pdc, fig.height=24}
-p <- list()
-p$BMA <- analysis$pdc[[1]]$BMA$plot
-p$BPM <- analysis$pdc[[1]]$BPM$plot
-p$HPM <- analysis$pdc[[1]]$HPM$plot
-p$MPM <- analysis$pdc[[1]]$MPM$plot
-n <- length(p)
-nCol <- floor(sqrt(n))
-do.call("grid.arrange", c(p, ncol=nCol))
+## Appendix C: Bayesian Model Averaging
+```{r a-bma, code=readLines('../R/bma.R')[4:123], echo=TRUE, eval=FALSE}
 ```
-`r kfigr::figr(label = "a_pdc", prefix = TRUE, link = TRUE, type="Figure")`: Posterior parameter estimates and credible intervals 
+`r kfigr::figr(label = "a-bma", prefix = TRUE, link = TRUE, type="Code")`: Bayesian model averaging function
+
+## Appendix D: Bayesian Prediction
+```{r a-bmaPredict, code=readLines('../R/bmaPredict.R')[4:73], echo=TRUE, eval=FALSE}
+```
+`r kfigr::figr(label = "a-bmaPredict", prefix = TRUE, link = TRUE, type="Code")`: Bayesian prediction function

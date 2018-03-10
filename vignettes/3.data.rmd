@@ -3,7 +3,7 @@ The motivating example for this experiment is the prediction of audience scores 
 
 `r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`: Movie Dataset Variables 
 ```{r vars}
-vars <- read.csv(file = "../inst/extdata/variables.csv")
+vars <- read.csv(file = "../vignettes/figs_tables/variables.csv")
 knitr::kable(vars) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") 
 ```

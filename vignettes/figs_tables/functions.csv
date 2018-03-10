@@ -1,0 +1,24 @@
+Section,#,Function,Description
+3. Data,1,preprocess,Preprocesses the data
+4. Exploratory Data Analysis,1,summaryStats,Computes summary statistics for a quantitative variable
+4. Exploratory Data Analysis,2,univariate,Performs univariate analysis via univariateQual and univariateQuant
+4. Exploratory Data Analysis,3,univariateQual,Performs univariate analysis of qualitative variables 
+4. Exploratory Data Analysis,4,bivariate,Performs bivariate analysis via bivariateQual and bivariateQuant
+4. Exploratory Data Analysis,5,univariateQuant,Performs univariate analysis of quantitative variables 
+4. Exploratory Data Analysis,6,bivariateQual,Performs bivariate analysis of qualitative variables on audience scores
+4. Exploratory Data Analysis,7,bivariateQuant,Performs bivariate analysis of quantitative variables on audience scores
+4. Exploratory Data Analysis,8,corrAssociation,Performs correlation and association tests for the parameter set
+5. Models,1,bma,Performs BMA for all nine candidate priors
+5. Models,2,bmaAnalysis,"Reports parameter inclusion probabilities, parameter estimates, and complexity vis-à-vis posterior probability "
+5. Models,3,bmaImage,Renders BMA Model Space visualization
+5. Models,4,bmaPIP,Reports posterior inclusion probabilities for parameters
+5. Models,5,bmaPIPPlots,"Renders plots of posterior inclusion probabilities by variable, across priors"
+5. Models,6,bmaPDC,Reports posterior distribution of coefficients for a model
+5. Models,7,bmaComplexity,Reports model complexity vis-à-vis posterior probability
+5. Models,8,bmaPerformance,"Executes predictions for all nine priors and four estimators on 400  random samplings of training and test data,via bmaPredictModels"
+5. Models,9,bmaPerformanceReport,Renders reports summarizing predictive performance
+5. Models,10,bmaPredictModels,Executes predictions for all nine priors via bmaPredict
+5. Models,11,bmaPredict,Renders prediction for model and estimator
+5. Models,12,bmaEvaluation,Reports residuals vs predicted and parameter estimates 
+6. Predictions,1,bestPredictions,Prepares predictions for top models on new data
+All,1,visualization,Visualization functions

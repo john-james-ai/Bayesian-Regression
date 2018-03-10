@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Model Averaging, Default Priors & Prediction Accuracy"
+title: "Bayesian Model Averaging, Default Priors, Inference & Prediction Accuracy"
 author: "John James jjames@datasciencesalon.org"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
@@ -75,8 +75,8 @@ source("../R/univariateQuant.R")
 source("../R/bivariate.R")
 source("../R/bivariateQual.R")
 source("../R/bivariateQuant.R")
+source("../R/summaryStats.R")
 source("../R/visualization.R")
-source("../R/analysis.R")
 ```
 
 ```{r set_run}
@@ -183,6 +183,9 @@ run <- FALSE
 ```
 
 ```{r intro, child = '7.conclusion.rmd'}
+```
+
+```{r intro, child = '8.appendix.rmd'}
 ```
 
 

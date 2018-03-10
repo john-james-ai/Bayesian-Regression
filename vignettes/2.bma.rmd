@@ -6,7 +6,7 @@ where:
 $X_1, X_2, ..., X_p$  is a subset of $X_1, X_2, ..., X_k$  
 $X$ is a $n \times (p + 1)$ matrix containing the observed data on $p$ predictors  
 $\epsilon$ ~ $N(0,\sigma^2I)$  
-$\beta$ and $\sigma^2$ are the $(p + 1)$ individual unknown parameters  
+$\beta$ are the $(p + 1)$ individual unknown parameters  
 
 However, model selection exercises that lead to a single "best" model ignore model uncertainty [@Hodges1987; @Draper1995; @Raftery1997], and leads to underestimation of uncertainty when making inferences about quantities of interest [@Raftery1997].
 
@@ -29,6 +29,31 @@ Averaging over *all* models in this way provides better predictive results, as m
 ## Prior Distributions of Parameters
 To implement BMA, one must specify *prior distributions* over all parameters in all models, as well as prior probabilities of the models themselves. If prior information about the parameters and the models is available, it should be used. However, if the amount of prior information is small relative to the effort required to specify it, as is often the case, default or so-called "non-informative" or "reference" priors may be used for such analysis. The selection of default priors may effect the *integrated likelihood*, the key factor in computing posterior model weights, and so the prior density should be wide enough and reasonably flat over the region of the parameter space where the likelihood is large, but not so spread out as to decrease the prior at the posterior mode.  This decreases the integrated likelihood and may unnecessarily penalize larger models [@Raftery1994]. 
 
+### Zellner's g-prior and Variable Selection
+Zellner [@zellner1986] proposed a multivariate normal-gamma conjugate prior, the so-called 'g-prior', which is given by:
+$$\beta | \sigma^2 \sim N(\beta_0, \sigma^2g(X'X)^{-1}).$$
+Typically,  $\beta_0 = 0$, and the Gaussian posterior for $\beta$ is given by:
+$$B|\sigma^2, X, Y \sim N(\Sigma^{-1}a,\Sigma^{-1}),$$
+where
+$$\Sigma = \frac{1}{g}(\sigma^2(X'X)^{-1})^{-1} + \frac{1}{\sigma^2}X'X,$$
+and
+$$a = \frac{1}{g}(\sigma^2(X'X)^{-1})^{-1}\beta_0 + \frac{1}{g}X'Y.$$
+Since 
+$$\hat{\beta} = (X'X)^{-1}X'Y,$$
+the posterior distribution of $\beta$ is
+$$\beta|Y,\sigma^2,X \sim N(\frac{1}{g+1}({\beta_0 + g\hat{\beta}}),\frac{g\sigma^2}{g+1}(X'X)^{-1}).$$
+Hence, the posterior mean is:
+$$\mathbb{E}[\beta|Y,\sigma^2,X] = \Sigma^{-1}a = \frac{1}{1+g}\beta_0+\frac{g}{1+g}(X'X)^{-1}X'Y = \frac{1}{1+g}\beta_0+\frac{g}{1+g}\hat{\beta}.$$
+By reducing prior elicitation down to two components, the prior mean of $\beta_0$, taken to be 0, and the scalar g, Zellner's informative g-prior determines how much the prior distribution of $\beta$ contributes to the posterior. Since it provides a closed-form for the marginal likelihood, Zellner's g-prior is popular in variable selection. 
+
+### Zellner's g-prior and Model Selection (see Berkeley lecture notes in evernote )
+In order to compare different models to each other, one takes the marginal likelihoods of each model, then computers their ratios to obtain the Bayes factor. Zellner's g-prior provides an explicit expression 
+
+
+Zellner's g-prior also provides an explicit expression of 
+However, one is still left with choosing g.
+
+
 This experiment explores the following nine default priors supported in literature (`r kfigr::figr(label = "priors", prefix = TRUE, link = TRUE, type="Table")`). 
 
 `r kfigr::figr(label = "priors", prefix = TRUE, link = TRUE, type="Table")`: Parameter priors 
@@ -41,8 +66,13 @@ knitr::kable(priors,digits = 2) %>%
 The **Bayesian Information Criterior (BIC) prior** is a reference prior based upon an approximation of the log marginal likelihood of parameter value $\theta$ using the Bayesian information criterion.  
 $$log Pr(\theta|M_k) \approx c - 1/2BIC_k$$
 where:   
-$$BIC_k = nlog(1-R^2_k) + p_klog(n)$$    
-The $R^2$ and $p_k$ variables are the coefficient of determination and the number of regressors for model $M_k$, respectively, $n$ is the number of observations, and $c$ is a constant that does not vary across models and so cancels in the model averaging. This prior is typically flat where the likelihood is large and contains the same amount of information that would be contained in a typical single observation [@Wasserman1996]. The **Akaike information criterion (AIC) prior** is the same as the BIC prior above, except AIC is used to approximate the likelihood of the data given a model $M_k$. The remaining priors are based upon the multivariate normal-gamma conjugate prior where the conditional distribution $X|\theta \sim N(\mu,1/\lambda\sigma^2)$ and $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, where the scaled variance and covariances are obtained from the ordinary least squares (OLS). This reduces prior elicitation down to two components, the prior mean of $\beta_0$, taken to be 0, and the scalar g. **Empirical Bayes Global Prior(EP-G)** uses an EM algorithm to find a common or global estimate of g, averaged over all models [@Clyde2017]. **Empirical Bayes Local Prior(EP-L)** uses the MLE of g from the marginal likelihood within each model [@Clyde2017]. The **Zellner's g-prior**  is a multivariate normal-gamma conjugate prior where $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, $g = n$, and the scaled variance and covariances are obtained from the ordinary least squares (OLS).**Hyper-g** is a class of g-priors based upon continuous proper hyperprior f(g), giving a mixture of g-priors where the prior on g/(1+g) is a Beta(1, alpha/2) [@Clyde2017]. **Hyper-g-n** is a special case of the Hyper-g prior where  u = g/n and u ~ Beta(1, alpha/2), to provide consistency when the null model is true [@Clyde2017]. **Hyper-g Laplace** is the same as the Hyper-g prior, but uses Laplace approximation to integrate over the prior on g. Lastly, the **Zellner-Siow prior** places a gamma prior on n/g with G(shape = 1/2, scale = 1/2).
+$$BIC_k = -2log(\hat{L}) + plog(n).$$    
+where $\hat{L}$ is the maximized value of the likelihood function of the model with respect to the parameter $\theta$, $p$ is the number of parameters and $n$ is the number of observations. This prior is typically flat where the likelihood is large and contains the same amount of information that would be contained in a typical single observation [@Wasserman1996]. 
+
+The **Akaike information criterion (AIC) prior** is the same as the BIC prior above, except AIC is used to approximate the likelihood of the data given a model $M_k$.  AIC is value of the model $M_k$ is:
+$$AIC_k = 2p - 2log(\hat{L})$$
+
+where the conditional distribution $X|\theta \sim N(\mu,1/\lambda\sigma^2)$ and $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, where the scaled variance and covariances are obtained from the ordinary least squares (OLS). This  **Empirical Bayes Global Prior(EP-G)** uses an EM algorithm to find a common or global estimate of g, averaged over all models [@Clyde2017]. **Empirical Bayes Local Prior(EP-L)** uses the MLE of g from the marginal likelihood within each model [@Clyde2017]. The **Zellner's g-prior**  is a multivariate normal-gamma conjugate prior where $\beta \sigma^2\sim N(\beta_0, g\sigma^2S^{-1}_{XX})$, $g = n$, and the scaled variance and covariances are obtained from the ordinary least squares (OLS).**Hyper-g** is a class of g-priors based upon continuous proper hyperprior f(g), giving a mixture of g-priors where the prior on g/(1+g) is a Beta(1, alpha/2) [@Clyde2017]. **Hyper-g-n** is a special case of the Hyper-g prior where  u = g/n and u ~ Beta(1, alpha/2), to provide consistency when the null model is true [@Clyde2017]. **Hyper-g Laplace** is the same as the Hyper-g prior, but uses Laplace approximation to integrate over the prior on g. Lastly, the **Zellner-Siow prior** places a gamma prior on n/g with G(shape = 1/2, scale = 1/2).
 
 
 ## Model Priors
