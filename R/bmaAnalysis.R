@@ -13,6 +13,9 @@
 #' @export
 bmaAnalysis <- function(models, top = FALSE) {
   
+  # Compare top model across priors
+  topModels <- bmaModel1(models)
+  
   # Obtain parameter inclusion probabilities
   pip <- bmaPIP(models = models)
   
@@ -25,6 +28,7 @@ bmaAnalysis <- function(models, top = FALSE) {
   })
   
   analysis = list(
+    topModels = topModels,
     pip = pip,
     pdc = pdc,
     complexity = complexity

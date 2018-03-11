@@ -8,9 +8,9 @@ knitr::kable(functions) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center") %>%
   kableExtra::group_rows("Data", 1,1) %>%
   kableExtra::group_rows("Exploratory Data Analysis", 2,9) %>%
-  kableExtra::group_rows("Models", 10,21) %>%
-  kableExtra::group_rows("Predictions", 22,22) %>%
-  kableExtra::group_rows("All", 23,23)
+  kableExtra::group_rows("Models", 10,23) %>%
+  kableExtra::group_rows("Predictions", 24,24) %>%
+  kableExtra::group_rows("All", 25,25)
 ```
 
 The primary functions are outlined below. The complete source code is available at https://github.com/DataScienceSalon/Bayesian-Regression.

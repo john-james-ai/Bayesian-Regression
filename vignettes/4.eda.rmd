@@ -13,7 +13,7 @@ edaUni$qual$summary$plot
 `r kfigr::figr(label = "films_summary", prefix = TRUE, link = TRUE, type="Figure")`: Drama, features and R Rated Films
 
 #### Film Performance Variables
-`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Figure")` summarizes the counts and proportions of films in the sample which have achieved notability at the box office or with the Academy. Best Picture winners, top 200 box office earners and Best Picture nominees claimed the top one, two, and three percent of the films, respectively. Films earning best director, best actress, and best actor Oscars were slightly less rarefied at 7%, 11%, and 14% of the sample respectively.
+`r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Figure")` summarizes the counts and proportions of films in the sample which have achieved notability at the box office or with the Academy. Best Picture winners, top 200 box office earners, and Best Picture nominees claimed the top one, two, and three percent of the films, respectively. Films earning Best Director, Best Actress, and Best Actor Oscars were slightly less rarefied at 7%, 11%, and 14% of the sample respectively.
 
 ```{r performance, fig.height=8}
 edaUni$qual$performance$plot
@@ -21,14 +21,14 @@ edaUni$qual$performance$plot
 `r kfigr::figr(label = "performance", prefix = TRUE, link = TRUE, type="Figure")`: Oscar Awards and Top 200 Box Office Class
 
 #### Theatrical Release Season 
-The Oscar season, starting in October and lasting until 31 December, marks the period in which Hollywood studios release their more critically acclaimed films. As indicated in `r kfigr::figr(label = "Oscar", prefix = TRUE, link = TRUE, type="Figure")`, approximately 30% of films in the data set were released during the Oscar season. 
+The Oscar season, starting in October and lasting until 31 December, marks the period in which Hollywood studios release their more critically acclaimed films. As indicated in `r kfigr::figr(label = "Oscar", prefix = TRUE, link = TRUE, type="Figure")`, approximately 30% of films in the dataset were released during the Oscar season. 
 
 ```{r season, fig.height=8}
 edaUni$qual$season$plot
 ```
 `r kfigr::figr(label = "season", prefix = TRUE, link = TRUE, type="Figure")`: Oscar and Summer Season Releases
 
-The summer season, which starts the first weekend of May and ends on Labour Day, accounts for disproportionate share of Hollywood studio's annual box office revenue. Similarly, some 32% of the feature films in the data set were launched during the summer months.
+The summer season, which starts the first weekend of May and ends on Labour Day, accounts for a disproportionate share of Hollywood studios' annual box office revenue. Similarly, some 32% of the feature films in the dataset were launched during the summer months.
 
 #### Year of Theatrical Release
 ```{r year_summary}
@@ -40,7 +40,7 @@ high <- years %>% filter(N == max(N))
 last <- years %>% filter(Category == "2014")
 ```
 
-The data set contained some `r nrow(preprocessed)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`, the number of films in the sample by year of release, tended to grow somewhat linearly from `r low$N` film in `r as.character(low$Category)`to a peak of approximately `r high$N[1]` films in `r as.character(high$Category[1])` and in `r as.character(high$Category[2])`, then drops until settling at `r last$N` films in 2014. The number of films per year centered at a mean and median of `r ave$Mean` and `r med$Median` films, respectively.
+The dataset contained some `r nrow(preprocessed)` feature films released between 1970 and 2014. As presented in `r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`, the number of films in the sample by year of release, tended to grow somewhat linearly from `r low$N` film in 1970 to a peak of approximately `r high$N[1]` films in 2006 and 2007, then drops until settling at `r last$N` films in 2014. The number of films per year centered at a mean and median of `r round(ave$Mean,1)` and `r med$Median` films, respectively.
 
 ```{r year}
 edaUni$qual$year$plot
@@ -49,7 +49,7 @@ edaUni$qual$year$plot
 
 ### Quantitative Analysis
 #### Critics Score
-Moving on to the quantitative variables, the critics score, ranging from 1 to 100, was obtained from the Rotten Tomatoes website and its summary statistics are described below in `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`.
+Moving on to the quantitative variables, critics' score, ranging from 1 to 100, was obtained from the Rotten Tomatoes website and its summary statistics are described below in `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`.
 
 `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`: Critics score summary statistics
 ```{r critics_score_stats}
@@ -477,7 +477,7 @@ edaBi$thtr_rel_year$scatterPlot
 ## Association and Correlation
 Next, the significance and strength of associations between categorical variables were examined. Pairwise chi-squared and association tests were conducted to reveal the significance (p.value) and the strength, Cramer's V [@Cramer1946] of each association. The chi-square results summarized in `r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")` reveal several associations that could present as collinearity issues for regression. Focusing on those regressors most highly associated with audience score, the degree of association among Academy awarded films was significant. There was also a strong association between films that won Best Picture and those that were nominated. Both significant and strong associations were observed among films with theatrical releases in the Oscar and Summer seasons.
 
-`r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")`: Chi-squared test of independence between categorical variables. Significant ($\alpha = 0.05$) differences between observed and expected differences under the null hypothesis are highlighted in bold text.
+`r kfigr::figr(label = "chi", prefix = TRUE, link = TRUE, type="Table")`: Chi-squared test of independence between categorical variables.
 ```{r chi}
 chi <- x2(preprocessed)
 vars <- data.frame(Terms = as.character(rownames(chi)))
@@ -490,7 +490,7 @@ knitr::kable(chi, escape = F) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-`r kfigr::figr(label = "cramer", prefix = TRUE, link = TRUE, type="Table")`: Cramer's V measure of association between categorical variables. Associations with a medium strength (Cramer's V > .3) are highlighted in bold text.
+`r kfigr::figr(label = "cramer", prefix = TRUE, link = TRUE, type="Table")`: Cramer's V measure of association between categorical variables. 
 ```{r cramer}
 cv <- cramers(preprocessed)
 vars <- data.frame(Terms = as.character(rownames(cv)))
@@ -510,7 +510,7 @@ cp
 `r kfigr::figr(label = "cp", prefix = TRUE, link = TRUE, type="Figure")`: Correlations among quantitative predictors
 
 ## EDA Summary
-Whereas acknowledgements of individual achievement from the Academy had no statistically significant correlation with audience scores, films that were nominated for, or won Best Picture, were associated with higher audience scores to a statistically significant degree. It would appear that audiences prefer teamwork. Non-feature films were also associated with higher audience scores. As one might expect, high positive correlations were extant between critics scores, IMDb ratings and audience scores. Weak positive correlations between IMDb number of votes and runtime were observed and finally, audience scores saw a slight, but statistically significant downward trend over the time period observed. The associations between the qualitative and quantitative variables revealed potential collinearity among the Oscar award variables. There was a moderate to strong correlation between critics scores and IMDb ratings.
+Whereas acknowledgments of individual achievement from the Academy had no statistically significant correlation with audience scores, films that were nominated for, or won Best Picture, were associated with higher audience scores to a statistically significant degree. It would appear that audiences prefer teamwork. Non-feature films were also associated with higher audience scores. As one might expect, high positive correlations were extant between critics scores, IMDb ratings, and audience scores. Weak positive correlations between IMDb number of votes and runtime were observed and finally, audience scores saw a slight, but statistically significant downward trend over the time period observed. The associations between the qualitative and quantitative variables revealed potential collinearity among the Oscar award variables. There was a moderate to strong correlation between critics scores and IMDb ratings.
 
 
 * * *

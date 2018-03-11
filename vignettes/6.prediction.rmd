@@ -1,12 +1,12 @@
 # Prediction
-Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten Tomatoes websites and predictions were rendered using the four "best"  models from the model evaluation section:  
-* Akaike Information Criterion (Median Prediction Model)   
+Five films from 2016 were selected from the BoxOfficeMojo.com, IMDb, and Rotten Tomatoes websites and predictions were rendered using the four of the top ten models from the model evaluation section:  
+* Empirical Bayes-Local (Median Prediction Model)   
 * Zellner's g-prior (Median Predictive Model)   
-* Empirical Bayes-Global (Median Predictive Model)   
-* Hyper-g Laplace (Median Predictive Model)   
+* AIC (Median Predictive Model)   
+* BIC (Median Predictive Model)   
 
 ## Prediction Data
-The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`) were so chosen to present a range of values for audience score and predictor values across the parameter space. Audience scores ranged from 34 to 87. The number of IMDb votes varied from approximately 8000 votes for Synchronicity,  to over 460,000 for Suicide Squad.  Similarly critics scores stretched from a low 26 points to a near perfect 98. Results at the Academy varied significantly among the chosen films in order to provide a reasonably diverse sampling.
+The five movies selected for prediction (`r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`) were so chosen to present a range of values for audience score and predictor values across the parameter space. Audience scores ranged from 34 to 87. The number of IMDb votes varied from approximately 8000 votes for Synchronicity,  to over 460,000 for Suicide Squad.  Similarly, critics' scores stretched from a low 26 points to a near perfect 98. Results at the Academy varied significantly among the chosen films in order to provide a reasonably diverse sampling. The data was obtained from the IMDb and boxofficemojo web sites.
 
 `r kfigr::figr(label = "cases", prefix = TRUE, link = TRUE, type="Table")`: Movies selected for prediction
 ```{r cases}

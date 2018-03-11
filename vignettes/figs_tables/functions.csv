@@ -10,6 +10,8 @@ Section,#,Function,Description
 4. Exploratory Data Analysis,8,corrAssociation,Performs correlation and association tests for the parameter set
 5. Models,1,bma,Performs BMA for all nine candidate priors
 5. Models,2,bmaAnalysis,"Reports parameter inclusion probabilities, parameter estimates, and complexity vis-à-vis posterior probability "
+5. Models,,bmaModel1,"Reports relative posterior probabilities, R2, and model sizes for each prior"
+5. Models,,bmaModel1Plots,"Renders plots of relative posterior probabilities, R2, and model sizes for each prior."
 5. Models,3,bmaImage,Renders BMA Model Space visualization
 5. Models,4,bmaPIP,Reports posterior inclusion probabilities for parameters
 5. Models,5,bmaPIPPlots,"Renders plots of posterior inclusion probabilities by variable, across priors"

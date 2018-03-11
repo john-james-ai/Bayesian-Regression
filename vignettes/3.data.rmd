@@ -1,5 +1,5 @@
 # Data
-The motivating example for this experiment is the prediction of audience scores for feature films based upon critics ratings, movie runtimes, MPAA rating, Oscar performance, box office returns, genre, and season of theatrical release (`r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`) information obtained from the IMDb [@Needham1990] Rotten Tomatoes [@Flixter] and BoxOfficeMojo [@Fritz2008] websites. 
+The motivating example for this experiment is the prediction of audience scores for feature films based upon critics ratings, movie runtimes, MPAA rating, Oscar performance, box office returns, genre, year and season of theatrical release (`r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`) information obtained from the IMDb [@Needham1990] Rotten Tomatoes [@Flixter] and BoxOfficeMojo [@Fritz2008] websites. 
 
 `r kfigr::figr(label = "vars", prefix = TRUE, link = TRUE, type="Table")`: Movie Dataset Variables 
 ```{r vars}
@@ -12,6 +12,6 @@ knitr::kable(vars) %>%
 Launched in October 1990 by Col Needham, the Internet Movie Database (abbreviated IMDb) is an online database of film information, audience and critics ratings, plot summaries and reviews.  As of November 2017, the site contained over 4.6 million titles, 8.2 million personalities, and hosts 80 million registered users [@Needham1990].  Rotten Tomatoes.com, so named from the practice of audiences throwing rotten tomatoes when disapproving of a poor stage performance, was launched officially in April 2000 by Berkeley student, Senh Duong. It provides audience and critics ratings  for some 26 million users worldwide [@Flixter]. Founded in 1999, BoxOfficeMojo tracks box office information and publishes the data on its website [@Fritz2008].
 
 ## Generalizability & Causality
-The data were **randomly sampled** from available IMDb and Rotten Tomatoes website apis, and so the inference should be generalizable to the population. Since this was an observational study, random assignment was not performed, as such **causality is not indicated by this analysis**.
+The data were **randomly sampled** from available IMDb and Rotten Tomatoes website APIs, and so the inference should be generalizable to the population. Since this was an observational study, random assignment was not performed, as such **causality is not indicated by this analysis**.
 
 * * *
